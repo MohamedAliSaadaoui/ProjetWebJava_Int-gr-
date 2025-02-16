@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Event{% endblock %}
+
+{% block body %}
+    <h1>Create a New Event</h1>
+
+    {# Afficher le formulaire de création d'événement #}
+    {{ form_start(form) }}
+        {{ form_row(form.titre) }}
+        {{ form_row(form.dateDebut) }}
+        {{ form_row(form.dateFin) }}
+        {{ form_row(form.lieu) }}
+        {{ form_row(form.statut) }}
+        {{ form_row(form.categorie) }}
+        <button type="submit">Create Event</button>
+    {{ form_end(form) }}
+{% endblock %}
