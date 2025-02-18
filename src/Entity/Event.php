@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\EventRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event
@@ -15,21 +16,31 @@ class Event
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank(message: "Le titre est obligatoire.")]
     private ?string $titre = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\NotBlank(message: "La date de début est obligatoire.")]
     private ?\DateTimeInterface $dateDebut = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\NotBlank(message: "La date de fin est obligatoire.")]
+    #[Assert\Expression(
+        "this.getDateFin() > this.getDateDebut()",
+        message: "The end date must be later than the start date."
+    )]
     private ?\DateTimeInterface $dateFin = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank(message: "Le Lieu est obligatoire.")]
     private ?string $lieu = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank(message: "Le statut est obligatoire.")]
     private ?string $statut = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank(message: "La catégorie est obligatoire.")]
     private ?string $categorie = null;
 
     public function getId(): ?int

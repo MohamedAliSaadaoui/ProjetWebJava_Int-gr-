@@ -8,11 +8,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-
+use App\Repository\EventRepository;
 
 class EventController extends AbstractController
 {
-    #[Route('/event', name: 'app_event')]
+    #[Route('/event.html', name: 'app_event')]
     public function index(): Response
     {
         return $this->render('event/Evenement.html.twig', [
@@ -20,8 +20,8 @@ class EventController extends AbstractController
         ]);
     }
 
-    #[Route('/event/create', name: 'event_create')] 
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/event/create', name: 'event_create')]
+public function create(Request $request, EntityManagerInterface $entityManager): Response
 {
     // Créer un objet Event pour le formulaire
     $event = new Event();
@@ -34,17 +34,6 @@ class EventController extends AbstractController
 
     // Si le formulaire est soumis et valide
     if ($form->isSubmitted() && $form->isValid()) {
-        // Gérer l'image téléchargée, si présente
-        $image = $form->get('image')->getData();
-        if ($image) {
-            $newFilename = uniqid() . '.' . $image->guessExtension();
-            $image->move(
-                $this->getParameter('event_images_directory'), // Répertoire de stockage des images
-                $newFilename
-            );
-            $event->setImage($newFilename); // Lier le nom de l'image à l'événement
-        }
-
         // Persister l'événement dans la base de données
         $entityManager->persist($event);
         $entityManager->flush();
@@ -61,4 +50,45 @@ class EventController extends AbstractController
         'form' => $form->createView(),
     ]);
 }
+#[Route('/event/list', name: 'event_list')]
+    public function list(EventRepository $eventRepository): Response
+    {
+        $events = $eventRepository->findAll();
+        return $this->render('event/event_list.html.twig', [
+            'events' => $events,
+        ]);
+    }
+    #[Route('/event/delete/{id}', name: 'event_delete')]
+public function delete(Event $event, EntityManagerInterface $entityManager, Request $request): Response
+{
+    if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->request->get('_token'))) {
+        $entityManager->remove($event);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Event deleted successfully.');
+    }
+
+    return $this->redirectToRoute('event_list');
+}
+#[Route('/event/edit/{id}', name: 'event_edit')]
+    public function edit(Event $event, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(EventType::class, $event);
+        $form->handleRequest($request);
+
+        // Si le formulaire est soumis et valide
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Mettre à jour l'événement en base
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Event updated successfully.');
+
+            return $this->redirectToRoute('event_list'); // Redirection vers la liste des événements
+        }
+
+        return $this->render('event/event_edit.html.twig', [
+            'form' => $form->createView(),
+            'event' => $event,
+        ]);
+    }
 }
