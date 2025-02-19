@@ -10,8 +10,8 @@ class Product
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'integer')]
+    private ?int $id;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -20,7 +20,7 @@ class Product
     private ?string $category = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $condition = null;
+    private ?string $productCondition = null;
 
     #[ORM\Column(length: 50)]
     private ?string $color = null;
@@ -43,8 +43,8 @@ class Product
     public function getCategory(): ?string { return $this->category; }
     public function setCategory(string $category): self { $this->category = $category; return $this; }
 
-    public function getCondition(): ?string { return $this->condition; }
-    public function setCondition(string $condition): self { $this->condition = $condition; return $this; }
+    public function getProductCondition(): ?string { return $this->productCondition; }
+    public function setProductCondition(string $productCondition): self { $this->productCondition = $productCondition; return $this; }
 
     public function getColor(): ?string { return $this->color; }
     public function setColor(string $color): self { $this->color = $color; return $this; }

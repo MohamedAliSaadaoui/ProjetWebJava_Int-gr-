@@ -25,20 +25,20 @@ class ProductManagementController extends AbstractController
     // Handle the form submission
     $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
+    if ($form->isSubmitted() && $form->isValid()) {   
         // Persist the product to the database
         $entityManager->persist($product);
         $entityManager->flush();
-
-        // Optionally, you can add a success message
+    
+        // Optionally, add a success message
         $this->addFlash('success', 'Product added successfully!');
         
-        // You can either just render the same form with the success message or keep the user on the same page
+        // Pass product data to the view
         return $this->render('seller_dashbord/addproduit.html.twig', [
             'form' => $form->createView(),
         ]);
     }
-
+    
     // Render the form template if not submitted or not valid
     return $this->render('seller_dashbord/addproduit.html.twig', [
         'form' => $form->createView(),

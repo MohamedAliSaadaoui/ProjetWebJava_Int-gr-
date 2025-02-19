@@ -537,80 +537,86 @@
 							</li>
 						</ul>
 					</div>
-					<!-- breadcrumb end -->
 
-					<!-- add product form start  -->
-					{# templates/seller_dashbord/addproduit.html.twig #}
-					{{ form_start(form,) }}
-						<div class="input-label-wrapper"> <label for="{{ form.name.vars.id }}">Product Name* (In Any Language)</label>
-						{{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Product Name'} }) }}
-					</div>
-					<div class="input-label-wrapper">
-						<label for="{{ form.category.vars.id }}">Category</label>
-						{{ form_widget(form.category, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Category'} }) }}
-					</div>
-					<div class="input-label-wrapper">
-						<label for="{{ form.productCondition.vars.id }}">Condition</label>
-						{{ form_widget(form.productCondition, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Condition'} }) }}
-					</div>
-					<div class="input-label-wrapper">
-						<label for="{{ form.color.vars.id }}">Color</label>
-						{{ form_widget(form.color, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Color'} }) }}
-					</div>
-					<div class="input-label-wrapper">
-						<label for="{{ form.stock.vars.id }}">Stock</label>
-						{{ form_widget(form.stock, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Stock Quantity'} }) }}
-					</div>
-					<div class="input-label-wrapper">
-						<label for="{{ form.description.vars.id }}">Description</label>
-						{{ form_widget(form.description, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Description'} }) }}
-					</div>
-					<div class="input-label-wrapper">
-						<label for="{{ form.returnPolicy.vars.id }}">Return Policy</label>
-						{{ form_widget(form.returnPolicy, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Return Policy'} }) }}
-					</div>
+    {# Display the form with the custom style #}
+    {{ form_start(form) }}
 
-					<button type="submit" class="btn btn-primary">Save Product</button>
-					{{ form_end(form) }}
+    <div class="input-label-wrapper">
+        <label for="{{ form.name.vars.id }}">Product Name* (In Any Language)</label>
+        {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Product Name'} }) }}
+    </div>
+    
+    <div class="input-label-wrapper">
+        <label for="{{ form.category.vars.id }}">Category</label>
+        {{ form_widget(form.category, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Category'} }) }}
+    </div>
 
-					<!-- add product form end -->
+    <div class="input-label-wrapper">
+        <label for="{{ form.productCondition.vars.id }}">Condition</label>
+        {{ form_widget(form.productCondition, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Condition'} }) }}
+    </div>
 
-				</div>
-				<!-- outlet end  -->
-			</div>
-		</div>
-	</div>
-	<!-- user dashboard wrapper end -->
+    <div class="input-label-wrapper">
+        <label for="{{ form.color.vars.id }}">Color</label>
+        {{ form_widget(form.color, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Color'} }) }}
+    </div>
+
+    <div class="input-label-wrapper">
+        <label for="{{ form.stock.vars.id }}">Stock</label>
+        {{ form_widget(form.stock, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Stock Quantity'} }) }}
+    </div>
+
+    <div class="input-label-wrapper">
+        <label for="{{ form.description.vars.id }}">Description</label>
+        {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Description'} }) }}
+    </div>
+
+    <div class="input-label-wrapper">
+        <label for="{{ form.returnPolicy.vars.id }}">Return Policy</label>
+        {{ form_widget(form.returnPolicy, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Return Policy'} }) }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Product</button>
+
+    {{ form_end(form) }}
+   </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+    </div>
+                <!-- outlet end  -->
+            </div>
+        </div>
+    </div>
+    <!-- user dashboard wrapper end -->
 
 
-	<div class="modal gs-modal fade" id="confirm-detete-modal" tabindex="-1" aria-hidden="true">
-		<form id="delete_url" class="modal-dialog confirm-delete-modal-dialog modal-dialog-centered" method="POST">
-			<div class="modal-content confirm-delete-modal-content form-group">
-				<div class="modal-header delete-modal-header w-100">
-					<div class="title-des-wrapper">
-						<h4 class="title">Confirm Delete ?</h4>
-						<h5 class="sub-title">
-							Are you sure you want to delete this item?
-						</h5>
-					</div>
-				</div>
-				<!-- modal body start  -->
+    <div class="modal gs-modal fade" id="confirm-detete-modal" tabindex="-1" aria-hidden="true">
+        <form id="delete_url" class="modal-dialog confirm-delete-modal-dialog modal-dialog-centered" method="POST">
+            <div class="modal-content confirm-delete-modal-content form-group">
+                <div class="modal-header delete-modal-header w-100">
+                    <div class="title-des-wrapper">
+                        <h4 class="title">Confirm Delete ?</h4>
+                        <h5 class="sub-title">
+                        Are you sure you want to delete this item?                        </h5>
+                    </div>
+                </div>
+                <!-- modal body start  -->
 
-				<!-- Buttons  -->
-				<div class="row row-cols-2 w-100">
-					<input type="hidden" name="_token" value="impNs1YibXfpuDVpxLVE7Vk8p3Jl5jixKZBCetoq" autocomplete="off">
-					<input type="hidden" name="_method" value="DELETE">
-					<div class="col">
-						<button type="submit" class="template-btn black-btn w-100" id="">Delete</button>
-					</div>
-					<div class="col">
-						<button class="template-btn w-100" data-bs-dismiss="modal" type="button">Cancel</button>
-					</div>
-				</div>
-				<!-- modal body end  -->
-			</div>
-		</form>
-	</div>
-
-  
+                <!-- Buttons  -->
+                <div class="row row-cols-2 w-100">
+                    <input type="hidden" name="_token" value="u5Nkli3ecj16MXKTEoqRd3keILP6NNtO0pxT4lKF" autocomplete="off">                    <input type="hidden" name="_method" value="DELETE">                    <div class="col">
+                        <button type="submit" class="template-btn black-btn w-100" id="">Delete</button>
+                    </div>
+                    <div class="col">
+                        <button class="template-btn w-100" data-bs-dismiss="modal" type="button">Cancel</button>
+                    </div>
+                </div>
+                <!-- modal body end  -->
+            </div>
+        </form>
+    </div>
 {% endblock %}

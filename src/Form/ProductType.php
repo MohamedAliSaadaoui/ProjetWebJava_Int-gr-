@@ -25,7 +25,7 @@ class ProductTypeControler extends AbstractType
                     'Home & Garden' => 'home_garden',
                 ],
             ])
-            ->add('condition', ChoiceType::class, [
+            ->add('productCondition', ChoiceType::class, [
                 'label' => 'Condition',
                 'choices' => [
                     'New' => 'new',
