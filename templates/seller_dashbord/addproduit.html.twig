@@ -690,16 +690,39 @@
 
         <!-- add product form start  -->
 {# templates/seller_dashbord/addproduit.html.twig #}
-{{ form_start(form) }}
-    {{ form_row(form.name) }}
-    {{ form_row(form.category) }}
-    {{ form_row(form.condition) }}
-    {{ form_row(form.color) }}
-    {{ form_row(form.stock) }}
-    {{ form_row(form.description) }}
-    {{ form_row(form.returnPolicy) }}
-    <button type="submit" class="btn btn-primary">Add Product</button>
+{{ form_start(form,) }}
+    <div class="input-label-wrapper">
+        <label for="{{ form.name.vars.id }}">Product Name* (In Any Language)</label>
+        {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Product Name'} }) }}
+    </div>
+    <div class="input-label-wrapper">
+        <label for="{{ form.category.vars.id }}">Category</label>
+        {{ form_widget(form.category, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Category'} }) }}
+    </div>
+    <div class="input-label-wrapper">
+        <label for="{{ form.condition.vars.id }}">Condition</label>
+        {{ form_widget(form.condition, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Condition'} }) }}
+    </div>
+    <div class="input-label-wrapper">
+        <label for="{{ form.color.vars.id }}">Color</label>
+        {{ form_widget(form.color, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Color'} }) }}
+    </div>
+    <div class="input-label-wrapper">
+        <label for="{{ form.stock.vars.id }}">Stock</label>
+        {{ form_widget(form.stock, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Stock Quantity'} }) }}
+    </div>
+    <div class="input-label-wrapper">
+        <label for="{{ form.description.vars.id }}">Description</label>
+        {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Description'} }) }}
+    </div>
+    <div class="input-label-wrapper">
+        <label for="{{ form.returnPolicy.vars.id }}">Return Policy</label>
+        {{ form_widget(form.returnPolicy, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Return Policy'} }) }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Product</button>
 {{ form_end(form) }}
+
         <!-- add product form end -->
 
     </div>
