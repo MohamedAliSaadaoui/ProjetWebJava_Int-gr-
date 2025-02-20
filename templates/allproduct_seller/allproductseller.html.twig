@@ -659,7 +659,7 @@
         <div class="gs-vendor-breadcrumb has-mb">
             <div class="d-flex gap-4  flex-wrap align-items-center custom-gap-sm-2">
                 <h4 class="text-capitalize">All Products</h4>
-                <a class="template-btn md-btn black-btn data-table-btn" href="{{ path('app_seller_produit') }}">+Add New Product</a>
+                <a class="template-btn md-btn black-btn data-table-btn" href="/seller/add-product">+Add New Product</a>
 
             </div>
             <ul class="breadcrumb-menu">
@@ -695,11 +695,13 @@
                     <thead>
                         <tr>
 
-                            <th>Image</th>
-                            <th>Name</th>
-                            <th>Type</th>
-                            <th>Price</th>
-                            <th class="text-center">Status</th>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Condition</th>
+                            <th>Color</th>
+                            <th class="text-center">Stock</th>
+                            <th class="text-center">Description</th>
+                            <th class="text-center">Return Policy</th>
                             <th class="text-center">Options</th>
                         </tr>
                     </thead>
@@ -724,13 +726,23 @@
         <td><span class="content">{{ product.productCondition }}</span></td>
         <td><span class="content">{{ product.color }}</span></td>
         <td><span class="content">{{ product.stock }}</span></td>
-        <td><span class="content">{{ product.description }}</span></td>
-        <td><span class="content">{{ product.returnPolicy }}</span></td>
+       <td><span class="content">{{ product.description|slice(0, 30) }}{% if product.description|length > 30 %}...{% endif %}</span></td>
+<td><span class="content">{{ product.returnPolicy|slice(0, 30) }}{% if product.returnPolicy|length > 30 %}...{% endif %}</span></td>
+
         <td>
             <div class="table-icon-btns-wrapper">
-<a href="{{ path('app_editproduct', { id: product.id }) }}" class="view-btn edit-btn">Edit</a>
-                <a href="" class="view-btn">View</a>
-            <a href="{{ path('app_deleteproduct', { id: product.id }) }}" class="view-btn delete-btn delete_button" onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
+            <a href="{{ path('app_editproduct', { id: product.id }) }}" class="view-btn edit-btn">
+    <i class="fas fa-edit" style="color: white;"></i> 
+</a>
+
+<a href="" class="view-btn">
+    <i class="fas fa-eye" style="color: white;"></i> 
+</a>
+
+<a href="{{ path('app_deleteproduct', { id: product.id }) }}" class="view-btn delete-btn delete_button" >
+    <i class="fas fa-trash-alt" style="color: white;"></i> 
+</a>
+
             </div>
         </td>
     </tr>
@@ -752,6 +764,19 @@
         </div>
     </div>
     <!-- user dashboard wrapper end -->
+
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="deleteToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                Product deleted successfully!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
 
 
     <div class="modal gs-modal fade" id="confirm-detete-modal" tabindex="-1" aria-hidden="true">
@@ -779,4 +804,30 @@
             </div>
         </form>
     </div>
+    
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".delete_button").forEach(button => {
+        button.addEventListener("click", function (event) {
+            event.preventDefault();
+            let url = this.href;
+
+            fetch(url, { method: "GET" }) // Change "GET" selon ta méthode de suppression
+                .then(response => {
+                    if (response.ok) {
+                        let toast = new bootstrap.Toast(document.getElementById("deleteToast"));
+                        toast.show();
+                        setTimeout(() => location.reload(), 2000); // Recharge après 2s
+                    } else {
+                        alert("Error deleting product!");
+                    }
+                })
+                .catch(error => alert("An error occurred: " + error));
+        });
+    });
+});
+</script>
+
+
+
 {% endblock %}

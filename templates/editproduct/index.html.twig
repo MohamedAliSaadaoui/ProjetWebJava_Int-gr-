@@ -509,7 +509,7 @@
 							<a href="/seller/dashbord" class="back-btn">
 								<i class="fa-solid fa-arrow-left-long"></i>
 							</a>
-							<h4>Add Product</h4>
+							<h4>Update Product</h4>
 						</div>
 
 						<ul class="breadcrumb-menu">
@@ -539,7 +539,8 @@
 					</div>
 
     {# Display the form with the custom style #}
-    {{ form_start(form) }}
+    {{ form_start(form, { 'attr': {'id': 'updateForm'} }) }}
+
 
     <div class="input-label-wrapper">
         <label for="{{ form.name.vars.id }}">Product Name* (In Any Language)</label>
@@ -594,6 +595,18 @@
     <!-- user dashboard wrapper end -->
 
 
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="updateToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                Product updated successfully!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+
     <div class="modal gs-modal fade" id="confirm-detete-modal" tabindex="-1" aria-hidden="true">
         <form id="delete_url" class="modal-dialog confirm-delete-modal-dialog modal-dialog-centered" method="POST">
             <div class="modal-content confirm-delete-modal-content form-group">
@@ -619,4 +632,33 @@
             </div>
         </form>
     </div>
+	<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("updateForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Empêche le rechargement de la page
+        
+        let form = this;
+        let formData = new FormData(form);
+
+        fetch(form.action, {
+            method: "POST",
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                let toast = new bootstrap.Toast(document.getElementById("updateToast"));
+                toast.show();
+                setTimeout(() => {
+                    window.location.href = "/allproduct/seller"; // Redirection après 2s
+                }, 2000);
+            } else {
+                alert("Error updating product!");
+            }
+        })
+        .catch(error => alert("An error occurred: " + error));
+    });
+});
+</script>
+
+
 {% endblock %}

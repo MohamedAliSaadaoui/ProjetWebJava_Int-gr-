@@ -527,37 +527,60 @@
 
 					<!-- add product form start  -->
 					{# templates/seller_dashbord/addproduit.html.twig #}
-					{{ form_start(form,) }}
-						<div class="input-label-wrapper"> <label for="{{ form.name.vars.id }}">Product Name</label>
-						{{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Product Name'} }) }}
-					</div>
-					<div class="input-label-wrapper">
-						<label for="{{ form.category.vars.id }}">Category</label>
-						{{ form_widget(form.category, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Category'} }) }}
-					</div>
-					<div class="input-label-wrapper">
-						<label for="{{ form.productCondition.vars.id }}">Condition</label>
-						{{ form_widget(form.productCondition, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Condition'} }) }}
-					</div>
-					<div class="input-label-wrapper">
-						<label for="{{ form.color.vars.id }}">Color</label>
-						{{ form_widget(form.color, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Color'} }) }}
-					</div>
-					<div class="input-label-wrapper">
-						<label for="{{ form.stock.vars.id }}">Stock</label>
-						{{ form_widget(form.stock, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Stock Quantity'} }) }}
-					</div>
-					<div class="input-label-wrapper">
-						<label for="{{ form.description.vars.id }}">Description</label>
-						{{ form_widget(form.description, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Description'} }) }}
-					</div>
-					<div class="input-label-wrapper">
-						<label for="{{ form.returnPolicy.vars.id }}">Return Policy</label>
-						{{ form_widget(form.returnPolicy, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Return Policy'} }) }}
-					</div>
+					{{ form_start(form, {'attr': {'id': 'addForm', 'novalidate': 'novalidate'}}) }}
 
-					<button type="submit" class="btn btn-primary">Save Product</button>
-					{{ form_end(form) }}
+    <div class="input-label-wrapper">
+        <label for="{{ form.name.vars.id }}">Product Name</label>
+        {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Product Name'} }) }}
+        <div class="text-danger">
+            {{ form_errors(form.name) }}
+        </div>
+    </div>
+    <div class="input-label-wrapper">
+        <label for="{{ form.category.vars.id }}">Category</label>
+        {{ form_widget(form.category, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Category'} }) }}
+        <div class="text-danger">
+            {{ form_errors(form.category) }}
+        </div>
+    </div>
+    <div class="input-label-wrapper">
+        <label for="{{ form.productCondition.vars.id }}">Condition</label>
+        {{ form_widget(form.productCondition, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Condition'} }) }}
+        <div class="text-danger">
+            {{ form_errors(form.productCondition) }}
+        </div>
+    </div>
+    <div class="input-label-wrapper">
+        <label for="{{ form.color.vars.id }}">Color</label>
+        {{ form_widget(form.color, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Color'} }) }}
+        <div class="text-danger">
+            {{ form_errors(form.color) }}
+        </div>
+    </div>
+    <div class="input-label-wrapper">
+        <label for="{{ form.stock.vars.id }}">Stock</label>
+        {{ form_widget(form.stock, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Stock Quantity'} }) }}
+        <div class="text-danger">
+            {{ form_errors(form.stock) }}
+        </div>
+    </div>
+    <div class="input-label-wrapper">
+        <label for="{{ form.description.vars.id }}">Description</label>
+        {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Description'} }) }}
+        <div class="text-danger">
+            {{ form_errors(form.description) }}
+        </div>
+    </div>
+    <div class="input-label-wrapper">
+        <label for="{{ form.returnPolicy.vars.id }}">Return Policy</label>
+        {{ form_widget(form.returnPolicy, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Return Policy'} }) }}
+        <div class="text-danger">
+            {{ form_errors(form.returnPolicy) }}
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Product</button>
+{{ form_end(form) }}
+
 
 					<!-- add product form end -->
 
@@ -567,6 +590,8 @@
 		</div>
 	</div>
 	<!-- user dashboard wrapper end -->
+
+	
 
 
 	<div class="modal gs-modal fade" id="confirm-detete-modal" tabindex="-1" aria-hidden="true">
@@ -600,3 +625,7 @@
 
   
 {% endblock %}
+
+
+
+

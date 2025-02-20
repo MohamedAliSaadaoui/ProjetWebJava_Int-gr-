@@ -1837,7 +1837,6 @@
         <button type="button" class="template-btn dark-btn w-100" id="addtodetailscart" 
             data-id="{{ product.id }}"
             data-name="{{ product.name }}">
-
             Add to Cart
         </button>
     </div> 
@@ -1986,7 +1985,7 @@
 
                             </span>
                             <span> <b>Total Items :</b>
-                                                                        
+
                                                             </span>
 
                             <div class="action-btns-wrapper">
@@ -3536,4 +3535,39 @@
     </div>
 </footer>
     <!-- footer section -->
+    
 {% endblock %}
+
+{% block javascripts %}
+    
+    <script>
+        document.getElementById('addtodetailscart').addEventListener('click', function () {
+            const productId = this.getAttribute('data-id');
+            const productName = this.getAttribute('data-name');
+
+            fetch(`/produit/${productId}?add_to_cart=true`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(`${productName} added to cart!`);
+                updateCartDisplay();
+            })
+            .catch(error => {
+                console.error('Error adding product to cart:', error);
+            });
+        });
+
+        function updateCartDisplay() {
+            fetch('/panier')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('cart-container').innerHTML = html;
+                });
+        }
+    </script>
+    {% endblock %}
+

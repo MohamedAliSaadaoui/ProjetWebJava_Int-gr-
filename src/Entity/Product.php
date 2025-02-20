@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -34,6 +36,14 @@ class Product
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $returnPolicy = null;
 
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Panier::class)]
+    private Collection $panierItems;
+
+    public function __construct()
+    {
+        $this->panierItems = new ArrayCollection();
+    }
+
     // Getters and Setters
     public function getId(): ?int { return $this->id; }
 
@@ -57,5 +67,33 @@ class Product
 
     public function getReturnPolicy(): ?string { return $this->returnPolicy; }
     public function setReturnPolicy(?string $returnPolicy): self { $this->returnPolicy = $returnPolicy; return $this; }
+
+    /**
+     * @return Collection<int, Panier>
+     */
+    public function getPanierItems(): Collection
+    {
+        return $this->panierItems;
+    }
+
+    public function addPanierItem(Panier $panierItem): self
+    {
+        if (!$this->panierItems->contains($panierItem)) {
+            $this->panierItems->add($panierItem);
+            $panierItem->setProduct($this);
+        }
+        return $this;
+    }
+
+    public function removePanierItem(Panier $panierItem): self
+    {
+        if ($this->panierItems->removeElement($panierItem)) {
+            // set the owning side to null (unless already changed)
+            if ($panierItem->getProduct() === $this) {
+                $panierItem->setProduct(null);
+            }
+        }
+        return $this;
+    }
 }
 

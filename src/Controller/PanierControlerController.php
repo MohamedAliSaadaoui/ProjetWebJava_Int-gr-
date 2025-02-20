@@ -1,6 +1,9 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Panier;
+use App\Entity\Product;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -11,48 +14,41 @@ class PanierControlerController extends AbstractController
 {
     // Route to add a product to the cart
     #[Route('/panier/add/{id}', name: 'app_panier_add')]
-    public function addToCart($id, ProductRepository $productRepository, SessionInterface $session): Response
+    public function addToCart($id, ProductRepository $productRepository, SessionInterface $session, EntityManagerInterface $entityManager): Response
     {
-        // Retrieve the cart from the session
-        $panier = $session->get('panier', []);
-
         // Retrieve the product from the database
         $product = $productRepository->find($id);
 
         if (!$product) {
-            throw $this->createNotFoundException('Produit non trouvé');
+            throw $this->createNotFoundException('Product not found');
         }
 
-        // Add or update the product in the cart
-        if (isset($panier[$id])) {
-            // Increment quantity if the product is already in the cart
-            $panier[$id]['quantity'] += 1;
-        } else {
-            // Add new product to the cart with its details (id, name, and initial quantity of 1)
-            $panier[$id] = [
-                'id' => $product->getId(),
-                'name' => $product->getName(),
-                'quantity' => 1, // Set initial quantity to 1
-            ];
-        }
+        // Create new Panier entity
+        $panierItem = new Panier();
+        $panierItem->setProduct($product);
+        $panierItem->setQuantity(1);
+        // You might want to calculate subtotal based on product price
+        $panierItem->setSubtotal(0); // Set appropriate calculation here
 
-        // Save the updated cart back into the session
-        $session->set('panier', $panier);
+        // Persist to database
+        $entityManager->persist($panierItem);
+        $entityManager->flush();
 
-        // After adding to cart, render the cart page
+        // Add success flash message
+        $this->addFlash('success', 'Product added to cart successfully!');
+
         return $this->redirectToRoute('app_panier_controler');
     }
 
     // Route to display the cart
     #[Route('/panier', name: 'app_panier_controler')]
-    public function viewCart(SessionInterface $session): Response
+    public function viewCart(EntityManagerInterface $entityManager): Response
     {
-        // Retrieve the cart from the session
-        $panier = $session->get('panier', []);
+        // Get all cart items from database
+        $panierItems = $entityManager->getRepository(Panier::class)->findAll();
 
-        // Render the panier.html.twig template and pass the cart to it
         return $this->render('panier_controler/panier.html.twig', [
-            'panier' => $panier, // Pass the cart to the template
+            'panierItems' => $panierItems,
         ]);
     }
 }

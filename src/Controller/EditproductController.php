@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
-use App\Form\ProductTypeControler;
+use App\Form\ProductType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;  // Add this
 use Symfony\Component\HttpFoundation\Request;
@@ -26,20 +26,17 @@ final class EditproductController extends AbstractController
         }
 
         // Create the form for editing the product
-        $form = $this->createForm(ProductTypeControler::class, $product);
+        $form = $this->createForm(ProductType::class, $product);
 
         // Handle the form submission
         $form->handleRequest($request);
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Persist the updated product to the database
             $entityManager->flush();
 
-            // No redirect, just return the updated product details in the same page
-            return $this->render('editproduct/index.html.twig', [
-                'form' => $form->createView(),
-                'product' => $product
-            ]);
+            return $this->redirectToRoute('app_allproduct_seller');
         }
 
         // Render the form if it was not submitted or is invalid
