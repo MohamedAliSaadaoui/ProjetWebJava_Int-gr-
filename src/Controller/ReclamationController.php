@@ -22,7 +22,7 @@ final class ReclamationController extends AbstractController
         $user = $userRepository->findById(1); // Assuming you're using Symfony's security system to manage users
         $reclamations = $reclamationRepository->findByUser($user);
 
-        return $this->render('reclamation/index.html.twig', [
+        return $this->render('user_dash_board/user_dash_board.html.twig', [
             'reclamations' => $reclamations,
         ]);
     }

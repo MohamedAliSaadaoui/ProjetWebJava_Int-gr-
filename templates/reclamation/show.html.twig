@@ -1,54 +1,58 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Reclamation{% endblock %}
+{% block title %}Reclamation Details{% endblock %}
 
 {% block body %}
-    <h1>Reclamation</h1>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Reclamation Details</h1>
 
-    <table class="table">
-        <tbody>
-        <tr>
-            <th>Id</th>
-            <td>{{ reclamation.id }}</td>
-        </tr>
-        <tr>
-            <th>Objet</th>
-            <td>{{ reclamation.objet }}</td>
-        </tr>
-        <tr>
-            <th>Description</th>
-            <td>{{ reclamation.description ?: 'No description available' }}</td>
-        </tr>
-        <tr>
-            <th>Status</th>
-            <td>{{ reclamation.status }}</td>
-        </tr>
-        <tr>
-            <th>Date Reclamation</th>
-            <td>{{ reclamation.dateReclamation ? reclamation.dateReclamation|date('Y-m-d H:i:s') : 'Not available' }}</td>
-        </tr>
+        <div class="card shadow-sm p-4">
+            <table class="table table-bordered">
+                <tbody>
 
-        {% if reclamation.attachments %}
-            <tr>
-                <th>Attachments</th>
-                <td>
-                    <ul>
-                        {% for attachment in reclamation.attachments|split('; ') %}
-                            <li><a href="{{ attachment }}" target="_blank">{{ attachment }}</a></li>
-                        {% endfor %}
-                    </ul>
-                </td>
-            </tr>
-        {% endif %}
-        </tbody>
-    </table>
+                <tr>
+                    <th>Objet</th>
+                    <td>{{ reclamation.objet }}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ reclamation.description ?: 'No description available' }}</td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td>
+                            <span class="badge
+                                {% if reclamation.status == 'Résolue' %} bg-success
+                                {% else %} bg-danger {% endif %}">
+                                {{ reclamation.status }}
+                            </span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Date Reclamation</th>
+                    <td>{{ reclamation.dateReclamation ? reclamation.dateReclamation|date('Y-m-d H:i:s') : 'Not available' }}</td>
+                </tr>
 
-    <div>
-        <a href="{{ path('app_reclamation_index') }}" class="btn btn-secondary">Back to list</a>
-        {% if reclamation.status != 'Résolue' %}
-        <a href="{{ path('app_reclamation_edit', {'id': reclamation.id}) }}" class="btn btn-primary">Edit</a>
-        {% endif %}
+                {% if reclamation.attachments %}
+                    <tr>
+                        <th>Attachments</th>
+                        <td class="image-gallery">
+                            {% for attachment in reclamation.attachments|split('; ') %}
+                                <img src="{{ attachment }}" alt="Reclamation Image" class="img-thumbnail">
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+
+            <div class="text-center mt-1">
+                <a href="{{ path('app_reclamation_index') }}" class="btn btn-secondary">Back to List</a>
+                {% if reclamation.status != 'Résolue' %}
+                    <a href="{{ path('app_reclamation_edit', {'id': reclamation.id}) }}" class="btn btn-primary">Edit</a>
+                {% endif %}
+                {{ include('reclamation/_delete_form.html.twig') }}
+            </div>
+        </div>
     </div>
-
-    {{ include('reclamation/_delete_form.html.twig') }}
 {% endblock %}

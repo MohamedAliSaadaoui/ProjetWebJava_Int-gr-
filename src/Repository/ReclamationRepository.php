@@ -21,7 +21,7 @@ class ReclamationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->andWhere('r.user = :userId')
             ->setParameter('userId', $userId)
-            ->orderBy('r.id_reclam', 'DESC')
+            ->orderBy('r.id_reclam', 'ASC')
             ->getQuery()
             ->getResult();
     }
@@ -31,7 +31,7 @@ class ReclamationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->andWhere('r.category = :category')
             ->setParameter('category', $category)
-            ->orderBy('r.id_reclam', 'DESC')
+            ->orderBy('r.id_reclam', 'ASC')
             ->getQuery()
             ->getResult();
     }
@@ -41,7 +41,7 @@ class ReclamationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->andWhere('r.status = :status')
             ->setParameter('status', $status)
-            ->orderBy('r.id_reclam', 'DESC')
+            ->orderBy('r.id_reclam', 'ASC')
             ->getQuery()
             ->getResult();
     }
@@ -49,7 +49,7 @@ class ReclamationRepository extends ServiceEntityRepository
     public function findByMaxDate()
     {
         return $this->createQueryBuilder('r')
-            ->orderBy('r.dateReclamation', 'DESC')
+            ->orderBy('r.dateReclamation', 'ASC')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
