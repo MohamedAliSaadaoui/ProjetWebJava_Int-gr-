@@ -16,7 +16,14 @@ public function detailProduit($id, ProductRepository $productRepository): Respon
     if (!$product) {
         throw $this->createNotFoundException('Produit non trouvé');
     }
-
+    {
+        // Add the product to the cart with quantity 1
+        $panier[$id] = [
+            'id' => $product->getId(),
+            'name' => $product->getName(),
+            'quantity' => 1,
+        ];
+    }
     return $this->render('detail_produit_controler/detailproduit.html.twig', [
         'product' => $product,
     ]);

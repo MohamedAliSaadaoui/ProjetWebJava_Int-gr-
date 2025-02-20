@@ -15,11 +15,15 @@ class CategoryController extends AbstractController
     {
         // Fetch all products from the database
         $products = $entityManager->getRepository(Product::class)->findAll();
+         // Get the total number of products
+         $totalProducts = count($products);
 
         // Render the template and pass the products to it
         return $this->render('category/category.html.twig', [
             'controller_name' => 'CategoryController',
             'products' => $products,  // Passing products to the template
+            'totalProducts' => $totalProducts,  // Pass the total count
+
         ]);
     }
 }
