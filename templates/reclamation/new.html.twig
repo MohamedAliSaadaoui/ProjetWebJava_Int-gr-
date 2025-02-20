@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>New Complaint</h1>
+
+    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+    {{ form_row(form.user_name) }}
+    {{ form_row(form.objet) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.category) }}
+    {{ form_row(form.attachments) }}
+
+    <button type="submit">Submit</button>
+    {{ form_end(form) }}
+{% endblock %}
+
