@@ -1660,144 +1660,51 @@
                         <tbody class="t_body">
                                                             
 
-                                <tr class="">
-                                    <td class="cart-product-area">
-                                        <div class="cart-product d-flex">
-                                            <img src="https://cleandemo.geniusocean.net/geniuscart2/assets/images/products/1733224672oz6wrOt6.png"
-                                                alt="">
-                                            <div class="cart-product-info">
 
-                                                <a class="cart-title d-inline-block"
-                                                    href="https://cleandemo.geniusocean.net/geniuscart2/item/fashion-physical-product-title-will-be-here-pnb1245f5xcf">Fashion Physical product title will...</a>
+{% for id, product in panier %}
+<tr class="">
+    <td class="cart-product-area">
+        <div class="cart-product d-flex">
+            <img src="{{ product.image }}" alt="">
+            <div class="cart-product-info">
+                <a class="cart-title d-inline-block" href="#">{{ product.name }}</a>
+                <div class="d-flex align-items-center gap-2">
+                    Size: <p class="d-inline-block">{{ product.size }}</p>
+                </div>
+            </div>
+        </div>
+    </td>
+    <td class="cart-price">{{ product.price }}$</td>
 
-                                                <div class="d-flex align-items-center gap-2">
-                                                                                                                                                                Size : <p class="d-inline-block">
-                                                            S
-                                                        </p>
-                                                                                                    </div>
+    <td>
+        <div class="cart-quantity">
+            <button class="cart-quantity-btn quantity-down">-</button>
+            <input type="text" id="qty{{ id }}" value="{{ product.quantity }}" class="borderless" readonly>
+            <input type="hidden" class="prodid" value="{{ id }}">
+            <input type="hidden" class="size_qty" value="{{ product.stock }}">
+            <button class="cart-quantity-btn quantity-up">+</button>
+        </div>
+    </td>
 
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="cart-price">
-                                        190$</td>
+    <input type="hidden" id="stock{{ id }}" value="{{ product.stock }}">
 
-                                                                            <td>
-                                            <div class="cart-quantity">
-                                                <button class="cart-quantity-btn quantity-down">-</button>
-                                                <input type="text"
-                                                    id="qty496S"
-                                                    value="1" class="borderless" readonly>
-                                                <input type="hidden" class="prodid"
-                                                    value="496">
-                                                <input type="hidden" class="itemid"
-                                                    value="496S">
-                                                <input type="hidden" class="size_qty"
-                                                    value="100">
-                                                <input type="hidden" class="size_price"
-                                                    value="10">
-                                                <input type="hidden" class="minimum_qty"
-                                                    value="0">
+    <td class="cart-price" id="prc{{ id }}">{{ product.price * product.quantity }}$</td>
 
-                                                <button class="cart-quantity-btn quantity-up">+</button>
-                                            </div>
-                                        </td>
-                                    
+    <td>
+        <a class="cart-remove-btn" href="{{ path('app_panier_remove', { id: id }) }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M9 3H15M3 6H21M19 6L18.2987 16.5193C18.1935 18.0975 18.1409 18.8867 17.8 19.485C17.4999 20.0118 17.0472 20.4353 16.5017 20.6997C15.882 21 15.0911 21 13.5093 21H10.4907C8.90891 21 8.11803 21 7.49834 20.6997C6.95276 20.4353 6.50009 20.0118 6.19998 19.485C5.85911 18.8867 5.8065 18.0975 5.70129 16.5193L5 6M10 10.5V15.5M14 10.5V15.5"
+                      stroke="#1F0300" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </a>
+    </td>
+</tr>
+{% else %}
+<tr>
+    <td colspan="5">Your cart is empty.</td>
+</tr>
+{% endfor %}
 
-                                                                            <input type="hidden"
-                                            id="stock496S"
-                                            value="100">
-                                    
-
-
-                                    <td class="cart-price"
-                                        id="prc496S">
-                                        190$
-                                                                            </td>
-                                    <td>
-                                        <a class="cart-remove-btn"
-                                            ata-class="cremove496S"
-                                            href="https://cleandemo.geniusocean.net/geniuscart2/removecart/496S">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none">
-                                                <path
-                                                    d="M9 3H15M3 6H21M19 6L18.2987 16.5193C18.1935 18.0975 18.1409 18.8867 17.8 19.485C17.4999 20.0118 17.0472 20.4353 16.5017 20.6997C15.882 21 15.0911 21 13.5093 21H10.4907C8.90891 21 8.11803 21 7.49834 20.6997C6.95276 20.4353 6.50009 20.0118 6.19998 19.485C5.85911 18.8867 5.8065 18.0975 5.70129 16.5193L5 6M10 10.5V15.5M14 10.5V15.5"
-                                                    stroke="#1F0300" stroke-width="2" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </svg>
-                                        </a>
-                                    </td>
-                                </tr>
-                                                            
-
-                                <tr class="">
-                                    <td class="cart-product-area">
-                                        <div class="cart-product d-flex">
-                                            <img src="https://cleandemo.geniusocean.net/geniuscart2/assets/images/products/1733224982418e3yol.png"
-                                                alt="">
-                                            <div class="cart-product-info">
-
-                                                <a class="cart-title d-inline-block"
-                                                    href="https://cleandemo.geniusocean.net/geniuscart2/item/fashion-physical-product-title-will-be-here-pnb1245f5xss">Fashion Physical product title will...</a>
-
-                                                <div class="d-flex align-items-center gap-2">
-                                                                                                                                                                Size : <p class="d-inline-block">
-                                                            S
-                                                        </p>
-                                                                                                    </div>
-
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="cart-price">
-                                        124$</td>
-
-                                                                            <td>
-                                            <div class="cart-quantity">
-                                                <button class="cart-quantity-btn quantity-down">-</button>
-                                                <input type="text"
-                                                    id="qty495S"
-                                                    value="1" class="borderless" readonly>
-                                                <input type="hidden" class="prodid"
-                                                    value="495">
-                                                <input type="hidden" class="itemid"
-                                                    value="495S">
-                                                <input type="hidden" class="size_qty"
-                                                    value="100">
-                                                <input type="hidden" class="size_price"
-                                                    value="10">
-                                                <input type="hidden" class="minimum_qty"
-                                                    value="0">
-
-                                                <button class="cart-quantity-btn quantity-up">+</button>
-                                            </div>
-                                        </td>
-                                    
-
-                                                                            <input type="hidden"
-                                            id="stock495S"
-                                            value="100">
-                                    
-
-
-                                    <td class="cart-price"
-                                        id="prc495S">
-                                        124$
-                                                                            </td>
-                                    <td>
-                                        <a class="cart-remove-btn"
-                                            ata-class="cremove495S"
-                                            href="https://cleandemo.geniusocean.net/geniuscart2/removecart/495S">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none">
-                                                <path
-                                                    d="M9 3H15M3 6H21M19 6L18.2987 16.5193C18.1935 18.0975 18.1409 18.8867 17.8 19.485C17.4999 20.0118 17.0472 20.4353 16.5017 20.6997C15.882 21 15.0911 21 13.5093 21H10.4907C8.90891 21 8.11803 21 7.49834 20.6997C6.95276 20.4353 6.50009 20.0118 6.19998 19.485C5.85911 18.8867 5.8065 18.0975 5.70129 16.5193L5 6M10 10.5V15.5M14 10.5V15.5"
-                                                    stroke="#1F0300" stroke-width="2" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </svg>
-                                        </a>
-                                    </td>
-                                </tr>
                             
                         </tbody>
                     </table>

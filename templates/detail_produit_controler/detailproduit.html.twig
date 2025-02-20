@@ -1709,7 +1709,7 @@
                     <form>
                         <!-- product-info-wrapper  -->
                         <div class="product-info-wrapper  ">
-                            <h3>Fashion Physical product title will be here</h3>
+<h3>{{ product.name }}</h3>
                             <div class="price-wrapper">
                                 <h5 id="sizeprice">120$</h5>
                                 <h5><del>139.90$</del></h5>
@@ -1739,7 +1739,7 @@
                                 <ul>
                                     <li>
                                                                                     <span><b>Availability : </b></span>
-                                                                                             In Stock
+                                                                                             {{ product.stock }}
                                                                                     
                                     </li>
 
@@ -1749,8 +1749,7 @@
                                             <span>72hrs</span>
                                         </li>
                                                                                                                 <li>
-                                            <span><b>Product SKU : </b></span>
-                                            <span>pNb1245F5dgX </span>
+                                           
                                         </li>
                                     
                                                                     </ul>
@@ -1811,7 +1810,7 @@
 
                                                             <!-- product colors -->
                                 <div class="variation-wrapper variation-colors">
-                                    <span class="varition-title">Color :</span>
+                                    <span class="varition-title">{{ product.color }}</span>
                                     <ul>
                                                                                     <li class="active cart_color">
                                                 <input checked type="radio" data-price="0"
@@ -1865,22 +1864,7 @@
                             
 
                             <!-- add-qty-wrapper -->
-                            <div class="add-qty-wrapper">
-                                <span class="varition-title">Quantity :</span>
-                                <div class="product-input-wrapper">
-                                    <button class="action-btn qtminus" type="button">-</button>
 
-                                    <input class="qty-input qttotal" type="text" readonly id="order-qty"
-                                        value="1">
-
-                                    <input class="qty-input" type="hidden" id="affilate_user"
-                                        value="1">
-
-                                    <input class="qty-input" type="hidden" id="product_minimum_qty"
-                                        value="1">
-                                    <button class="action-btn qtplus" type="button">+</button>
-                                </div>
-                            </div>
 
                         
                         <input type="hidden" id="product_price"
@@ -1891,11 +1875,17 @@
 
 
                         <!-- add to cart buy btn wrapper -->
-                        <div class="row row-cols-2">
-                            <div class="col">
-                                <button type="button" class="template-btn dark-btn w-100" id="addtodetailscart">
-                                    add to cart                                </button>
-                            </div>
+<div class="row row-cols-2">
+    <div class="col">
+        <button type="button" class="template-btn dark-btn w-100" id="addtodetailscart" 
+            data-id="{{ product.id }}"
+            data-name="{{ product.name }}">
+
+            Add to Cart
+        </button>
+    </div> 
+</div>
+
                             <div class="col">
                                 <button type="button" class="template-btn w-100"
                                     id="addtobycard">buy now</button>
