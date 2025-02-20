@@ -101,18 +101,19 @@ public function delete(Request $request, Article $article, EntityManagerInterfac
 #[Route('/blog/liste', name: 'app_liste')]
 public function liste(EntityManagerInterface $entityManager): Response
 {
-    // Récupère tous les articles depuis la base de données
     $articles = $entityManager->getRepository(Article::class)->findAll();
 
     // Rendu de la page avec la liste des articles
     return $this->render('blog/liste_article.html.twig', [
-        'articles' => $articles, // Passe la liste d'articles à la vue
+        'articles' => $articles, 
     ]);
 }
 
 
 
-#[Route('/blog/{id}', name: 'article_show')]
+
+
+#[Route('/blog/comm', name: 'article_comm')]
 public function show(Article $article, Request $request, EntityManagerInterface $entityManager): Response
 {
     // Crée un nouveau commentaire
@@ -124,36 +125,37 @@ public function show(Article $article, Request $request, EntityManagerInterface 
         $commentaire->setArticle($article); // Lier le commentaire à l'article
         $entityManager->persist($commentaire);
         $entityManager->flush();
-        $this->addFlash('success', 'Commentaire ajouté avec succès !');
 
-        return $this->redirectToRoute('article_show', ['id' => $article->getId()]);
+        return $this->redirectToRoute('article_comm', ['id' => $article->getId()]);
     }
 
-    // Retourne la vue de l'article avec les commentaires
-    return $this->render('blog/article_show.html.twig', [
+    
+    return $this->render('blog/article_comm.html.twig', [
         'article' => $article,
         'commentaireForm' => $form->createView(),
     ]);
 
-
-
-
-
-
+    
 }
 
 
+#[Route('/blog/details_article', name: 'article_details')]
+public function details(EntityManagerInterface $entityManager): Response
+{
+    $article = $entityManager->getRepository(Article::class)->findOneBy([], ['date' => 'DESC']);
 
+    if (!$article) {
+        throw $this->createNotFoundException('Aucun article disponible.');
+    }
 
+    $commentaire = new Commentaire();
+    $form = $this->createForm(CommentaireType::class, $commentaire);
 
-
-
-
-
-
-
-
-
+    return $this->render('blog/article_details.html.twig', [
+        'article' => $article,
+        'commentaireForm' => $form->createView(),
+    ]);
+}
 
 
 

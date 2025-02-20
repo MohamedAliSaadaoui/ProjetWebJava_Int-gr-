@@ -7,8 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert; 
 
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
@@ -18,22 +18,16 @@ class Article
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 60, nullable: false)]
-    #[Assert\NotBlank(message: "Le titre ne peut pas être vide")]
-    #[Assert\Length(max: 60, maxMessage: "Le titre ne peut pas dépasser 60 caractères")]
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le titre ne peut pas être vide.")]
     private ?string $title = null;
 
-
+    #[Assert\GreaterThanOrEqual(value: "today", message: "La date doit être la date d'aujourd'hui." )]
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false)]
-    #[Assert\NotNull(message: "La date ne peut pas être vide")]
-    #[Assert\Type("\DateTimeInterface", message: "entrez une date valide")]
-    #[Assert\EqualTo("today", message: "La date doit être celle d'aujourd'hui")]
     private ?\DateTimeInterface $date = null;
 
-
-    
-    #[ORM\Column(type: "text", nullable: false)]
-    #[Assert\NotBlank(message: "Le contenu de l'article ne peut pas être vide")]
+    #[ORM\Column(type: "text")]
+    #[Assert\NotBlank(message: "Le contenu ne peut pas être vide.")]
     private ?string $content = null;
 
     // Getter pour "content"
@@ -49,15 +43,9 @@ class Article
 
         return $this;
     }
-    
-
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
-
-
-    
-
 
     #[ORM\OneToMany(mappedBy: "article", targetEntity: Commentaire::class, cascade: ["remove"])]
     private Collection $commentaires;
@@ -66,8 +54,6 @@ class Article
     {
         $this->commentaires = new ArrayCollection();
     }
-
-
 
     public function getId(): ?int
     {
@@ -106,8 +92,6 @@ class Article
         $this->image = $image;
         return $this;
     }
-
-
 
     /**
      * @return Collection<int, Commentaire>

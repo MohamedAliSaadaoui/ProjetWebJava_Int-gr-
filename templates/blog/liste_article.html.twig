@@ -19,9 +19,9 @@
                 {% for article in articles %}
                     <tr>
                         <td>
-                            <a href="{{ path('article_show', {'id': article.id}) }}">
-                                {{ article.title }}
-                            </a>
+                           <a href="{{ path('article_details') }}">Voir l'article</a>
+
+                        
                         </td>
                         <td>{{ article.date|date('d-m-Y') }}</td> {# Affiche la date formatée #}
                         

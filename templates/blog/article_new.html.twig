@@ -6,7 +6,7 @@
 <div class="container">
     <h1 class="text-center my-5">Créer un nouvel article</h1>
 
-    {{ form_start(form, {'attr': {'class': 'form-group'}}) }}
+    {{ form_start(form, {'attr': {'class': 'form-group', 'novalidate': 'novalidate'}}) }}
         <div class="mb-3">
             {{ form_row(form.title, {
                 'label': 'Titre de l\'article',
@@ -17,13 +17,12 @@
         <div class="mb-3">
             {{ form_row(form.date, {
                 'label': 'Date de l\'article',
-                'attr': {'class': 'form-control'}
+                'attr': {'class': 'form-contro'}
             }) }}
         </div>
 
         <div class="mb-3">
-            {{ form_row(form.content, {  // Assurez-vous que 'content' correspond à votre champ dans le formulaire
-                'label': 'Contenu de l\'article',
+            {{ form_row(form.content, {  
                 'attr': {'class': 'form-control', 'rows': 4, 'placeholder': 'Écrivez votre article ici...'}
             }) }}
         </div>
