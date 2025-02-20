@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert; 
+
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
@@ -21,32 +23,51 @@ class Article
     #[Assert\Length(max: 60, maxMessage: "Le titre ne peut pas dépasser 60 caractères")]
     private ?string $title = null;
 
+
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false)]
     #[Assert\NotNull(message: "La date ne peut pas être vide")]
     #[Assert\Type("\DateTimeInterface", message: "entrez une date valide")]
+    #[Assert\EqualTo("today", message: "La date doit être celle d'aujourd'hui")]
     private ?\DateTimeInterface $date = null;
+
+
+    
+    #[ORM\Column(type: "text", nullable: false)]
+    #[Assert\NotBlank(message: "Le contenu de l'article ne peut pas être vide")]
+    private ?string $content = null;
+
+    // Getter pour "content"
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    // Setter pour "content"
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+    
+
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
 
-
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "articles")]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
-
-
+    
 
 
     #[ORM\OneToMany(mappedBy: "article", targetEntity: Commentaire::class, cascade: ["remove"])]
     private Collection $commentaires;
 
-
-
     public function __construct()
     {
         $this->commentaires = new ArrayCollection();
     }
+
+
 
     public function getId(): ?int
     {
@@ -85,21 +106,6 @@ class Article
         $this->image = $image;
         return $this;
     }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
-        return $this;
-    }
-
-
-
-
 
 
 

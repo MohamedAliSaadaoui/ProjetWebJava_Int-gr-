@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block body %}
+    <h1>{{ article.title }}</h1>
+    <p><strong>Date :</strong> {{ article.date|date('d-m-Y') }}</p>
+    <img src="{{ article.image }}" alt="{{ article.title }}" width="200">
+    <p>{{ article.content }}</p>
+
+    <h2>Commentaires :</h2>
+    {% if article.commentaires is empty %}
+        <p>Aucun commentaire pour cet article.</p>
+    {% else %}
+        <ul>
+            {% for commentaire in article.commentaires %}
+                <li>
+                    <strong>{{ commentaire.date|date('d-m-Y H:i') }}</strong> :
+                    {{ commentaire.contenuComm }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h3>Ajouter un commentaire</h3>
+    {{ form_start(commentaireForm) }}
+        {{ form_row(commentaireForm.contenuComm) }}
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+    {{ form_end(commentaireForm) }}
+
+    <a href="{{ path('app_blog') }}">Retour</a>
+{% endblock %}

@@ -11,9 +11,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class BlogController extends AbstractController
 {
+
+    //Page blog affiché 
     #[Route('/blog', name: 'app_blog')]
     public function index(EntityManagerInterface $entityManager): Response
     {
@@ -24,117 +27,142 @@ class BlogController extends AbstractController
         ]);
     }
 
-    #[Route('/article/new', name: 'article_new')]
-    public function newArticle(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $article = new Article();
-        $form = $this->createForm(ArticleType::class, $article);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $article->setAuteur($this->getUser());
-            $entityManager->persist($article); //AJOUT
-            $entityManager->flush();
+//affichage et creation du formulaire
 
-            return $this->redirectToRoute('app_blog'); //affichage
-        }
+#[Route('/blog/new', name: 'app_blog_new')]
+public function create(Request $request, EntityManagerInterface $entityManager): Response
+{
+    // Créer une nouvelle instance de l'article
+    $article = new Article();
 
-        return $this->render('blog/article_form.html.twig', 
-        [
-            'form' => $form->createView(),
-        ]);
+    // Créer le formulaire en lien avec l'entité Article
+    $form = $this->createForm(ArticleType::class, $article);
+
+    // Gérer la soumission du formulaire
+    $form->handleRequest($request);
+
+    // Vérifier si le formulaire est soumis et valide
+    if ($form->isSubmitted() && $form->isValid()) {
+        
+        // Sauvegarder l'article dans la base de données
+        $entityManager->persist($article);
+        $entityManager->flush();
+
+        // Ajouter un message flash pour indiquer le succès
+        $this->addFlash('success', 'Article créé avec succès !');
+
+        // Rediriger vers la page de liste des articles après succès
+        return $this->redirectToRoute('app_blog');
     }
 
-    #[Route('/article/{id}', name: 'article_show')]
-    public function showArticle(Article $article): Response
-    {
-        return $this->render('blog/article_show.html.twig', [
-            'article' => $article,
-        ]);
-    }
+    // Renvoyer la vue avec le formulaire
+    return $this->render('blog/article_new.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
 
-    #[Route('/article/{id}/edit', name: 'article_edit')]
-    public function editArticle(Request $request, Article $article, EntityManagerInterface $entityManager): Response
-    {
-        $this->denyAccessUnlessGranted('EDIT', $article);
+//MODIFICATION
 
-        $form = $this->createForm(ArticleType::class, $article);
-        $form->handleRequest($request);
+#[Route('/blog/edit/{id}', name: 'article_edit')]
+public function edit(Request $request, Article $article, EntityManagerInterface $entityManager): Response
+{
+    $form = $this->createForm(ArticleType::class, $article);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-            return $this->redirectToRoute('app_blog');
-        }
+    if ($form->isSubmitted() && $form->isValid()) {
+       
 
-        return $this->render('blog/article_form.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-    #[Route('/article/{id}/delete', name: 'article_delete', methods: ['POST'])]
-    public function deleteArticle(Request $request, Article $article, EntityManagerInterface $entityManager): Response
-    {
-        $this->denyAccessUnlessGranted('DELETE', $article);
-
-        if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($article);
-            $entityManager->flush();
-        }
+        $entityManager->flush();
+        $this->addFlash('success', 'Article modifié avec succès.');
 
         return $this->redirectToRoute('app_blog');
     }
 
-
-
+    return $this->render('blog/article_new.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
 
     
-
-    #[Route('/article/{id}/comment', name: 'comment_new')]
-    public function newComment(Request $request, Article $article, EntityManagerInterface $entityManager): Response
-    {
-        $comment = new Commentaire();
-        $form = $this->createForm(CommentaireType::class, $comment);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $comment->setArticle($article);
-            $comment->setDateComm(new \DateTime());
-            $entityManager->persist($comment);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('article_show', ['id' => $article->getId()]);
-        }
-
-        return $this->render('blog/comment_form.html.twig', [
-            'form' => $form->createView(),
-        ]);
+//SUPPRESSION
+#[Route('/blog/delete/{id}', name: 'article_delete', methods: ['POST'])]
+public function delete(Request $request, Article $article, EntityManagerInterface $entityManager): Response
+{
+    if ($this->isCsrfTokenValid('delete' . $article->getId(), $request->request->get('_token'))) {
+        $entityManager->remove($article);
+        $entityManager->flush();
+        $this->addFlash('success', 'Article supprimé avec succès.');
     }
 
-    #[Route('/comment/{id}/edit', name: 'comment_edit')]
-    public function editComment(Request $request, Commentaire $comment, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(CommentaireType::class, $comment);
-        $form->handleRequest($request);
+    return $this->redirectToRoute('app_blog');
+}
+// Affichage de la liste des articles
+#[Route('/blog/liste', name: 'app_liste')]
+public function liste(EntityManagerInterface $entityManager): Response
+{
+    // Récupère tous les articles depuis la base de données
+    $articles = $entityManager->getRepository(Article::class)->findAll();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-            return $this->redirectToRoute('article_show', ['id' => $comment->getArticle()->getId()]);
-        }
+    // Rendu de la page avec la liste des articles
+    return $this->render('blog/liste_article.html.twig', [
+        'articles' => $articles, // Passe la liste d'articles à la vue
+    ]);
+}
 
-        return $this->render('blog/comment_form.html.twig', [
-            'form' => $form->createView(),
-        ]);
+
+
+#[Route('/blog/{id}', name: 'article_show')]
+public function show(Article $article, Request $request, EntityManagerInterface $entityManager): Response
+{
+    // Crée un nouveau commentaire
+    $commentaire = new Commentaire();
+    $form = $this->createForm(CommentaireType::class, $commentaire);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $commentaire->setArticle($article); // Lier le commentaire à l'article
+        $entityManager->persist($commentaire);
+        $entityManager->flush();
+        $this->addFlash('success', 'Commentaire ajouté avec succès !');
+
+        return $this->redirectToRoute('article_show', ['id' => $article->getId()]);
     }
 
-    #[Route('/comment/{id}/delete', name: 'comment_delete', methods: ['POST'])]
-    public function deleteComment(Request $request, Commentaire $comment, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($comment);
-            $entityManager->flush();
-        }
+    // Retourne la vue de l'article avec les commentaires
+    return $this->render('blog/article_show.html.twig', [
+        'article' => $article,
+        'commentaireForm' => $form->createView(),
+    ]);
 
-        return $this->redirectToRoute('article_show', ['id' => $comment->getArticle()->getId()]);
-    }
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 } 
+
 

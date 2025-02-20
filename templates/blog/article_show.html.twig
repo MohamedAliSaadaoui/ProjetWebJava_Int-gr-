@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block body %}
+    <div class="article">
+        <h1>{{ article.title }}</h1>
+        <p><em>{{ article.date|date('d-m-Y') }}</em></p>
+        <div>
+            <p>{{ article.content }}</p>
+        </div>
+
+        <h3>Commentaires</h3>
+
+        <div class="commentaires">
+            {% for commentaire in article.commentaires %}
+                <div class="commentaire">
+                    
+                </div>
+            {% else %}
+                <p>Aucun commentaire pour cet article.</p>
+            {% endfor %}
+        </div>
+
+        <h3>Ajouter un commentaire</h3>
+        {{ form_start(commentaireForm) }}
+            <div class="mb-3">
+               
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Ajouter un commentaire</button>
+            </div>
+        {{ form_end(commentaireForm) }}
+
+        <br><a href="{{ path('app_blog') }}" class="btn btn-secondary">Retour à la liste des articles</a>
+    </div>
+{% endblock %}

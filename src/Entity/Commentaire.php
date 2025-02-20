@@ -18,7 +18,7 @@ class Commentaire
     private ?\DateTimeInterface $dateComm = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $contentComm = null;
+    private ?string $contenuComm;
 
     #[ORM\ManyToOne(targetEntity: Article::class, inversedBy: "commentaires")]
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
@@ -40,14 +40,14 @@ class Commentaire
         return $this;
     }
 
-    public function getContentComm(): ?string
+    public function getcontenuComm(): ?string
     {
-        return $this->contentComm;
+        return $this->contenuComm;
     }
-
-    public function setContentComm(?string $contentComm): static
+    
+    public function setcontenuComm(string $contenuComm): self
     {
-        $this->contentComm = $contentComm;
+        $this->contenuComm = $contenuComm;
         return $this;
     }
 

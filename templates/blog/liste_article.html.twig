@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Articles{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="text-center my-4">Liste des Articles</h1>
+
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Titre</th>
+                    <th>Date</th>
+                  
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for article in articles %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('article_show', {'id': article.id}) }}">
+                                {{ article.title }}
+                            </a>
+                        </td>
+                        <td>{{ article.date|date('d-m-Y') }}</td> {# Affiche la date formatée #}
+                        
+                        <td class="d-flex justify-content-center">
+                            <div class="d-flex justify-content-center">
+                                <a href="{{ path('article_edit', {'id': article.id}) }}" class="btn btn-warning btn-sm mx-2" style="border: 1px solid #f39c12;">Modifier</a>
+                                <form action="{{ path('article_delete', {'id': article.id}) }}" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm mx-2" style="border: 1px solid #c0392b;" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?')">Supprimer</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">Aucun article trouvé.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
