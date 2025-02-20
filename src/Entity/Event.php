@@ -38,10 +38,27 @@ class Event
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\NotBlank(message: "Le statut est obligatoire.")]
     private ?string $statut = null;
+    public const STATUTS = [
+        'Upcoming' => 'upcoming',
+        'Ongoing' => 'ongoing',
+        'Cancelled' => 'cancelled',
+    ];
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\NotBlank(message: "La catégorie est obligatoire.")]
     private ?string $categorie = null;
+    public const CATEGORIES = [
+        'Clothing Exchange' => 'Clothing Exchange',
+        'Recycling and Upcycling' => 'Recycling and Upcycling',
+        'Second-Hand Market' => 'Second-Hand Market',
+        'Repair Workshops' => 'Repair Workshops',
+        'Community Clean-Up' => 'Community Clean-Up',
+        'Ecology Conferences' => 'Ecology Conferences',
+        'Solidarity Donation' => 'Solidarity Donation',
+        'Local Sustainable Products' => 'Local Sustainable Products',
+        'Book Exchange' => 'Book Exchange',
+        'Eco-Friendly Gardening Workshops' => 'Eco-Friendly Gardening Workshops',
+    ];
 
     public function getId(): ?int
     {

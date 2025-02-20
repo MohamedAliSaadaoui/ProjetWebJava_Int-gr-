@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\ParticipeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: ParticipeRepository::class)]
 class Participe
@@ -14,11 +16,18 @@ class Participe
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank(message: "Veuillez sélectionner une date de participation.")]
     private ?\DateTimeInterface $date_participation = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $nbr_place = null;
+
+  
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Event $id_event = null;
 
     public function getId(): ?int
     {
@@ -48,4 +57,38 @@ class Participe
 
         return $this;
     }
+
+    public function getIdEvent(): ?Event
+    {
+        return $this->id_event;
+    }
+
+    public function setIdEvent(?Event $id_event): static
+    {
+        $this->id_event = $id_event;
+
+        return $this;
+    }
+    public function __construct()
+{
+    $this->nbr_place = 0; // Assurer une valeur initiale
 }
+
+#[Assert\Callback]
+public function validateDateParticipation(ExecutionContextInterface $context): void
+{
+    if ($this->date_participation && $this->id_event) {
+        $dateDebut = $this->id_event->getDateDebut();
+        $dateFin = $this->id_event->getDateFin();
+
+        if ($this->date_participation < $dateDebut || $this->date_participation > $dateFin) {
+            $context->buildViolation("La date de participation doit être entre le {$dateDebut->format('d/m/Y')} et le {$dateFin->format('d/m/Y')}.")
+                ->atPath('date_participation')
+                ->addViolation();
+        }
+    }
+}
+
+
+}
+

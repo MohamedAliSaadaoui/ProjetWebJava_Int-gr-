@@ -6,6 +6,8 @@ use App\Entity\Event;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
 
 class EventType extends AbstractType
 {
@@ -24,8 +26,22 @@ class EventType extends AbstractType
                 'attr' => ['class' => 'form-control'],
             ])
             ->add('lieu')
-            ->add('statut')
-            ->add('categorie')
+            ->add('statut',ChoiceType::class, [
+                'choices' => [
+                    'Upcoming' => 'upcoming',
+                    'Ongoing' => 'ongoing',
+                    'Cancelled' => 'cancelled',
+                ],
+                'placeholder' => 'Select a status',
+                'required' => true,
+            ])
+
+            ->add('categorie',ChoiceType::class, [
+                'choices' => Event::CATEGORIES,
+                'placeholder' => 'Choose a category', // Optionnel : texte par défaut
+                'attr' => ['class' => 'form-control'],
+            ]);
+        
         ;
     }
 

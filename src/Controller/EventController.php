@@ -58,7 +58,8 @@ public function create(Request $request, EntityManagerInterface $entityManager):
             'events' => $events,
         ]);
     }
-    #[Route('/event/delete/{id}', name: 'event_delete')]
+    // #[IsGranted('ROLE_ADMIN')]
+#[Route('/event/delete/{id}', name: 'event_delete')]
 public function delete(Event $event, EntityManagerInterface $entityManager, Request $request): Response
 {
     if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->request->get('_token'))) {
@@ -70,6 +71,7 @@ public function delete(Event $event, EntityManagerInterface $entityManager, Requ
 
     return $this->redirectToRoute('event_list');
 }
+// #[IsGranted('ROLE_ADMIN')]
 #[Route('/event/edit/{id}', name: 'event_edit')]
     public function edit(Event $event, Request $request, EntityManagerInterface $entityManager): Response
     {

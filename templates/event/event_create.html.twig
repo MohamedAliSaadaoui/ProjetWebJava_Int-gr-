@@ -4,61 +4,61 @@
 
 {% block body %}
     <div class="container">
-        <h1 class="text-center my-4">Create a New Event</h1>
+        <h1 class="text-center my-4" style="color: #4B5320;">Create a New Event</h1>
 
-        {# Afficher le formulaire de création d'événement #}
+        {# Formulaire avec un thème naturel #}
         {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
             <div class="form-group">
                 {{ form_label(form.titre, 'Title', {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                 <div class="col-sm-10">
-                    {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
-                    {{ form_errors(form.titre) }} {# Affiche les erreurs pour le titre #}
+                    {{ form_widget(form.titre, {'attr': {'class': 'form-control', 'style': 'background-color: #f0e1c1; border-color: #4B5320;'}}) }}
+                    {{ form_errors(form.titre) }}
                 </div>
             </div>
 
             <div class="form-group">
                 {{ form_label(form.dateDebut, 'Start Date', {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                 <div class="col-sm-10">
-                    {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control'}}) }}
-                    {{ form_errors(form.dateDebut) }} {# Affiche les erreurs pour la date de début #}
+                    {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control', 'style': 'background-color: #f0e1c1; border-color: #4B5320;'}}) }}
+                    {{ form_errors(form.dateDebut) }}
                 </div>
             </div>
 
             <div class="form-group">
                 {{ form_label(form.dateFin, 'End Date', {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                 <div class="col-sm-10">
-                    {{ form_widget(form.dateFin, {'attr': {'class': 'form-control'}}) }}
-                    {{ form_errors(form.dateFin) }} {# Affiche les erreurs pour la date de début #}
+                    {{ form_widget(form.dateFin, {'attr': {'class': 'form-control', 'style': 'background-color: #f0e1c1; border-color: #4B5320;'}}) }}
+                    {{ form_errors(form.dateFin) }}
                 </div>
             </div>
 
             <div class="form-group">
                 {{ form_label(form.lieu, 'Location', {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                 <div class="col-sm-10">
-                    {{ form_widget(form.lieu, {'attr': {'class': 'form-control'}}) }}
-                    {{ form_errors(form.lieu) }} {# Affiche les erreurs pour la date de début #}
+                    {{ form_widget(form.lieu, {'attr': {'class': 'form-control', 'style': 'background-color: #f0e1c1; border-color: #4B5320;'}}) }}
+                    {{ form_errors(form.lieu) }}
                 </div>
             </div>
 
             <div class="form-group">
                 {{ form_label(form.statut, 'Status', {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                 <div class="col-sm-10">
-                    {{ form_widget(form.statut, {'attr': {'class': 'form-control'}}) }}
-                    {{ form_errors(form.statut) }} {# Affiche les erreurs pour la date de début #}
+                    {{ form_widget(form.statut, {'attr': {'class': 'form-control', 'style': 'background-color: #f0e1c1; border-color: #4B5320;'}}) }}
+                    {{ form_errors(form.statut) }}
                 </div>
             </div>
 
             <div class="form-group">
                 {{ form_label(form.categorie, 'Category', {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                 <div class="col-sm-10">
-                    {{ form_widget(form.categorie, {'attr': {'class': 'form-control'}}) }}
-                    {{ form_errors(form.categorie) }} {# Affiche les erreurs pour la date de début #}
+                    {{ form_widget(form.categorie, {'attr': {'class': 'form-control', 'style': 'background-color: #f0e1c1; border-color: #4B5320;'}}) }}
+                    {{ form_errors(form.categorie) }}
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-primary">Create Event</button>
+                    <button type="submit" class="btn" style="background-color: #4B5320; color: white;">Create Event</button>
                 </div>
             </div>
         {{ form_end(form) }}
