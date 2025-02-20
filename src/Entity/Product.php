@@ -88,7 +88,7 @@ class Product
     public function removePanierItem(Panier $panierItem): self
     {
         if ($this->panierItems->removeElement($panierItem)) {
-            // set the owning side to null (unless already changed)
+
             if ($panierItem->getProduct() === $this) {
                 $panierItem->setProduct(null);
             }
