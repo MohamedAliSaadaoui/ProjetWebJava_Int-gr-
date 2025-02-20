@@ -1,11 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Reponse{% endblock %}
+{% block title %}New Response{% endblock %}
 
 {% block body %}
-    <h1>Create new Reponse</h1>
+    <div class="form-container">
+        <h1 class="form-title">Create New Response</h1>
 
-    {{ include('reponse/_form.html.twig') }}
+        {{ include('reponse/_form.html.twig') }}
 
-    <a href="{{ path('app_reponse_index') }}">back to list</a>
+        <div class="form-buttons">
+            <button type="submit" class="submit-btn">Submit</button>
+            <a href="{{ path('app_reponse_index') }}" class="back-btn">Back to List</a>
+        </div>
+    </div>
 {% endblock %}

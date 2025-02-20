@@ -16,11 +16,12 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/reponse')]
 final class ReponseController extends AbstractController
 {
-    #[Route(name: 'app_reponse_index', methods: ['GET'])]
-    public function index(ReponseRepository $reponseRepository): Response
+    #[Route('/', name: 'app_reponse_index', methods: ['GET'])]
+    public function index(ReponseRepository $reponseRepository , ReclamationRepository $reclamationRepository): Response
     {
-        return $this->render('reponse/index.html.twig', [
-            'reponses' => $reponseRepository->findAll(),
+        return $this->render('admin_dash_board/admindashbord.html.twig', [
+            'responses' => $reponseRepository->findAll(),
+            'reclamations' => $reclamationRepository->findAll(),
         ]);
     }
 
@@ -48,9 +49,6 @@ final class ReponseController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Save the response to the database
-            $reclamation->setStatus('Résolue'); // Set the status
-            $entityManager->persist($reclamation);
             $entityManager->persist($reponse);
             $entityManager->flush();
 
