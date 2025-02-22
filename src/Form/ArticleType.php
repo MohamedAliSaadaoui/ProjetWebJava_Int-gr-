@@ -25,6 +25,7 @@ class ArticleType extends AbstractType
             ->add('date', DateType::class, [
                 'label' => 'Date',
                 'widget' => 'single_text',
+                'data' => new \DateTime(),
                 'required' => true,
             ])
             ->add('image', UrlType::class, [

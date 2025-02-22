@@ -97,6 +97,9 @@ public function delete(Request $request, Article $article, EntityManagerInterfac
 
     return $this->redirectToRoute('app_blog');
 }
+
+
+
 // Affichage de la liste des articles
 #[Route('/blog/liste', name: 'app_liste')]
 public function liste(EntityManagerInterface $entityManager): Response
@@ -133,9 +136,7 @@ public function show(Article $article, Request $request, EntityManagerInterface 
     return $this->render('blog/article_comm.html.twig', [
         'article' => $article,
         'commentaireForm' => $form->createView(),
-    ]);
-
-    
+    ]);   
 }
 
 
@@ -156,14 +157,6 @@ public function details(EntityManagerInterface $entityManager): Response
         'commentaireForm' => $form->createView(),
     ]);
 }
-
-
-
-
-
-
-
-
 
 } 
 
