@@ -9,7 +9,6 @@
 						<ul class="wows align-items-center">
 							<li>
 								<a href="#" "tel:+1(234)567-8901">
-									Contact & Support: 00 000 000 000</a>
 							</li>
 						</ul>
 					</div>
@@ -328,7 +327,7 @@
 						</div>
 
 						<div class="icon-circle">
-							<a href="#" "item/compare/view.html">
+							<a href="#" "/compare/view.html">
 								<span class="cart-count" id="compare-count">
 									0
 								</span>
@@ -407,7 +406,7 @@
 								class="accordion">
 								<!-- main list -->
 								<li>
-									<a href="#" "https://cleandemo.geniusocean.net/geniuscart2">Home</a>
+									<a href="/">Home</a>
 								</li>
 								<li>
 									<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category">Product</a>
@@ -1272,7 +1271,7 @@
 					<h2 class="breadcrumb-title">Product</h2>
 					<ul class="bread-menu">
 						<li>
-							<a href="#" "https://cleandemo.geniusocean.net/geniuscart2">Home</a>
+							<a href="/">Home</a>
 						</li>
 						<li>
 							<a href="#" "javascript:;">Product</a>
@@ -1292,6 +1291,51 @@
 					<div
 						class="gs-product-sidebar-wrapper">
 						<!-- product categories wrapper -->
+<div class="single-product-widget">
+    <h5 class="widget-title">Product Categories</h5>
+    <div class="product-cat-widget">
+        <div class="d-flex flex-wrap gap-2">
+            {% set categories = [
+                {'name': "Men's Clothing", 'slug': 'Mens-Clothing'},
+                {'name': "Women's Clothing", 'slug': 'Womens-Clothing'},
+                {'name': "Kids' Clothing", 'slug': 'Kids-Clothing'},
+                {'name': "Accessories", 'slug': 'Accessories'}
+            ] %}
+
+            {% for category in categories %}
+                <button class="btn filter-btn {{ app.request.get('category') == category.slug ? 'btn-primary' : 'btn-outline-primary' }}"
+                        data-category="{{ category.slug }}">
+                    {{ category.name }}
+                </button>
+            {% endfor %}
+        </div>
+
+        <!-- Apply & Clear Filter Buttons -->
+        <button class="template-btn mt-3 w-100" id="price_filter">Apply Filter</button>
+        <a href="https://cleandemo.geniusocean.net/geniuscart2/category" class="template-btn dark-btn w-100 mt-3">Clear Filter</a>
+    </div>
+</div>
+
+<script>
+    let selectedCategory = '';
+
+    document.querySelectorAll('.filter-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('btn-primary'));
+            this.classList.add('btn-primary');
+            selectedCategory = this.getAttribute('data-category');
+        });
+    });
+
+    document.getElementById('price_filter').addEventListener('click', function() {
+        if (selectedCategory) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('category', selectedCategory);
+            window.location.href = url.toString();
+        }
+    });
+</script>
+
 
 						<!-- Price Range -->
 						<div class="single-product-widget">
@@ -1389,11 +1433,12 @@
                         </div>
                     </a>
 
-                    <a href="{{ path('app_panier_add', { id: product.id , name : product.name }) }}" class="add_cart_click">
+<a href="{{ path('app_panier_add', { id: product.id, name: product.name|url_encode }) }}" class="add_cart_click">
     <div class="add-cart">
         Add To Cart
     </div>
 </a>
+
 
 
 <a href="{{ path('app_detail_produit_controler', { 'id': product.id }) }}">
@@ -1711,4 +1756,15 @@ type="hidden" id="update_max_price" value="">
 		</div>
 	</div>
 </footer>
+<script>
+    var mainurl = "{{ app.request.schemeAndHttpHost }}"; // Set the base URL dynamically
+</script>
+
+<script src="path/to/myscript.js"></script>  <!-- Ensure this comes after the definition -->
+<script>
+    var lang = "{{ app.request.locale }}";  // Set the language dynamically
+</script>
+
+<script src="path/to/myscript.js"></script>  <!-- Ensure this comes after the lang definition -->
+
 <!-- footer section -->{% endblock %}

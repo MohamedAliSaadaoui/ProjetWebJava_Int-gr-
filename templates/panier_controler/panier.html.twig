@@ -1464,98 +1464,54 @@
 </div>
 <!-- user panel mobile sidebar -->
 <div class="overlay"></div>
-<section class="gs-breadcrumb-section bg-class"
-   data-background="https://cleandemo.geniusocean.net/geniuscart2/assets/images/1724480495Imagexxxxxpng.png">
-   <div class="container">
-      <div class="row justify-content-center content-wrapper">
-         <div class="col-12">
-            <h2 class="breadcrumb-title">Cart</h2>
-            <ul class="bread-menu">
-               <li><a href="#""https://cleandemo.geniusocean.net/geniuscart2">Home</a></li>
-               <li><a href="#""https://cleandemo.geniusocean.net/geniuscart2/carts">Cart</a></li>
-            </ul>
-         </div>
-      </div>
-   </div>
-</section>
 <section class="gs-cart-section load_cart">
-   <div class="container gs-cart-container">
-      <div class="row gs-cart-row">
-         <div class="col-lg-8">
-            <div class="cart-table table-responsive">
-               <table class="table">
-                  <thead>
-                     <tr class="">
-                        <th scope="col">Product Name</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Subtotal</th>
-                        <th scope="col">Action</th>
-                     </tr>
-                  </thead>
-                  <tbody class="t_body">
-                     <div id="cart-container">
-                        {% for item in panierItems %}
-                        <tr>
-                           <td class="cart-product-area">
-                              <div class="cart-product d-flex">
-                                 <div class="cart-product-info">
-                                    <a class="cart-title d-inline-block" href="#">{{ item.product.name }}</a>
-                                 </div>
-                              </div>
-                           </td>
-                           <td>
-                              <div class="cart-quantity">
-                                 <button class="cart-quantity-btn quantity-down">-</button>
-                                 <input type="text" value="{{ item.quantity }}" class="borderless" readonly>
-                                 <button class="cart-quantity-btn quantity-up">+</button>
-                              </div>
-                           </td>
-                           <td class="cart-price">{{ item.subtotal }}$</td>
-                           <td>
-                              <a class="cart-remove-btn" href="{{ path('app_panier_remove', { id: item.id }) }}">
-                                 <i class="fas fa-trash"></i>
-                              </a>
-                           </td>
-                        </tr>
-                        {% else %}
-                        <tr>
-                           <td colspan="4">Your cart is empty.</td>
-                        </tr>
-                        {% endfor %}
-                     </div>
-                  </tbody>
-               </table>
+    <div class="container gs-cart-container">
+        <div class="row gs-cart-row">
+            <div class="col-lg-8">
+                <div class="cart-table table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if cartItems is not empty %}
+                                {% for product in cartItems %}
+                                    <tr>
+                                        <td>{{ product.name }}</td>  <!-- Display product name -->
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="3">Your cart is empty.</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-         </div>
-         <div class="col-lg-4">
-            <div class="cart-summary">
-               <h4 class="cart-summary-title">Cart Summary</h4>
-               <div class="cart-summary-content">
-                  <div class="cart-summary-item d-flex justify-content-between">
-                     <p class="cart-summary-subtitle">Subtotal</p>
-                     <p class="cart-summary-price">
-                     </p>
-                  </div>
-                  <div class="cart-summary-item d-flex justify-content-between">
-                     <p class="cart-summary-subtitle">Discount</p>
-                     <p class="cart-summary-price">0$</p>
-                  </div>
-                  <div class="cart-summary-item d-flex justify-content-between">
-                     <p class="cart-summary-subtitle">Total</p>
-                     <p class="cart-summary-price total-cart-price">
-                        $
-                     </p>
-                  </div>
-                  <div class="cart-summary-btn">
-                     <a href="#""https://cleandemo.geniusocean.net/geniuscart2/checkout" class="template-btn w-100">Proceed to Checkout</a>
-                  </div>
-               </div>
+            <div class="col-lg-4">
+                <div class="cart-summary">
+                    <h4 class="cart-summary-title">Cart Summary</h4>
+                    <div class="cart-summary-content">
+                        <div class="cart-summary-item d-flex justify-content-between">
+                            <p class="cart-summary-subtitle">Total Items</p>
+                            <p class="cart-summary-price">{{ cartItems|length }}</p>
+                        </div>
+                        <div class="cart-summary-btn">
+                            <a href="#" class="template-btn w-100">Proceed to Checkout</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-         </div>
-      </div>
-   </div>
+        </div>
+    </div>
 </section>
+
+<pre>{{ dump(cartItems) }}</pre>
 <!-- footer section -->
 <footer class="gs-footer-section ">
    <div class="newslatter newslatter2">
@@ -1824,4 +1780,7 @@
    </div>
 </footer>
 <!-- footer section -->
+
+
+
 {% endblock %}

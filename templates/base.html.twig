@@ -4,45 +4,42 @@
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        
         {% block stylesheets %}
-        {# Local assets using Symfony's asset function #}
-            <link rel="stylesheet" href="{{ asset('assets/front/css/bootstrap.min.css') }}">
-            <link rel="stylesheet" href="{{ asset('assets/front/css/all.css') }}">
-            <link rel="stylesheet" href="{{ asset('assets/front/css/slick.css') }}">
-            <link rel="stylesheet" href="{{ asset('assets/front/css/nice-select.css') }}">
-            <link rel="stylesheet" href="{{ asset('assets/front/css/jquery-ui.css') }}">
-            <link rel="stylesheet" href="{{ asset('assets/front/css/animate.css') }}">
-            <link rel="stylesheet" href="{{ asset('assets/front/css/toastr.min.css') }}">
-            <link rel="stylesheet" href="{{ asset('assets/front/css/datatables.min.css') }}">
-            <link rel="stylesheet" href="{{ asset('assets/front/css/style.css') }}">
-            <link rel="stylesheet" href="{{ asset('assets/front/css/custom.css') }}">
-            
-            {# Favicon #}
-            <link rel="icon" href="{{ asset('assets/images/17333080691572146352faviconpng.png') }}">
-            
-            {# Open Graph tags #}
-            <meta property="og:title" content="Genius-Shop" />
-            <meta property="og:image" content="{{ asset('assets/images/1730281140Blackpng.png') }}" />
-            
-            {# External resources #}
-            <link href="https://fonts.googleapis.com/css?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" rel="stylesheet">
-            
-            
-
+        <link rel="stylesheet" href="{{ asset('assets/front/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/front/css/all.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/front/css/slick.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/front/css/nice-select.css') }}">  <!-- NiceSelect CSS -->
+        <link rel="stylesheet" href="{{ asset('assets/front/css/jquery-ui.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/front/css/animate.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/front/css/toastr.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/front/css/datatables.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/front/css/style.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/front/css/custom.css') }}">
+        <link rel="icon" href="{{ asset('assets/images/17333080691572146352faviconpng.png') }}">
+        <meta property="og:title" content="Genius-Shop" />
+        <meta property="og:image" content="{{ asset('assets/images/1730281140Blackpng.png') }}" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" rel="stylesheet">
         {% endblock %}
 
-        {% block javascripts %}
-            {#front logic #}
-            <script src="{{ asset('assets/front/js/jquery.min.js') }}"></script>
-            <script src="{{ asset('assets/front/js/slick.js') }}"></script>
-            <script src="{{ asset('assets/front/js/jquery-ui.js') }}"></script>
-            <script src="{{ asset('assets/front/js/nice-select.js') }}"></script>
-            <script src="{{ asset('assets/front/js/wow.js') }}"></script>
-            <script src="{{ asset('assets/front/js/bootstrap.bundle.min.js') }}"></script>
-            <script src="{{ asset('assets/front/js/toastr.min.js') }}"></script>
-            <script src="{{ asset('assets/front/js/script.js') }}"></script>
-            <script src="{{ asset('assets/front/js/myscript.js') }}"></script>
-        {% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('assets/front/js/jquery.min.js') }}"></script>  <!-- jQuery -->
+    <script src="{{ asset('assets/front/js/nice-select.js') }}"></script>  <!-- NiceSelect JS -->
+    <script src="{{ asset('assets/front/js/slick.js') }}"></script>
+    <script src="{{ asset('assets/front/js/jquery-ui.js') }}"></script>
+    <script src="{{ asset('assets/front/js/wow.js') }}"></script>
+    <script src="{{ asset('assets/front/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/front/js/toastr.min.js') }}"></script>
+    <script src="{{ asset('assets/front/js/script.js') }}"></script>
+    <script src="{{ asset('assets/front/js/myscript.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('select').niceSelect();  // Initialize NiceSelect
+        });
+    </script>
+{% endblock %}
+
     </head>
     <body>
         {% block body %}{% endblock %}

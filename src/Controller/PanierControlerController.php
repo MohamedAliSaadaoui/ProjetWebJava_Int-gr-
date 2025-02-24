@@ -1,12 +1,11 @@
 <?php
+
 namespace App\Controller;
 
-use App\Entity\Panier;
 use App\Entity\Product;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\ProductRepository;
 
@@ -14,7 +13,7 @@ class PanierControlerController extends AbstractController
 {
     // Route to add a product to the cart
     #[Route('/panier/add/{id}', name: 'app_panier_add')]
-    public function addToCart($id, ProductRepository $productRepository, SessionInterface $session, EntityManagerInterface $entityManager): Response
+    public function addToCart($id, ProductRepository $productRepository, SessionInterface $session): Response
     {
         // Retrieve the product from the database
         $product = $productRepository->find($id);
@@ -23,16 +22,23 @@ class PanierControlerController extends AbstractController
             throw $this->createNotFoundException('Product not found');
         }
 
-        // Create new Panier entity
-        $panierItem = new Panier();
-        $panierItem->setProduct($product);
-        $panierItem->setQuantity(1);
-        // You might want to calculate subtotal based on product price
-        $panierItem->setSubtotal(0); // Set appropriate calculation here
+        // Get the cart from the session (if it doesn't exist, create an empty one)
+        $cart = $session->get('cart', []);
 
-        // Persist to database
-        $entityManager->persist($panierItem);
-        $entityManager->flush();
+        // Check if the product is already in the cart
+        if (isset($cart[$id])) {
+            // If it is, increase the quantity
+            $cart[$id]['quantity']++;
+        } else {
+            // If it's not, add it to the cart with the product name and quantity
+            $cart[$id] = [
+                'name' => $product->getName(),
+                'quantity' => 1,
+            ];
+        }
+
+        // Save the cart back to the session
+        $session->set('cart', $cart);
 
         // Add success flash message
         $this->addFlash('success', 'Product added to cart successfully!');
@@ -42,17 +48,48 @@ class PanierControlerController extends AbstractController
 
     // Route to display the cart
     #[Route('/panier', name: 'app_panier_controler')]
-    public function viewCart(EntityManagerInterface $entityManager): Response
+    public function viewCart(SessionInterface $session, ProductRepository $productRepository): Response
     {
-        // Get all cart items from database
-        $panierItems = $entityManager->getRepository(Panier::class)->findAll();
+        // Get all cart items from the session
+        $cart = $session->get('cart', []);
 
+        // Fetch the full product details based on the cart items' product IDs
+        $cartItems = [];
+
+        foreach ($cart as $id => $item) {
+            // Fetch the product details for each item in the cart using its ID
+            $product = $productRepository->find($id);
+
+            if ($product) {
+                $cartItems[] = [
+                    'product' => $product,
+                    'quantity' => $item['quantity'],
+                ];
+            }
+        }
+
+        // Render the cart page with the fetched product details
         return $this->render('panier_controler/panier.html.twig', [
-            'panierItems' => $panierItems,
+            'cartItems' => $cartItems,
         ]);
     }
+
+    // Route to remove a product from the cart
+    #[Route('/panier/remove/{id}', name: 'app_panier_remove')]
+    public function removeFromCart($id, SessionInterface $session): Response
+    {
+        // Get the cart from the session
+        $cart = $session->get('cart', []);
+
+        // Remove the product from the cart
+        if (isset($cart[$id])) {
+            unset($cart[$id]);
+        }
+
+        // Save the updated cart to the session
+        $session->set('cart', $cart);
+
+        // Redirect to the cart page
+        return $this->redirectToRoute('app_panier_controler');
+    }
 }
-
-
-
-
