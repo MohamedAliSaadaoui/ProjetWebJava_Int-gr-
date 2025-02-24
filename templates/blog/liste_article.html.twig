@@ -9,11 +9,10 @@
         <table class="table table-bordered table-striped table-hover">
             <thead class="thead-dark">
                 <tr>
-                    <th>Titre</th>
-                    <th>Date</th>
-                  
-                    <th>Actions</th>
-                </tr>
+        <th class="text-center">Titre</th>
+        <th class="text-center">Date</th>
+        <th class="text-center">Actions</th>
+    </tr>
             </thead>
             <tbody>
                 {% for article in articles %}
@@ -27,7 +26,7 @@
                         
                         <td class="d-flex justify-content-center">
                             <div class="d-flex justify-content-center">
-                                <a href="{{ path('article_edit', {'id': article.id}) }}" class="btn btn-warning btn-sm mx-2" style="border: 1px solid #f39c12;">Modifier</a>
+                               {# <a href="{{ path('article_edit', {'id': article.id}) }}" class="btn btn-warning btn-sm mx-2" style="border: 1px solid #f39c12;">Modifier</a> #}
                                 <form action="{{ path('article_delete', {'id': article.id}) }}" method="post" style="display:inline;">
                                     <button type="submit" class="btn btn-danger btn-sm mx-2" style="border: 1px solid #c0392b;" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?')">Supprimer</button>
                                 </form>

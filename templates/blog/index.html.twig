@@ -1776,70 +1776,53 @@
 
 
                 <div class="col-12 col-lg-8 gs-main-blog-wrapper wow-replaced" data-wow-delay=".1s">
-                                            <div class="gs-main-single-blog wow-replaced " data-wow-delay=".1s">
-                            <div class="left-side-content">
-                                
-                             </div>
-                            <div class="right-side-content">
-                                <h4>
-                                    <a class="title" href="#">
-                                        
-                                    </a>
-                                </h4>
-                               
-                        
-                                            <div class="gs-main-single-blog wow-replaced " data-wow-delay=".1s">
-                            <div class="left-side-content">
-                                <img class="blog-img"
-                                    src="https://textileaddict.me/wp-content/uploads/2021/10/empreinte-environnementale-vetement_TextileAddict.jpg"
-                                    alt="blog img">
-                            </div>
-                            <div class="right-side-content">
-                                <h4>
-                                    
-                                    <a href="{{ path('article_details') }}">Article</a>
+    {% for article in articles %}
+        <div class="gs-main-single-blog wow-replaced " data-wow-delay=".1s">
+                  <div class="left-side-content">
+                {% if article.image %}
+                    <img class="blog-img" src="{{ asset('uploads/' ~ article.image) }}" alt="{{ article.title }}">
+                {% else %}
+                    <img class="blog-img" src="{{ asset('assets/images/1724480495Imagexxxxxpng.png') }}" alt="Image par défaut">
+                {% endif %}
+            </div>
+            <div class="right-side-content">
+                <h4>
+                    <a class="title" href="{{ path('article_details', {'id': article.id}) }}">
+                        {{ article.title }}
+                    </a>
+                </h4>
+                <p class="des">
+                    {{ article.content|slice(0, 150) }}...
+                </p>
 
-                                
-                                    </a>
-                                </h4>
-                                <p class="des">
-                                    Pourquoi Acheter Neuf Quand On Peut Sauver la Planète ?
-                                </p>
+                <div class="date-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none">
+                        <path d="M8 2V5" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M16 2V5" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M3.5 9.09009H20.5" stroke="#292D32" stroke-width="1.5"
+                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                        <path
+                            d="M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z"
+                            stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
 
-                                <div class="date-wrapper">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none">
-                                        <path d="M8 2V5" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M16 2V5" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M3.5 9.09009H20.5" stroke="#292D32" stroke-width="1.5"
-                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path
-                                            d="M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z"
-                                            stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M15.6937 13.7H15.7027" stroke="#292D32" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M15.6937 16.7H15.7027" stroke="#292D32" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M11.9945 13.7H12.0035" stroke="#292D32" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M11.9945 16.7H12.0035" stroke="#292D32" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M8.29529 13.7H8.30427" stroke="#292D32" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M8.29529 16.7H8.30427" stroke="#292D32" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
+                    <span class="date-text">{{ article.date|date('d M - Y') }}</span>
+                </div>
 
-                                    <span class="date-text">Jan 02 - 2025</span>
-                                </div>
+                <a class="template-btn outlinee-btn" href="{{ path('article_details', {'id': article.id}) }}">
+                    En savoir plus
+                </a>
+            </div>
+        </div>
+    {% else %}
+        <p>Aucun article disponible pour le moment.</p>
+    {% endfor %}
+</div>
 
-                                <a class="template-btn outlinee-btn"
-                                    href="#">En savoir plus</a>
-                            </div>
-                        </div>
                                             
 
                    

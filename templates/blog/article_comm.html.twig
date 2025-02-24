@@ -15,18 +15,32 @@
         <ul>
             {% for commentaire in article.commentaires %}
                 <li>
-                    <strong>{{ commentaire.date|date('d-m-Y H:i') }}</strong> :
+                    <strong>{{ commentaire.dateComm|date('d-m-Y H:i') }}</strong> :
                     {{ commentaire.contenuComm }}
+
+                    <!-- Formulaire pour modifier le commentaire -->
+                    <form action="{{ path('commentaire_edit') }}" method="post" class="form-group" style="display:inline;">
+                        <input type="hidden" name="commentaire_id" value="{{ commentaire.id }}">
+                        <textarea name="contenuComm" required>{{ commentaire.contenuComm }}</textarea>
+                        <button type="submit" class="btn btn-warning btn-sm">Modifier</button>
+                    </form>
+
+                    <!-- Formulaire pour supprimer le commentaire -->
+                    <form action="{{ path('commentaire_delete') }}" method="post" style="display:inline;">
+                        <input type="hidden" name="commentaire_id" value="{{ commentaire.id }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ commentaire.id) }}">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Voulez-vous vraiment supprimer ce commentaire ?');">Supprimer</button>
+                    </form>
                 </li>
             {% endfor %}
         </ul>
     {% endif %}
 
     <h3>Ajouter un commentaire</h3>
-    {{ form_start(commentaireForm) }}
+    {{ form_start(commentaireForm, {'attr': {'class': 'form-group', 'novalidate': 'novalidate'}}) }}
+        {{ form_errors(commentaireForm) }}
         {{ form_row(commentaireForm.contenuComm) }}
-        <button type="submit" class="btn btn-primary">Envoyer</button>
     {{ form_end(commentaireForm) }}
 
-    <a href="{{ path('app_blog') }}">Retour</a>
+    <a href="{{ path('app_blog') }}" class="btn btn-secondary">Retour</a>
 {% endblock %}
