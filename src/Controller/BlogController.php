@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class BlogController extends AbstractController
 {
 
-    //Page blog affiché 
+    //Page blog 
     #[Route('/blog', name: 'app_blog')]
     public function index(EntityManagerInterface $entityManager): Response
     {
@@ -29,7 +29,7 @@ class BlogController extends AbstractController
     }
 
 
-//affichage et creation du formulaire
+//CREATION D'UN ARTICLE
 
 #[Route('/blog/new', name: 'article_new')]
 public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
@@ -56,18 +56,16 @@ public function new(Request $request, EntityManagerInterface $entityManager, Slu
                 // Gérer l'erreur si nécessaire
             }
         }
-
         $entityManager->persist($article);
         $entityManager->flush();
 
         return $this->redirectToRoute('app_blog');
     }
-
     return $this->render('blog/article_new.html.twig', [
         'form' => $form->createView(),
     ]);
 }
-//MODIFICATION
+//MODIFICATION BLOG
 
 #[Route('/blog/edit/{id}', name: 'article_edit')]
 public function edit(Request $request, Article $article, EntityManagerInterface $entityManager): Response
@@ -81,7 +79,9 @@ public function edit(Request $request, Article $article, EntityManagerInterface 
         $entityManager->flush();
         $this->addFlash('success', 'Article modifié avec succès.');
 
-        return $this->redirectToRoute('app_blog');
+        
+        return $this->redirectToRoute('article_details', ['id' => $article->getId()]);
+
     }
 
     return $this->render('blog/article_new.html.twig', [
@@ -90,7 +90,7 @@ public function edit(Request $request, Article $article, EntityManagerInterface 
 }
 
     
-//SUPPRESSION
+//SUPPRESSION BLOG
 #[Route('/blog/delete/{id}', name: 'article_delete', methods: ['POST'])]
 public function delete(Request $request, Article $article, EntityManagerInterface $entityManager): Response
 {
@@ -117,8 +117,6 @@ public function liste(EntityManagerInterface $entityManager): Response
     ]);
 }
 
-
-
 // #[Route('/blog/details_article', name: 'article_details')]
 // public function details(EntityManagerInterface $entityManager): Response
 // {
@@ -136,6 +134,8 @@ public function liste(EntityManagerInterface $entityManager): Response
 //         'commentaireForm' => $form->createView(),
 //     ]);
 // }
+
+//ARTICLE DETAILS
 #[Route('/blog/article/{id}', name: 'article_details')]
 public function detailsArticle(Article $article): Response
 {
@@ -144,22 +144,19 @@ public function detailsArticle(Article $article): Response
     ]);
 }
 
-#[Route('/blog/show_commentaire/1', name: 'article_show')]
-public function showComment(EntityManagerInterface $entityManager, Request $request, int $id = 1): Response
+//affichage et ajout de commentaire
+#[Route('/blog/show_commentaire/{id}', name: 'article_A')]
+public function showComment(EntityManagerInterface $entityManager, Request $request, int $id): Response
 {
     // Récupérer l'article avec l'ID spécifié
-    $article = $entityManager->getRepository(Article::class)->find(1);
-
+    $article = $entityManager->getRepository(Article::class)->find($id);
     // Si l'article n'existe pas
     if (!$article) {
-        throw $this->createNotFoundException('Aucun article trouvé.');
-    }
-
+        throw $this->createNotFoundException('Aucun article trouvé.');}
     // Créer une nouvelle instance de commentaire
     $commentaire = new Commentaire();
     $form = $this->createForm(CommentaireType::class, $commentaire);
     $form->handleRequest($request);
-
     // Vérifier si le formulaire de commentaire est soumis et valide
     if ($form->isSubmitted() && $form->isValid()) {
         $commentaire->setArticle($article); // Lier le commentaire à l'article
@@ -167,15 +164,13 @@ public function showComment(EntityManagerInterface $entityManager, Request $requ
         $entityManager->flush();
 
         $this->addFlash('success', 'Commentaire ajouté avec succès.');
-
-        return $this->redirectToRoute('article_show', ['id' => $id]);
+        return $this->redirectToRoute('article_A', ['id' => $id]);
     }
-
     // Récupérer tous les commentaires associés à l'article
     $commentaires = $article->getCommentaires();
 
     // Renvoyer la vue avec l'article, le formulaire de commentaire et la liste des commentaires
-    return $this->render('blog/article_show.html.twig', [
+    return $this->render('blog/article_details.html.twig', [
         'article' => $article,
         'commentaireForm' => $form->createView(),
         'commentaires' => $commentaires,
@@ -183,74 +178,14 @@ public function showComment(EntityManagerInterface $entityManager, Request $requ
 }
 
 
-#[Route('/blog/comm/{id}', name: 'article_comm')]
-public function addCommentaire(Article $article, Request $request, EntityManagerInterface $entityManager): Response
-{
-    // Créer un nouveau commentaire
-    $commentaire = new Commentaire();
-    $form = $this->createForm(CommentaireType::class, $commentaire);
-    $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        $commentaire->setArticle($article); // Lier le commentaire à l'article
-        $commentaire->setDateComm(new \DateTime());
-        $entityManager->persist($commentaire);
-        $entityManager->flush();
 
-        $this->addFlash('success', 'Commentaire ajouté avec succès.');
 
-        return $this->redirectToRoute('article_comm', ['id' => $article->getId()]);
-    }
-
-    return $this->render('blog/article_comm.html.twig', [
-        'article' => $article,
-        'commentaireForm' => $form->createView(),
-    ]);
-}
-
-// MODIFIER UN COMMENTAIRE
-#[Route('/commentaire/edit', name: 'commentaire_edit', methods: ['POST'])]
-public function editCommentaire(Request $request, EntityManagerInterface $entityManager): Response
-{
-    $commentaireId = $request->request->get('commentaire_id');
-    $commentaire = $entityManager->getRepository(Commentaire::class)->find($commentaireId);
-
-    if (!$commentaire) {
-        throw $this->createNotFoundException('Commentaire non trouvé.');
-    }
-
-    $contenu = $request->request->get('contenuComm');
-    $commentaire->setContenuComm($contenu);  // Met à jour le contenu du commentaire
-
-    $entityManager->flush();
-    $this->addFlash('success', 'Commentaire modifié avec succès.');
-
-    return $this->redirectToRoute('article_comm', ['id' => $commentaire->getArticle()->getId()]);
-}
-
-// SUPPRIMER UN COMMENTAIRE
-#[Route('/commentaire/delete', name: 'commentaire_delete', methods: ['POST'])]
-public function deleteCommentaire(Request $request, EntityManagerInterface $entityManager): Response
-{
-    $commentaireId = $request->request->get('commentaire_id');
-    $commentaire = $entityManager->getRepository(Commentaire::class)->find($commentaireId);
-
-    if (!$commentaire) {
-        throw $this->createNotFoundException('Commentaire non trouvé.');
-    }
-
-    if ($this->isCsrfTokenValid('delete' . $commentaireId, $request->request->get('_token'))) {
-        $entityManager->remove($commentaire);
-        $entityManager->flush();
-        $this->addFlash('success', 'Commentaire supprimé avec succès.');
-    }
-
-    return $this->redirectToRoute('article_comm', ['id' => $commentaire->getArticle()->getId()]);
 }
 
 
 
 
-} 
+
 
 

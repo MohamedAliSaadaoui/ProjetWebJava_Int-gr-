@@ -18,7 +18,9 @@
                 {% for article in articles %}
                     <tr>
                         <td>
-                           <a href="{{ path('article_details') }}">Voir larticle</a>
+                           <a href="{{ path('article_details', { 'id': article.id }) }}"> {{ article.title }}</a>
+</a>
+
 
                             
                         </td>
@@ -27,9 +29,11 @@
                         <td class="d-flex justify-content-center">
                             <div class="d-flex justify-content-center">
                                {# <a href="{{ path('article_edit', {'id': article.id}) }}" class="btn btn-warning btn-sm mx-2" style="border: 1px solid #f39c12;">Modifier</a> #}
-                                <form action="{{ path('article_delete', {'id': article.id}) }}" method="post" style="display:inline;">
-                                    <button type="submit" class="btn btn-danger btn-sm mx-2" style="border: 1px solid #c0392b;" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?')">Supprimer</button>
-                                </form>
+                                <form action="{{ path('article_delete', { 'id': article.id }) }}" method="post" onsubmit="return confirm('Voulez-vous vraiment supprimer cet article ?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+</form>
+
                             </div>
                         </td>
                     </tr>

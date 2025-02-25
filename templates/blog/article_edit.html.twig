@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier l'article{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="text-center my-4">Modifier l'article</h1>
+
+        {{ form_start(form) }}
+            <div class="mb-3">
+                {{ form_label(form.titre, "Titre de l'article") }}
+                {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.contenu, "Contenu de l'article") }}
+                {{ form_widget(form.contenu, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <button type="submit" class="btn btn-success">Enregistrer</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

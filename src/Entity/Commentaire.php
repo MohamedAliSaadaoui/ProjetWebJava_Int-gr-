@@ -26,7 +26,7 @@ class Commentaire
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?Article $article = null;
 
-    
+ 
     public function setCreatedAt(): void
     {
         if ($this->dateComm === null) {

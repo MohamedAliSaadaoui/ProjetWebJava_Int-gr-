@@ -55,6 +55,8 @@ class Article
         $this->commentaires = new ArrayCollection();
     }
 
+    
+
     public function getId(): ?int
     {
         return $this->id;
@@ -93,30 +95,9 @@ class Article
         return $this;
     }
 
-    /**
-     * @return Collection<int, Commentaire>
-     */
+    
     public function getCommentaires(): Collection
-    {
-        return $this->commentaires;
-    }
-
-    public function addCommentaire(Commentaire $commentaire): static
-    {
-        if (!$this->commentaires->contains($commentaire)) {
-            $this->commentaires->add($commentaire);
-            $commentaire->setArticle($this);
-        }
-        return $this;
-    }
-
-    public function removeCommentaire(Commentaire $commentaire): static
-    {
-        if ($this->commentaires->removeElement($commentaire)) {
-            if ($commentaire->getArticle() === $this) {
-                $commentaire->setArticle(null);
-            }
-        }
-        return $this;
-    }
+{
+    return $this->commentaires;
+}
 }
