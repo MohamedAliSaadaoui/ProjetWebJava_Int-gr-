@@ -177,10 +177,22 @@ public function showComment(EntityManagerInterface $entityManager, Request $requ
     ]);
 }
 
+// Suppression de commentaire
+#[Route('/blog/delete_comment/{id}', name: 'comment_delete', methods: ['POST'])]
+public function supprimerComment(int $id, EntityManagerInterface $entityManager): Response
+{
+    // Récupérer le commentaire via l'ID
+    $commentaire = $entityManager->getRepository(Commentaire::class)->find($id);
 
+    // Récupérer l'ID de l'article pour rediriger après la suppression
+    $articleId = $commentaire->getArticle()->getId();
 
+    // Suppression du commentaire
+    $entityManager->remove($commentaire);
+    $entityManager->flush();
 
-
+    // Rediriger vers la page de l'article
+    return $this->redirectToRoute('article_details', ['id' => $articleId]);
 }
 
 
@@ -188,4 +200,6 @@ public function showComment(EntityManagerInterface $entityManager, Request $requ
 
 
 
+
+}
 

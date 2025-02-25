@@ -1,3 +1,4 @@
+
 {% extends 'base.html.twig' %}
 {% block body %}
 <header class="header-section position-relative z-2 header-stikcy">
@@ -1775,14 +1776,36 @@
                         <p class="article-content">
                             {{ article.content|raw }}
                         </p>
-
-
-
                         
                         <div class="gs-comment-section">
     
-    
-<!-- Formulaire d'ajout de commentaire -->
+
+
+
+
+<!-- Section des commentaires -->
+            <section class="commentaires-section">
+                <h3 class="text-secondary">💬 Commentaires</h3>
+
+                <div class="commentaires list-group">
+                    {% for commentaire in article.commentaires %}
+                        <div class="list-group-item bg-light border-0 shadow-sm rounded mb-2">
+                            <p class="mb-1">{{ commentaire.contenuComm }}</p>
+
+                            <p class="text-muted small">🕒 Publié le {{ commentaire.dateComm|date('d-m-Y H:i') }}</p>
+                            <form action="{{ path('comment_delete', {'id': commentaire.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?');">
+            <button type="submit" class="btn btn-danger btn-sm">
+
+                <i class="fas fa-trash-alt"></i> Supprimer </button>
+        </form>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">Aucun commentaire pour cet article.</p>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <!-- Formulaire d'ajout de commentaire -->
             <section class="mt-4 p-3 bg-light rounded">
                 <h3 class="text-secondary">📝 Ajouter un commentaire</h3>
 
@@ -1814,30 +1837,15 @@
 
                 {{ form_end(commentaireForm) }}
             </section>
-    <div class="gs-comment-list">
-        <h6>Commentaires Récents:</h6>
-        
-    </div>
-    
-{% for commentaire in article.commentaires %}
-    <div class="commentaire">
-        <p><strong>{{ commentaire.dateComm|date('d/m/Y H:i') }}</strong></p>
-        <p>{{ commentaire.contenuComm }}</p>
-    </div>
-{% else %}
-    <p>Aucun commentaire pour cet article.</p>
-{% endfor %}
-
-</div>
-
-                        <!-- Bouton retour -->
-                        <a href="{{ path('app_blog') }}" class="btn btn-primary mt-3">Retour à la liste</a>
-                    </div>
-                </div>
+            
+            <div class="text-center mt-4">
+                <a href="{{ path('app_blog') }}" class="btn btn-outline-secondary">
+                    ⬅ Retour à la liste des articles
+                </a>
             </div>
         </div>
     </div>
-</div>
+
 
 
                 <div class="col-12 col-lg-4 mt-40 mt-lg-0 wow-replaced" data-wow-delay=".1s">
