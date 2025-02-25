@@ -6,6 +6,9 @@ use App\Repository\EventRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event
@@ -14,6 +17,13 @@ class Event
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Gedmo\Timestampable(on: "create")]
+    private ?\DateTimeInterface $createdAt = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Gedmo\Timestampable(on: "update")]
+    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\NotBlank(message: "Le titre est obligatoire.")]
@@ -21,6 +31,10 @@ class Event
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     #[Assert\NotBlank(message: "La date de début est obligatoire.")]
+    #[Assert\GreaterThanOrEqual(
+        "today", 
+        message: "La date de début doit être supérieure ou égale à la date d'aujourd'hui."
+    )]
     private ?\DateTimeInterface $dateDebut = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
@@ -59,7 +73,14 @@ class Event
         'Book Exchange' => 'Book Exchange',
         'Eco-Friendly Gardening Workshops' => 'Eco-Friendly Gardening Workshops',
     ];
+    #[ORM\OneToMany(mappedBy: "id_event", targetEntity: Participe::class, cascade: ["persist", "remove"])]
+    private Collection $participations;
 
+    public function __construct()
+    {
+        $this->participations = new ArrayCollection();
+    }
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -133,6 +154,34 @@ class Event
     public function setCategorie(?string $categorie): static
     {
         $this->categorie = $categorie;
+
+        return $this;
+    }
+    /**
+     * @return Collection<int, Participe>
+     */
+    public function getParticipations(): Collection
+    {
+        return $this->participations;
+    }
+
+    public function addParticipation(Participe $participation): static
+    {
+        if (!$this->participations->contains($participation)) {
+            $this->participations->add($participation);
+            $participation->setIdEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParticipation(Participe $participation): static
+    {
+        if ($this->participations->removeElement($participation)) {
+            if ($participation->getIdEvent() === $this) {
+                $participation->setIdEvent(null);
+            }
+        }
 
         return $this;
     }

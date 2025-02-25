@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\EventRepository;
+use App\Repository\ParticipeRepository;
 
 class EventController extends AbstractController
 {
@@ -23,18 +24,18 @@ class EventController extends AbstractController
     #[Route('/event/create', name: 'event_create')]
 public function create(Request $request, EntityManagerInterface $entityManager): Response
 {
-    // Créer un objet Event pour le formulaire
+   
     $event = new Event();
 
     // Créer le formulaire en utilisant la classe EventType
     $form = $this->createForm(EventType::class, $event);
 
-    // Traiter la soumission du formulaire
+    
     $form->handleRequest($request);
 
-    // Si le formulaire est soumis et valide
+    
     if ($form->isSubmitted() && $form->isValid()) {
-        // Persister l'événement dans la base de données
+       
         $entityManager->persist($event);
         $entityManager->flush();
 
@@ -42,10 +43,10 @@ public function create(Request $request, EntityManagerInterface $entityManager):
         $this->addFlash('success', 'Event created successfully!');
 
         // Rediriger vers une page de succès ou liste des événements
-        return $this->redirectToRoute('event_list'); // Change cela selon la route de la liste des événements
+        return $this->redirectToRoute('event_list'); 
     }
 
-    // Afficher le formulaire dans la vue
+    
     return $this->render('event/event_create.html.twig', [
         'form' => $form->createView(),
     ]);
@@ -59,18 +60,32 @@ public function create(Request $request, EntityManagerInterface $entityManager):
         ]);
     }
     // #[IsGranted('ROLE_ADMIN')]
-#[Route('/event/delete/{id}', name: 'event_delete')]
-public function delete(Event $event, EntityManagerInterface $entityManager, Request $request): Response
-{
-    if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->request->get('_token'))) {
-        $entityManager->remove($event);
-        $entityManager->flush();
-
-        $this->addFlash('success', 'Event deleted successfully.');
+    #[Route('/event/delete/{id}', name: 'event_delete', methods: ['POST'])]
+    public function delete(
+        Event $event, 
+        EntityManagerInterface $entityManager, 
+        Request $request, 
+        ParticipeRepository $participeRepository 
+    ): Response {
+        if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->request->get('_token'))) {
+            // Supprimer toutes les participations (instances de Participe) associées à l'événement
+            $participations = $participeRepository->findBy(['id_event' => $event]); // Utilisation de 'id_event' au lieu de 'event'
+            foreach ($participations as $participation) {
+                $entityManager->remove($participation);
+            }
+    
+            // Supprimer l'événement après les participations
+            $entityManager->remove($event);
+            $entityManager->flush();
+    
+            $this->addFlash('success', 'Event deleted successfully.');
+        } else {
+            $this->addFlash('error', 'Invalid CSRF token.');
+        }
+    
+        return $this->redirectToRoute('event_list');
     }
-
-    return $this->redirectToRoute('event_list');
-}
+    
 // #[IsGranted('ROLE_ADMIN')]
 #[Route('/event/edit/{id}', name: 'event_edit')]
     public function edit(Event $event, Request $request, EntityManagerInterface $entityManager): Response

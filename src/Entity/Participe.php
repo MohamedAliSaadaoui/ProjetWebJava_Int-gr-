@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: ParticipeRepository::class)]
 class Participe
@@ -25,9 +26,16 @@ class Participe
 
   
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'participations')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Event $id_event = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Gedmo\Timestampable(on: "create")]
+    private ?\DateTimeInterface $createdAt = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Gedmo\Timestampable(on: "update")]
+    private ?\DateTimeInterface $updatedAt = null;
 
     public function getId(): ?int
     {
