@@ -20,7 +20,7 @@ public function detailProduit($id, ProductRepository $productRepository): Respon
         // Add the product to the cart with quantity 1
         $panier[$id] = [
             'id' => $product->getId(),
-            'name' => $product->getName(),
+           // 'name' => $product->getName(),
             'quantity' => 1,
         ];
     }

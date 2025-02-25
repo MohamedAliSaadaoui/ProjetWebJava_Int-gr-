@@ -32,7 +32,7 @@ class PanierControlerController extends AbstractController
         } else {
             // If it's not, add it to the cart with the product name and quantity
             $cart[$id] = [
-                'name' => $product->getName(),
+                //'name' => $product->getName(),
                 'quantity' => 1,
             ];
         }
