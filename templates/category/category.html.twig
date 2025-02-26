@@ -1433,7 +1433,7 @@
                         </div>
                     </a>
 
-<a href="{{ path('app_panier_add', { id: product.id, name: product.name|url_encode }) }}" class="add_cart_click">
+<a href="#" class="add_cart_click">
     <div class="add-cart">
         Add To Cart
     </div>
@@ -1454,10 +1454,10 @@
             </div>
             <div class="content-wrapper">
 <a href="{{ path('app_detail_produit_controler', { id: product.id }) }}">
-<h6 class="product-title">{{ product.name }}</h6>
+<h6 class="product-title">{{ product.objetAVendre }}</h6>
                 </a>
                 <div class="price-wrapper">
-                    <h6>{{ product.productCondition }}</h6>
+                    <h6>{{ product.prixDeVente }}</h6>
                 </div>
             </div>
         </div>

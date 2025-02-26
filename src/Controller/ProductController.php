@@ -51,10 +51,12 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('app_allproduct_seller'); // Redirect to product list page
         }
 
-        return $this->render('product/add.html.twig', [
+        return $this->render('seller_dashbord/addproduit.html.twig', [
             'form' => $form->createView(),
         ]);
     }
+    //fetsh product 
+    
     
     /**
      * Validate product data with custom constraints
