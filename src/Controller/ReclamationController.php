@@ -11,6 +11,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 #[Route('/reclamation')]
 final class ReclamationController extends AbstractController
@@ -28,7 +30,7 @@ final class ReclamationController extends AbstractController
     }
 
     #[Route('/new', name: 'app_reclamation_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, MailerInterface $mailer): Response
     {
         $reclamation = new Reclamation();
 
@@ -44,8 +46,9 @@ final class ReclamationController extends AbstractController
         $reclamation->setDateReclamation(new \DateTime());
 
         $form = $this->createForm(ReclamationType::class, $reclamation, [
-            'user_name' => $user ? $user->getName() : 'Guest', // Set placeholder name
+            'user_name' => $user ? $user->getName() : 'Guest',
         ]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -66,6 +69,17 @@ final class ReclamationController extends AbstractController
             }
 
             $reclamation->setDateReclamation(new \DateTime());
+
+            $email = (new Email())
+                ->from('shyhebboudaya@gmail.com') // Ton email d'envoi
+                ->to('libero1809@gmail.com') // Email du client
+                ->subject('Réclamation enregistrée')
+                ->html("<p>Bonjour {$reclamation->getUser()->getName()},</p>
+                    <p>Votre réclamation a bien été enregistrée avec l'objet : <strong>{$reclamation->getObjet()}</strong>.</p>
+                    <p>Nous reviendrons vers vous sous peu.</p>
+                    <p>Cordialement, <br> L'équipe Support</p>");
+
+            $mailer->send($email);
 
             // Persist the reclamation entity
             $entityManager->persist($reclamation);
@@ -102,7 +116,9 @@ final class ReclamationController extends AbstractController
     public function edit(Request $request, Reclamation $reclamation, EntityManagerInterface $entityManager): Response
     {
 
-        $form = $this->createForm(ReclamationType::class, $reclamation);
+        $form = $this->createForm(ReclamationType::class, $reclamation, [
+            'user_name'=>$reclamation->getUser()->getName(),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

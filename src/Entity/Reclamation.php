@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\ReclamationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,9 +16,13 @@ class Reclamation
     private ?int $id_reclam = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "L'objet est obligatoire!")]
+    #[Assert\Length(max: 255, maxMessage: "L'objet ne doit pas dépasser 255 caractères.")]
     private ?string $objet = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\NotBlank(message: "La description est obligatoire!")]
+    #[Assert\Length(max: 1000, maxMessage: "La description ne doit pas dépasser 1000 caractères.")]
     private ?string $description = null;
 
     #[ORM\Column(length: 10)]
@@ -31,15 +36,17 @@ class Reclamation
     private ?User $user = null;
 
 
-    #[ORM\OneToOne(targetEntity: Reponse::class, inversedBy: 'reclamation')]
-    #[ORM\JoinColumn(name: "id_rep", referencedColumnName: "id_rep", nullable: true)]
+    #[ORM\OneToOne(targetEntity: Reponse::class, mappedBy: "reclamation", cascade: ['remove'])]
     private ?Reponse $reponse = null;
 
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\NotBlank(message: "La catégorie est obligatoire.")]
+    #[Assert\Choice(choices: ['Produit défectueux', 'Livraison en retard', 'Service client', 'Autre'], message: "Choisissez une catégorie valide.")]
     private ?string $category = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Url(message: "L'attachement doit être un lien valide.")]
     private ?string $attachments = null;
 
     public function getId(): ?int

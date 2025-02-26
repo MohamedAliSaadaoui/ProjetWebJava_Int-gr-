@@ -12,6 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 #[Route('/reponse')]
 final class ReponseController extends AbstractController
@@ -29,37 +31,50 @@ final class ReponseController extends AbstractController
     public function createReponse(
         Request $request,
         EntityManagerInterface $entityManager,
-        ReclamationRepository $reclamationRepository // Inject the repository
+        ReclamationRepository $reclamationRepository, MailerInterface $mailer // Inject the repository
     ): Response {
-        // Fetch all reclamations using repository
-        $reclamations = $reclamationRepository->findAll();
 
+        $idReclamation = $request->query->get('id_reclamation'); // Récupérer l'ID depuis l'URL
 
+        $reclamation = $reclamationRepository->findById($idReclamation);
 
         // Create a new response object
         $reponse = new Reponse();
 
         $reponse->setDateReponse(new \DateTime());
+        $reponse->setReclamation($reclamation);
 
         // Create the form and pass reclamations to the form options
         $form = $this->createForm(ReponseType::class, $reponse, [
-            'reclamations' => $reclamations,
+            'id_reclamation' => $idReclamation,
         ]);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $email = (new Email())
+                ->from('shyhebboudaya@gmail.com') // Ton email d'envoi
+                ->to('libero1809@gmail.com') // Email du client
+                ->subject('Réclamation enregistrée')
+                ->html("<p>Bonjour {$reclamation->getUser()->getName()},</p>
+                    <p>Votre réclamation a bien été enregistrée avec l'objet : <strong>{$reclamation->getObjet()}</strong>.</p>
+                    <p>Nous reviendrons vers vous sous peu.</p>
+                    <p>Cordialement, <br> L'équipe Support</p>");
+
+            $mailer->send($email);
+
+            $reclamation->setStatus('Résolue');
             $entityManager->persist($reponse);
             $entityManager->flush();
 
             // Redirect to the reclamation show page or index
-            return $this->redirectToRoute('app_reclamation_show', [
-                'id' => $reponse->getReclamation()->getId()
-            ]);
+            return $this->redirectToRoute('app_reponse_index');
         }
 
         return $this->render('reponse/new.html.twig', [
             'form' => $form->createView(),
+            'id_reclamation' => $idReclamation,
         ]);
     }
 
@@ -75,7 +90,9 @@ final class ReponseController extends AbstractController
     #[Route('/{id}/edit', name: 'app_reponse_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Reponse $reponse, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(ReponseType::class, $reponse);
+        $form = $this->createForm(ReponseType::class, $reponse , [
+            'id_reclamation' => $reponse->getReclamation()->getId(),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

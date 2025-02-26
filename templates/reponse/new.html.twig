@@ -7,10 +7,8 @@
         <h1 class="form-title">Create New Response</h1>
 
         {{ include('reponse/_form.html.twig') }}
-
-        <div class="form-buttons">
-            <button type="submit" class="submit-btn">Submit</button>
-            <a href="{{ path('app_reponse_index') }}" class="back-btn">Back to List</a>
-        </div>
+        <script>
+            console.log("ID Réclamation : {{ id_reclamation }}");
+        </script>
     </div>
 {% endblock %}

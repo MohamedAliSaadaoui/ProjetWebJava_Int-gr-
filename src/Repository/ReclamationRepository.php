@@ -54,4 +54,30 @@ class ReclamationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+
+    public function markAsResolved(int $id): void
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->update()
+            ->set('r.status', ':status')
+            ->where('r.id_reclam = :id')
+            ->setParameter('status', 'Résolue')
+            ->setParameter('id', $id);
+
+        $qb->getQuery()->execute();
+    }
+
+
+    public function findById(int $id): ?Reclamation
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.id_reclam = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+
+
 }

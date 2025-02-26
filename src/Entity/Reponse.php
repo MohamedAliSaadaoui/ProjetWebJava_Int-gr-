@@ -20,7 +20,9 @@ class Reponse
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateReponse = null;
 
-    #[ORM\OneToOne(targetEntity: Reclamation::class, mappedBy: 'reponse', cascade: ['persist', 'remove'])]
+
+    #[ORM\OneToOne(targetEntity: Reclamation::class, inversedBy: "reponse")]
+    #[ORM\JoinColumn(name: "id_reclam", referencedColumnName: "id_reclam", nullable: false)]
     private ?Reclamation $reclamation = null;
 
 

@@ -22,11 +22,13 @@ class ReponseType extends AbstractType
                 'label' => 'Réponse',
                 'attr' => ['placeholder' => 'Entrez votre réponse ici...'],
             ])
-            // The 'reclamation' field, a dropdown to choose the related reclamation
-            ->add('reclamation', ChoiceType::class, [
-                'label' => 'Reclamation',
-                'choices' => $options['reclamations'],
-                'placeholder' => 'Sélectionner une réclamation',
+            ->add('reclamation', TextType::class, [
+                'label' => 'Id de reclamation',
+                'mapped' => false, // Not mapped to the entity
+                'attr' => [
+                    'readonly' => true, // Prevent user from editing
+                    'placeholder' => $options['id_reclamation'] ?? 'Guest', // Set default if user_name is missing
+                ],
             ]);
 
     }
@@ -35,7 +37,8 @@ class ReponseType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Reponse::class,
-            'reclamations' => [], // Allow reclamations to be passed into the form
+            'reclamation' => null, // Allow reclamations to be passed into the form
+            'id_reclamation' => null,
         ]);
     }
 }

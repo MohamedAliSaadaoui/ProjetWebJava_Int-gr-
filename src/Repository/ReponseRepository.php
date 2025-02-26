@@ -29,6 +29,16 @@ class ReponseRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findByReclamation($reclamation) : array
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.reclamation = :reclamation')
+            ->setParameter('reclamation', $reclamation)
+            ->getQuery()
+            ->getResult();
+    }
+
+
     /**
      * Find responses by a specific date (or a date range)
      */
