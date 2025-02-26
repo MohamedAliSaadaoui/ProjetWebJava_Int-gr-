@@ -719,15 +719,11 @@
     <tr>
         <td class="text-start">
             <div class="product-name">
-                <span class="content">{{ product.name }}</span>
+                <span class="content">{{ product.objetAVendre }}</span>
             </div>
         </td>
-        <td><span class="content">{{ product.category }}</span></td>
-        <td><span class="content">{{ product.productCondition }}</span></td>
-        <td><span class="content">{{ product.color }}</span></td>
-        <td><span class="content">{{ product.stock }}</span></td>
-       <td><span class="content">{{ product.description|slice(0, 30) }}{% if product.description|length > 30 %}...{% endif %}</span></td>
-<td><span class="content">{{ product.returnPolicy|slice(0, 30) }}{% if product.returnPolicy|length > 30 %}...{% endif %}</span></td>
+        <td><span class="content">{{ product.genre }}</span></td>
+       <td><span class="content">{{ product.Description|slice(0, 30) }}{% if product.Description|length > 30 %}...{% endif %}</span></td>
 
         <td>
             <div class="table-icon-btns-wrapper">

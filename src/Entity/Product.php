@@ -16,7 +16,7 @@ class Product
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'products')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     private ?User $user = null;
 
     #[ORM\ManyToMany(targetEntity: Command::class, mappedBy: 'products')]

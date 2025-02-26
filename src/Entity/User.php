@@ -24,8 +24,8 @@ class User
     #[ORM\Column(type: 'string')]
     private ?string $password = null;
 
-    #[ORM\Column(type: 'json')]
-    private array $roles = [];
+    #[ORM\Column(type: 'string')]
+    private ?string $roles = 'user' ;
 
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $created_at = null;
@@ -36,17 +36,18 @@ class User
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Product::class)]
     private Collection $products;
 
-    public function __construct()
-    {
-        // Static User Details
-        $this->username = 'staticuser';
-        $this->email = 'staticuser@example.com';
-        $this->password = password_hash('staticpassword', \PASSWORD_BCRYPT);
-        $this->roles = ['ROLE_USER'];
-        $this->created_at = new \DateTime();
-        $this->commands = new ArrayCollection();
-        $this->products = new ArrayCollection();
-    }
+    // public function __construct()
+    // {
+    //     // Static User Details
+    //     $this->id = 1;
+    //     $this->username = 'staticuser';
+    //     $this->email = 'staticuser@example.com';
+    //     $this->password = password_hash('staticpassword', \PASSWORD_BCRYPT);
+    //     $this->roles = ['ROLE_USER'];
+    //     $this->created_at = new \DateTime();
+    //     $this->commands = new ArrayCollection();
+    //     $this->products = new ArrayCollection();
+    // }
 
     public function getId(): ?int
     {
@@ -89,12 +90,12 @@ class User
         return $this;
     }
 
-    public function getRoles(): array
+    public function getRoles(): ?string
     {
         return $this->roles;
     }
 
-    public function setRoles(array $roles): self
+    public function setRoles( string $roles): self
     {
         $this->roles = $roles;
 

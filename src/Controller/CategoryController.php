@@ -50,7 +50,7 @@ class CategoryController extends AbstractController
             $cart[$id] = [
                 'name' => $name,
                 'quantity' => 1,
-                'price' => $product->getPrice(), // Assuming you have a price field in your Product entity
+                'price' => $product->getPrixDeVente(), // Using getPrixDeVente instead of getPrice
             ];
         }
 

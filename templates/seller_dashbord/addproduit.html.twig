@@ -347,60 +347,292 @@
 					<!-- breadcrumb end -->
 
 					<!-- add product form start  -->
-					{# templates/seller_dashbord/addproduit.html.twig #}
-					{{ form_start(form, {'attr': {'id': 'addForm', 'novalidate': 'novalidate'}}) }}
+					{{ form_start(form, {'attr': {'id': 'addForm', 'novalidate': 'novalidate', 'class': 'product-form'}}) }}
 
-    <div class="input-label-wrapper">
-        <label for="{{ form.name.vars.id }}">Product Name</label>
-        {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Product Name'} }) }}
-        <div class="text-danger">
-            {{ form_errors(form.name) }}
-        </div>
-    </div>
-    <div class="input-label-wrapper">
-        <label for="{{ form.category.vars.id }}">Category</label>
-        {{ form_widget(form.category, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Category'} }) }}
-        <div class="text-danger">
-            {{ form_errors(form.category) }}
-        </div>
-    </div>
-    <div class="input-label-wrapper">
-        <label for="{{ form.productCondition.vars.id }}">Condition</label>
-        {{ form_widget(form.productCondition, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Condition'} }) }}
-        <div class="text-danger">
-            {{ form_errors(form.productCondition) }}
-        </div>
-    </div>
-    <div class="input-label-wrapper">
-        <label for="{{ form.color.vars.id }}">Color</label>
-        {{ form_widget(form.color, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Color'} }) }}
-        <div class="text-danger">
-            {{ form_errors(form.color) }}
-        </div>
-    </div>
-    <div class="input-label-wrapper">
-        <label for="{{ form.stock.vars.id }}">Stock</label>
-        {{ form_widget(form.stock, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Stock Quantity'} }) }}
-        <div class="text-danger">
-            {{ form_errors(form.stock) }}
-        </div>
-    </div>
-    <div class="input-label-wrapper">
-        <label for="{{ form.description.vars.id }}">Description</label>
-        {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Description'} }) }}
-        <div class="text-danger">
-            {{ form_errors(form.description) }}
-        </div>
-    </div>
-    <div class="input-label-wrapper">
-        <label for="{{ form.returnPolicy.vars.id }}">Return Policy</label>
-        {{ form_widget(form.returnPolicy, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Return Policy'} }) }}
-        <div class="text-danger">
-            {{ form_errors(form.returnPolicy) }}
-        </div>
-    </div>
-    <button type="submit" class="btn btn-primary">Save Product</button>
-{{ form_end(form) }}
+					{# Only display flash messages if the form was submitted #}
+					{% if app.request.method == 'POST' %}
+						{% for label, messages in app.flashes %}
+							{% for message in messages %}
+								<div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show" role="alert">
+									{{ message }}
+									<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+								</div>
+							{% endfor %}
+						{% endfor %}
+					{% endif %}
+
+					<div class="card mb-4">
+						<div class="card-header">
+							<h5 class="mb-0">Product Information</h5>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="input-label-wrapper mb-3">
+										<label for="{{ form.objetAVendre.vars.id }}" class="form-label">Product Name</label>
+										{{ form_widget(form.objetAVendre, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Product Name', 'minlength': '3', 'maxlength': '255', 'required': 'required'} }) }}
+										{% if app.request.method == 'POST' and not form.objetAVendre.vars.valid %}
+											<div class="text-danger">
+												{{ form_errors(form.objetAVendre) }}
+											</div>
+										{% endif %}
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="input-label-wrapper mb-3">
+										<label for="{{ form.genre.vars.id }}" class="form-label">Category/Genre</label>
+										{{ form_widget(form.genre, { 'attr': {'class': 'form-control form-select', 'required': 'required'} }) }}
+										{% if app.request.method == 'POST' and not form.genre.vars.valid %}
+											<div class="text-danger">
+												{{ form_errors(form.genre) }}
+											</div>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-md-6">
+									<div class="input-label-wrapper mb-3">
+										<label for="{{ form.etat.vars.id }}" class="form-label">Condition</label>
+										{{ form_widget(form.etat, { 'attr': {'class': 'form-control form-select', 'required': 'required'} }) }}
+										{% if app.request.method == 'POST' and not form.etat.vars.valid %}
+											<div class="text-danger">
+												{{ form_errors(form.etat) }}
+											</div>
+										{% endif %}
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="input-label-wrapper mb-3">
+										<label for="{{ form.couleur.vars.id }}" class="form-label">Color</label>
+										{{ form_widget(form.couleur, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Color', 'required': 'required'} }) }}
+										{% if app.request.method == 'POST' and not form.couleur.vars.valid %}
+											<div class="text-danger">
+												{{ form_errors(form.couleur) }}
+											</div>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-12">
+									<div class="input-label-wrapper mb-4">
+										<label class="form-label d-block mb-2">Size</label>
+										<div class="size-options d-flex flex-wrap gap-3">
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" name="{{ form.taille.vars.full_name }}" id="size-xs" value="XS" required>
+												<label class="form-check-label" for="size-xs">XS</label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" name="{{ form.taille.vars.full_name }}" id="size-s" value="S">
+												<label class="form-check-label" for="size-s">S</label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" name="{{ form.taille.vars.full_name }}" id="size-m" value="M">
+												<label class="form-check-label" for="size-m">M</label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" name="{{ form.taille.vars.full_name }}" id="size-l" value="L">
+												<label class="form-check-label" for="size-l">L</label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" name="{{ form.taille.vars.full_name }}" id="size-xl" value="XL">
+												<label class="form-check-label" for="size-xl">XL</label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" name="{{ form.taille.vars.full_name }}" id="size-xxl" value="XXL">
+												<label class="form-check-label" for="size-xxl">XXL</label>
+											</div>
+										</div>
+										{% if app.request.method == 'POST' and not form.taille.vars.valid %}
+											<div class="text-danger">
+												{{ form_errors(form.taille) }}
+											</div>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-md-6">
+									<div class="input-label-wrapper mb-3">
+										<label for="{{ form.prixDeVente.vars.id }}" class="form-label">Selling Price</label>
+										<div class="input-group">
+											<span class="input-group-text">$</span>
+											{{ form_widget(form.prixDeVente, { 'attr': {
+												'class': 'form-control', 
+												'placeholder': 'Enter Selling Price',
+												'min': '0.01',
+												'step': '0.01',
+												'required': 'required',
+												'pattern': '[0-9]+(\.[0-9]{1,2})?',
+												'title': 'Please enter a valid price (e.g. 10.99)'
+											} }) }}
+										</div>
+										{% if app.request.method == 'POST' and not form.prixDeVente.vars.valid %}
+											<div class="text-danger">
+												{{ form_errors(form.prixDeVente) }}
+											</div>
+										{% endif %}
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="input-label-wrapper mb-3">
+										<label for="{{ form.prixOriginal.vars.id }}" class="form-label">Original Price</label>
+										<div class="input-group">
+											<span class="input-group-text">$</span>
+											{{ form_widget(form.prixOriginal, { 'attr': {
+												'class': 'form-control', 
+												'placeholder': 'Enter Original Price',
+												'min': '0.01',
+												'step': '0.01',
+												'required': 'required',
+												'pattern': '[0-9]+(\.[0-9]{1,2})?',
+												'title': 'Please enter a valid price (e.g. 10.99)'
+											} }) }}
+										</div>
+										{% if app.request.method == 'POST' and not form.prixOriginal.vars.valid %}
+											<div class="text-danger">
+												{{ form_errors(form.prixOriginal) }}
+											</div>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-12">
+									<div class="input-label-wrapper mb-3">
+										<label for="{{ form.description.vars.id }}" class="form-label">Description</label>
+										{{ form_widget(form.description, { 'attr': {
+											'class': 'form-control', 
+											'placeholder': 'Enter detailed product description', 
+											'rows': 5,
+											'minlength': '10',
+											'required': 'required'
+										} }) }}
+										{% if app.request.method == 'POST' and not form.description.vars.valid %}
+											<div class="text-danger">
+												{{ form_errors(form.description) }}
+											</div>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="card mb-4">
+						<div class="card-header">
+							<h5 class="mb-0">Contact Information</h5>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="input-label-wrapper mb-3">
+										<label for="{{ form.telephone.vars.id }}" class="form-label">Phone Number</label>
+										{{ form_widget(form.telephone, { 'attr': {
+											'class': 'form-control', 
+											'placeholder': 'Enter Phone Number',
+											'pattern': '[0-9]{10}',
+											'title': 'Please enter a valid 10-digit phone number',
+											'required': 'required'
+										} }) }}
+										<small class="form-text text-muted">Format: 10 digits without spaces or special characters</small>
+										{% if app.request.method == 'POST' and not form.telephone.vars.valid %}
+											<div class="text-danger">
+												{{ form_errors(form.telephone) }}
+											</div>
+										{% endif %}
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="input-label-wrapper mb-3">
+										<label for="{{ form.email.vars.id }}" class="form-label">Email</label>
+										{{ form_widget(form.email, { 'attr': {
+											'class': 'form-control', 
+											'placeholder': 'Enter Email',
+											'type': 'email',
+											'pattern': '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$',
+											'title': 'Please enter a valid email address',
+											'required': 'required'
+										} }) }}
+										{% if app.request.method == 'POST' and not form.email.vars.valid %}
+											<div class="text-danger">
+												{{ form_errors(form.email) }}
+											</div>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-12">
+									<div class="input-label-wrapper mb-3">
+										<label for="{{ form.adresse.vars.id }}" class="form-label">Address</label>
+										{{ form_widget(form.adresse, { 'attr': {
+											'class': 'form-control', 
+											'placeholder': 'Enter Address',
+											'required': 'required'
+										} }) }}
+										{% if app.request.method == 'POST' and not form.adresse.vars.valid %}
+											<div class="text-danger">
+												{{ form_errors(form.adresse) }}
+											</div>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-md-6">
+									<div class="input-label-wrapper mb-3">
+										<label for="{{ form.codePostal.vars.id }}" class="form-label">Postal Code</label>
+										{{ form_widget(form.codePostal, { 'attr': {
+											'class': 'form-control', 
+											'placeholder': 'Enter Postal Code',
+											'pattern': '[0-9]{5}',
+											'title': 'Please enter a valid 5-digit postal code',
+											'required': 'required'
+										} }) }}
+										{% if app.request.method == 'POST' and not form.codePostal.vars.valid %}
+											<div class="text-danger">
+												{{ form_errors(form.codePostal) }}
+											</div>
+										{% endif %}
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="input-label-wrapper mb-3">
+										<label for="{{ form.ville.vars.id }}" class="form-label">City</label>
+										{{ form_widget(form.ville, { 'attr': {
+											'class': 'form-control', 
+											'placeholder': 'Enter City',
+											'required': 'required'
+										} }) }}
+										{% if app.request.method == 'POST' and not form.ville.vars.valid %}
+											<div class="text-danger">
+												{{ form_errors(form.ville) }}
+											</div>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="d-flex justify-content-between mt-4 mb-5">
+						<a href="{{ path('app_allproduct_seller') }}" class="btn btn-outline-secondary">
+							<i class="fa-solid fa-arrow-left me-2"></i>Cancel
+						</a>
+						<button type="submit" class="btn btn-primary">
+							<i class="fa-solid fa-save me-2"></i>Save Product
+						</button>
+					</div>
+
+					{{ form_end(form) }}
 
 
 					<!-- add product form end -->
