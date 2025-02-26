@@ -190,7 +190,7 @@
 										<div class="col-lg-3">
 											<div class="single-menu mt-30">
 												<h5>
-													<a href="category/Mens-Shoes.html">Men’s Shoes</a>
+													<a href="category/Mens-Shoes.html">Men's Shoes</a>
 												</h5>
 												<ul>
 													<li>
@@ -353,7 +353,7 @@
 
 						</div>
 						<div class="icon-circle">
-    <a href="{{ path('app_panier_controler') }}">
+    <a href="">
 								<span class="cart-count" id="cart-count">
 									0
 								</span>
@@ -924,7 +924,7 @@
 								<li>
 									<div class="d-flex justify-content-between align-items-lg-baseline">
 										<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Shoes" class="">
-											Men’s Shoes
+											Men's Shoes
 										</a>
 
 										<button data-bs-toggle="collapse" data-bs-target="#Mens-Shoes_level_2" aria-controls="Mens-Shoes_level_2" aria-expanded="false" class="position-relative bottom-12 collapsed">
@@ -1231,7 +1231,7 @@
 										<a class="dropdown-item dropdown__item" href="javascript:;">Unisex Clothing</a>
 									</li>
 									<li>
-										<a class="dropdown-item dropdown__item" href="javascript:;">Men’s Shoes</a>
+										<a class="dropdown-item dropdown__item" href="javascript:;">Men's Shoes</a>
 									</li>
 									<li>
 										<a class="dropdown-item dropdown__item" href="javascript:;">Women&#039;s Shoes</a>
@@ -1433,7 +1433,7 @@
                         </div>
                     </a>
 
-<a href="#" class="add_cart_click">
+<a href="{{ path('app_panier_add', { id: product.id, name: product.objetAVendre|url_encode }) }}" class="add_cart_click">
     <div class="add-cart">
         Add To Cart
     </div>
@@ -1630,7 +1630,7 @@ type="hidden" id="update_max_price" value="">
 						<a href="https://cleandemo.geniusocean.net/geniuscart2/category/Unisex-Clothing">Unisex Clothing</a>
 					</li>
 					<li class="wow-replaced" data-wow-delay=".1s">
-						<a href="https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Shoes">Men’s Shoes</a>
+						<a href="https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Shoes">Men's Shoes</a>
 					</li>
 					<li class="wow-replaced" data-wow-delay=".1s">
 						<a href="https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Shoes">Women&#039;s Shoes</a>

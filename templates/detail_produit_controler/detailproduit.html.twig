@@ -205,7 +205,7 @@
                                                                             <div class="col-lg-3">
                                             <div class="single-menu mt-30">
                                                 <h5><a
-                                                        href="category/Mens-Shoes.html">Men’s Shoes</a>
+                                                        href="category/Mens-Shoes.html">Men's Shoes</a>
                                                 </h5>
                                                                                                                                                             <ul>
                                                             <li><a
@@ -1168,7 +1168,7 @@
                                                                                 <div class="d-flex justify-content-between align-items-lg-baseline">
                                             <a href="category/Mens-Shoes"
                                                 class="">
-                                                Men’s Shoes
+                                                Men's Shoes
                                             </a>
 
                                             <button data-bs-toggle="collapse"
@@ -1579,7 +1579,7 @@
                                     </li>
                                                                     <li>
                                         <a class="dropdown-item dropdown__item"
-                                            href="javascript:;">Men’s Shoes</a>
+                                            href="javascript:;">Men's Shoes</a>
                                     </li>
                                                                     <li>
                                         <a class="dropdown-item dropdown__item"
@@ -1695,10 +1695,10 @@
                     <form>
                         <!-- product-info-wrapper  -->
                         <div class="product-info-wrapper  ">
-<h3>{{ product.name }}</h3>
+<h3>{{ product.objetAVendre }}</h3>
                             <div class="price-wrapper">
-                                <h5 id="sizeprice">120$</h5>
-                                <h5><del>139.90$</del></h5>
+                                <h5 id="sizeprice">{{ product.prixDeVente }}</h5>
+                                <h5><del>{{ product.prixOriginal }}</del></h5>
 
                                                                     <span class="product-badge">-14%</span>
                                 
@@ -1725,7 +1725,7 @@
                                 <ul>
                                     <li>
                                                                                     <span><b>Availability : </b></span>
-                                                                                             {{ product.stock }}
+                                                                                             
                                                                                     
                                     </li>
 
@@ -1766,7 +1766,7 @@
 
                                                             <!-- product colors -->
                                 <div class="variation-wrapper variation-colors">
-                                    <span class="varition-title">{{ product.color }}</span>
+                                    <span class="varition-title">{{ product.couleur }}</span>
                                     <ul>
                                                                                     <li class="active cart_color">
                                                 <input checked type="radio" data-price="0"
@@ -2045,7 +2045,7 @@
                 </div>
                 <div class="tab-pane fade" id="buy-return-policy-tab-pane" role="tabpanel"
                     aria-labelledby="buy-return-policy-tab" tabindex="0">
-                    <p><strong>{{product.returnPolicy}}</strong>
+                    <p><strong></strong>
                 </div>
 
                 <!-- Reviews tab content start  -->
@@ -2329,7 +2329,7 @@
                                 href="category/Unisex-Clothing">Unisex Clothing</a>
                         </li>
                                             <li class="wow-replaced" data-wow-delay=".1s"><a
-                                href="category/Mens-Shoes">Men’s Shoes</a>
+                                href="category/Mens-Shoes">Men's Shoes</a>
                         </li>
                                             <li class="wow-replaced" data-wow-delay=".1s"><a
                                 href="category/Womens-Shoes">Women&#039;s Shoes</a>

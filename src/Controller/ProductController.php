@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Form\ProductType;
+use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -55,7 +56,7 @@ class ProductController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-    //fetsh product 
+     
     
     
     /**
@@ -266,6 +267,20 @@ class ProductController extends AbstractController
             'controller_name' => 'CategoryController',
             'products' => $products,  // Passing products to the template
             'totalProducts' => $totalProducts,  // Pass the total count
+        ]);
+    }
+    //product detail 
+    #[Route('/produit/{id}', name: 'app_detail_produit_controler')]
+    public function detailProduit($id, ProductRepository $productRepository): Response
+    {
+        $product = $productRepository->find($id);
+
+        if (!$product) {
+            throw $this->createNotFoundException('Produit non trouvé');
+        }
+        
+        return $this->render('detail_produit_controler/detailproduit.html.twig', [
+            'product' => $product,
         ]);
     }
     
