@@ -21,10 +21,16 @@
                 <h3 class="text-secondary">💬 Commentaires</h3>
 
                 <div class="commentaires list-group">
+
                     {% for commentaire in article.commentaires %}
+                    
                         <div class="list-group-item bg-light border-0 shadow-sm rounded mb-2">
                             <p class="mb-1">{{ commentaire.contenuComm }}</p>
                             <p class="text-muted small">🕒 Publié le {{ commentaire.dateComm|date('d-m-Y H:i') }}</p>
+
+                            
+
+                <i class="fas fa-trash-alt"></i> Supprimer </button>
                         </div>
                     {% else %}
                         <p class="text-muted">Aucun commentaire pour cet article.</p>

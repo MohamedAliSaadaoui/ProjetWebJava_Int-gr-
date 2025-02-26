@@ -28,9 +28,7 @@ class BlogController extends AbstractController
         ]);
     }
 
-
 //CREATION D'UN ARTICLE
-
 #[Route('/blog/new', name: 'article_new')]
 public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
 {
@@ -61,12 +59,12 @@ public function new(Request $request, EntityManagerInterface $entityManager, Slu
 
         return $this->redirectToRoute('app_blog');
     }
-    return $this->render('blog/article_new.html.twig', [
+    return $this->render('blog/article_details.html.twig', [
         'form' => $form->createView(),
     ]);
 }
-//MODIFICATION BLOG
-
+    
+//MODIFICATION article
 #[Route('/blog/edit/{id}', name: 'article_edit')]
 public function edit(Request $request, Article $article, EntityManagerInterface $entityManager): Response
 {
@@ -79,18 +77,14 @@ public function edit(Request $request, Article $article, EntityManagerInterface 
         $entityManager->flush();
         $this->addFlash('success', 'Article modifié avec succès.');
 
-        
         return $this->redirectToRoute('article_details', ['id' => $article->getId()]);
-
     }
-
     return $this->render('blog/article_new.html.twig', [
         'form' => $form->createView(),
     ]);
 }
 
-    
-//SUPPRESSION BLOG
+//SUPPRESSION article
 #[Route('/blog/delete/{id}', name: 'article_delete', methods: ['POST'])]
 public function delete(Request $request, Article $article, EntityManagerInterface $entityManager): Response
 {
@@ -103,7 +97,14 @@ public function delete(Request $request, Article $article, EntityManagerInterfac
     return $this->redirectToRoute('app_blog');
 }
 
-
+//ARTICLE DETAILS
+#[Route('/blog/article/{id}', name: 'article_details')]
+public function detailsArticle(Article $article): Response
+{
+    return $this->render('blog/article_details.html.twig', [
+        'article' => $article,
+    ]);
+}
 
 // Affichage de la liste des articles
 #[Route('/blog/liste', name: 'app_liste')]
@@ -135,14 +136,6 @@ public function liste(EntityManagerInterface $entityManager): Response
 //     ]);
 // }
 
-//ARTICLE DETAILS
-#[Route('/blog/article/{id}', name: 'article_details')]
-public function detailsArticle(Article $article): Response
-{
-    return $this->render('blog/article_details.html.twig', [
-        'article' => $article,
-    ]);
-}
 
 //affichage et ajout de commentaire
 #[Route('/blog/show_commentaire/{id}', name: 'article_A')]
@@ -183,16 +176,34 @@ public function supprimerComment(int $id, EntityManagerInterface $entityManager)
 {
     // Récupérer le commentaire via l'ID
     $commentaire = $entityManager->getRepository(Commentaire::class)->find($id);
-
     // Récupérer l'ID de l'article pour rediriger après la suppression
     $articleId = $commentaire->getArticle()->getId();
-
     // Suppression du commentaire
     $entityManager->remove($commentaire);
     $entityManager->flush();
-
     // Rediriger vers la page de l'article
     return $this->redirectToRoute('article_details', ['id' => $articleId]);
+}
+
+#[Route('/blog/commentaire_edit/{id}/edit', name: 'commentaire_edit')]
+public function modifierCommentaire(Request $request, Commentaire $commentaire, EntityManagerInterface $entityManager): Response
+{
+    // Création du formulaire basé sur CommentaireType
+    $form = $this->createForm(CommentaireType::class, $commentaire);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Votre commentaire a été modifié avec succès.');
+
+        return $this->redirectToRoute('article_details', ['id' => $commentaire->getArticle()->getId()]);
+    }
+
+    return $this->render('blog/edit_comment.html.twig', [
+        'form' => $form->createView(),
+        'commentaire' => $commentaire,
+    ]);
 }
 
 

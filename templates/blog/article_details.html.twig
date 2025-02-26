@@ -1762,28 +1762,31 @@
                         <div class="meta-info-wrapper">
                             <div class="single-meta">
                                 <span class="meta-title">
+
+                                
+
                                     {{ article.date ? article.date|date('M d - Y') : 'Date inconnue' }}
                                 </span>
+                            
+                                <a href="{{ path('article_edit', {'id': article.id}) }}" class="btn btn-primary">Modifier</a>
+    
+
                             </div>
                         </div>
 
-                        <!-- Affichage du titre de l'article -->
+ <!-- Affichage du titre de l'article -->
                         <h4 class="fea-title mb-24">
                             {{ article.title }}
                         </h4>
-
-                        <!-- Affichage du contenu de l'article -->
+                        
+ <!-- Affichage du contenu de l'article -->
                         <p class="article-content">
                             {{ article.content|raw }}
                         </p>
                         
                         <div class="gs-comment-section">
-    
 
-
-
-
-<!-- Section des commentaires -->
+ <!-- Section des commentaires -->
             <section class="commentaires-section">
                 <h3 class="text-secondary">💬 Commentaires</h3>
 
@@ -1791,13 +1794,20 @@
                     {% for commentaire in article.commentaires %}
                         <div class="list-group-item bg-light border-0 shadow-sm rounded mb-2">
                             <p class="mb-1">{{ commentaire.contenuComm }}</p>
-
                             <p class="text-muted small">🕒 Publié le {{ commentaire.dateComm|date('d-m-Y H:i') }}</p>
-                            <form action="{{ path('comment_delete', {'id': commentaire.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?');">
+                            
+                                 <form action="{{ path('comment_delete', {'id': commentaire.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?');">
             <button type="submit" class="btn btn-danger btn-sm">
 
                 <i class="fas fa-trash-alt"></i> Supprimer </button>
+
+
+                <a href="{{ path('commentaire_edit', {'id': commentaire.id}) }}" class="btn btn-warning btn-sm">
+    <i class="fas fa-edit"></i> Modifier
+</a> 
         </form>
+
+    
                         </div>
                     {% else %}
                         <p class="text-muted">Aucun commentaire pour cet article.</p>
@@ -1821,7 +1831,7 @@
                             'attr': {
                                 'class': 'form-control border-primary shadow-sm',
                                 'placeholder': 'Écrivez votre commentaire ici...',
-                                'rows': '3',
+                                'rows': '2',
                                 'style': 'resize: none;'
                             }
                         }) }}
@@ -1837,7 +1847,9 @@
 
                 {{ form_end(commentaireForm) }}
             </section>
-            
+
+
+
             <div class="text-center mt-4">
                 <a href="{{ path('app_blog') }}" class="btn btn-outline-secondary">
                     ⬅ Retour à la liste des articles
@@ -1848,21 +1860,7 @@
 
 
 
-                <div class="col-12 col-lg-4 mt-40 mt-lg-0 wow-replaced" data-wow-delay=".1s">
-                    <div class="gs-blog-sidebar-wrapper right-side">
-                        <!-- search wrapper -->
-                        <div class="single-blog-widget wow-replaced" data-wow-delay=".1s">
-                            
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none">
-                                        <path
-                                            d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z"
-                                            stroke="black" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                    </svg>
-                                </button>
-                            </form>
-                        </div>
+            
 
                         <!-- categories wrapper -->
                         <div class="single-blog-widget wow-replaced" data-wow-delay=".1s">
