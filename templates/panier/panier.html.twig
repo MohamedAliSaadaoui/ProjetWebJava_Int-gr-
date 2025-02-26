@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Panier{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4">Mon Panier</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% if cart|length > 0 %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Prix</th>
+                        <th>Quantité</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for id, item in cart %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="ms-3">
+                                        <h6 class="mb-1">{{ item.objetAVendre }}</h6>
+                                        <small class="text-muted">
+                                            {{ item.genre }} - {{ item.taille }} - {{ item.couleur }} - {{ item.etat }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ item.prixDeVente }}€</td>
+                            <td>
+                                <form action="{{ path('app_panier_update', {'id': id}) }}" method="POST" class="d-flex align-items-center">
+                                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1" 
+                                           class="form-control form-control-sm" style="width: 70px;">
+                                    <button type="submit" class="btn btn-sm btn-outline-primary ms-2">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                </form>
+                            </td>
+                            <td>{{ (item.prixDeVente * item.quantity)|number_format(2, '.', ',') }}€</td>
+                            <td>
+                                <a href="{{ path('app_panier_remove', {'id': id}) }}" 
+                                   class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Êtes-vous sûr de vouloir retirer ce produit ?')">
+                                    <i class="fas fa-trash"></i> Supprimer
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td><strong>Total Quantité:</strong></td>
+                        <td><strong>{{ totalQuantity }}</strong></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td><strong>Total Prix:</strong></td>
+                        <td><strong>{{ totalPrice|number_format(2, '.', ',') }}€</strong></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <a href="{{ path('app_category') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Continuer mes achats
+            </a>
+            <a href="#" class="btn btn-primary">
+                Procéder au paiement <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <h3>Votre panier est vide</h3>
+            <p class="mb-4">Découvrez nos produits et commencez votre shopping !</p>
+            <a href="{{ path('app_category') }}" class="btn btn-primary">
+                Voir les produits
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 

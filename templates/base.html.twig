@@ -36,6 +36,23 @@
     <script>
         $(document).ready(function() {
             $('select').niceSelect();  // Initialize NiceSelect
+
+            // Handle add to cart clicks
+            $('.add_cart_click').on('click', function(e) {
+                e.preventDefault();
+                var url = $(this).attr('href');
+                
+                $.get(url, function(response) {
+                    // Update cart count
+                    $('#cart-count').text(response.cartTotalQuantity);
+                    
+                    // Show success message
+                    toastr.success('Produit ajouté au panier');
+                })
+                .fail(function() {
+                    toastr.error('Erreur lors de l\'ajout au panier');
+                });
+            });
         });
     </script>
 {% endblock %}

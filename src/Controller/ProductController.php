@@ -281,12 +281,13 @@ class ProductController extends AbstractController
         
         return $this->render('detail_produit_controler/detailproduit.html.twig', [
             'product' => $product,
+            
         ]);
     }
     
     // add to cart 
-    #[Route('/panier/add/{id}/{name}', name: 'app_panier_add')]
-    public function addToCart(int $id, string $name, EntityManagerInterface $entityManager): Response
+    #[Route('/panier/add/{id}', name: 'app_panier_add')]
+    public function addToCart(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
         // Get the session from the RequestStack
         $session = $this->requestStack->getSession();
@@ -294,32 +295,142 @@ class ProductController extends AbstractController
         // Fetch the product from the database by its ID
         $product = $entityManager->getRepository(Product::class)->find($id);
 
-        // If the product doesn't exist, redirect to the category page
+        // If the product doesn't exist, return error response
         if (!$product) {
-            $this->addFlash('error', 'Product not found.');
+            if ($request->isXmlHttpRequest()) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Produit non trouvé'
+                ], 404);
+            }
+            $this->addFlash('error', 'Produit non trouvé.');
             return $this->redirectToRoute('app_category');
         }
 
         // Get the cart from the session, or initialize an empty array if it doesn't exist
         $cart = $session->get('cart', []);
 
+        // Get quantity from request, default to 1 if not specified
+        $quantity = $request->query->getInt('quantity', 1);
+
         // Check if the product is already in the cart
         if (isset($cart[$id])) {
-            $cart[$id]['quantity']++; // Increment the quantity if the product is already in the cart
+            // Increment the quantity if the product is already in the cart
+            $cart[$id]['quantity'] += $quantity;
         } else {
-            // Otherwise, add the product to the cart with quantity 1
+            // Add the product to the cart with all necessary details
             $cart[$id] = [
-                'name' => $name,
-                'quantity' => 1,
-                'price' => $product->getPrixDeVente(), // Updated to use prixDeVente instead of price
+                'id' => $product->getId(),
+                'objetAVendre' => $product->getObjetAVendre(),
+                'quantity' => $quantity,
+                'prixDeVente' => $product->getPrixDeVente(),
+                'genre' => $product->getGenre(),
+                'taille' => $product->getTaille(),
+                'couleur' => $product->getCouleur(),
+                'etat' => $product->getEtat()
             ];
         }
 
         // Save the updated cart back into the session
         $session->set('cart', $cart);
 
-        // Redirect to the category page with a success message
-        $this->addFlash('success', 'Product added to cart!');
-        return $this->redirectToRoute('app_category');
+        // Calculate cart totals
+        $totalQuantity = 0;
+        $totalPrice = 0;
+        foreach ($cart as $item) {
+            $totalQuantity += $item['quantity'];
+            $totalPrice += $item['quantity'] * $item['prixDeVente'];
+        }
+        
+        // Store cart totals in session
+        $session->set('cart_total_quantity', $totalQuantity);
+        $session->set('cart_total_price', $totalPrice);
+
+        // If this is an AJAX request, return JSON response
+        if ($request->isXmlHttpRequest()) {
+            return $this->json([
+                'success' => true,
+                'message' => 'Produit ajouté au panier',
+                'cartTotalQuantity' => $totalQuantity,
+                'cartTotalPrice' => $totalPrice
+            ]);
+        }
+
+        // Redirect to the cart page with a success message
+        $this->addFlash('success', 'Produit ajouté au panier !');
+        return $this->redirectToRoute('app_panier');
+    }
+
+    // Display cart contents
+    #[Route('/panier', name: 'app_panier')]
+    public function showCart(): Response
+    {
+        // Get the cart from session
+        $cart = $this->requestStack->getSession()->get('cart', []);
+        $totalQuantity = $this->requestStack->getSession()->get('cart_total_quantity', 0);
+        $totalPrice = $this->requestStack->getSession()->get('cart_total_price', 0);
+
+        return $this->render('panier/panier.html.twig', [
+            'cart' => $cart,
+            'totalQuantity' => $totalQuantity,
+            'totalPrice' => $totalPrice
+        ]);
+    }
+
+    // Remove item from cart
+    #[Route('/panier/remove/{id}', name: 'app_panier_remove')]
+    public function removeFromCart(int $id): Response
+    {
+        $session = $this->requestStack->getSession();
+        $cart = $session->get('cart', []);
+
+        if (isset($cart[$id])) {
+            // Recalculate totals
+            $totalQuantity = $session->get('cart_total_quantity', 0) - $cart[$id]['quantity'];
+            $totalPrice = $session->get('cart_total_price', 0) - ($cart[$id]['quantity'] * $cart[$id]['prixDeVente']);
+            
+            // Remove the item
+            unset($cart[$id]);
+            
+            // Update session
+            $session->set('cart', $cart);
+            $session->set('cart_total_quantity', $totalQuantity);
+            $session->set('cart_total_price', $totalPrice);
+            
+            $this->addFlash('success', 'Produit retiré du panier');
+        }
+
+        return $this->redirectToRoute('app_panier');
+    }
+
+    // Update cart quantity
+    #[Route('/panier/update/{id}', name: 'app_panier_update', methods: ['POST'])]
+    public function updateCartQuantity(int $id, Request $request): Response
+    {
+        $session = $this->requestStack->getSession();
+        $cart = $session->get('cart', []);
+        $quantity = $request->request->getInt('quantity', 1);
+
+        if (isset($cart[$id])) {
+            // Calculate the difference for totals
+            $quantityDiff = $quantity - $cart[$id]['quantity'];
+            $priceDiff = $quantityDiff * $cart[$id]['prixDeVente'];
+            
+            // Update item quantity
+            $cart[$id]['quantity'] = $quantity;
+            
+            // Update totals
+            $totalQuantity = $session->get('cart_total_quantity', 0) + $quantityDiff;
+            $totalPrice = $session->get('cart_total_price', 0) + $priceDiff;
+            
+            // Update session
+            $session->set('cart', $cart);
+            $session->set('cart_total_quantity', $totalQuantity);
+            $session->set('cart_total_price', $totalPrice);
+            
+            $this->addFlash('success', 'Quantité mise à jour');
+        }
+
+        return $this->redirectToRoute('app_panier');
     }
 }
