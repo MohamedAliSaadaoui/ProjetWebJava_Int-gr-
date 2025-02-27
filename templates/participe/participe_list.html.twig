@@ -5,36 +5,36 @@
 {% block title %}Participation List{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h1 class="text-center my-4" style="color: #4B5320;">Participation List</h1>
+   <div class="container">
+    <h1 class="text-center my-4">Participation List</h1>
 
-        <table class="table table-striped" style="background-color: #f9f9f9; border-radius: 10px;">
-            <thead style="background-color: #4B5320; color: white;">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Date de Participation</th>
+                <th>Événement</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for participation in participations %}
                 <tr>
-                    <th>Date de Participation</th>
-                    <th>Événement</th>
-                    <th>Actions</th>
+                    <td>{{ participation.dateParticipation ? participation.dateParticipation|date('d/m/Y') : 'N/A' }}</td>
+                    <td>{{ participation.idEvent ? participation.idEvent.titre : 'N/A' }}</td>
+                    <td>
+                        <form action="{{ path('participation_edit', {'id': participation.id}) }}" method="get">
+                            <button type="submit" class="btn">Edit</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" action="{{ path('participation_delete', { 'id': participation.id }) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ participation.id) }}">
+                            <button type="submit" class="btn" onclick="return confirm('Are you sure you want to delete this participation?')">Delete</button>
+                        </form>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                {% for participation in participations %}
-                    <tr style="background-color: #f0e1c1; border-radius: 10px;">
-                        <td>{{ participation.dateParticipation ? participation.dateParticipation|date('d/m/Y') : 'N/A' }}</td>
-                        <td>{{ participation.idEvent ? participation.idEvent.titre : 'N/A' }}</td>
-                        <td>
-                            <form action="{{ path('participation_edit', {'id': participation.id}) }}" method="get">
-                                <button type="submit" class="btn" style="background-color: #4B5320; color: white;">Edit</button>
-                            </form>
-                        </td>
-                        <td>
-                            <form method="post" action="{{ path('participation_delete', { 'id': participation.id }) }}">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ participation.id) }}">
-                                <button type="submit" class="btn" style="background-color: #D35400; color: white;" onclick="return confirm('Are you sure you want to delete this participation?')">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}

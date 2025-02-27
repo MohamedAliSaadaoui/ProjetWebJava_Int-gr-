@@ -3,14 +3,16 @@
 {% block title %}Edit Event{% endblock %}
 
 {% block body %}
+        
     <div class="container py-5">
-        <h1 class="text-center mb-4" style="color: #4b8b3b;">Edit Event</h1>
+        <h1 class="text-center mb-4"> Edit Event</h1>
+
 
         {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
             <div class="form-group mb-4">
                 {{ form_label(form.titre, 'Title', {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                 <div class="col-sm-10">
-                    {{ form_widget(form.titre, {'attr': {'class': 'form-control', 'style': 'background-color: #f4f1e1;'}}) }}
+                   {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
                     {{ form_errors(form.titre) }}
                 </div>
             </div>
@@ -18,7 +20,7 @@
             <div class="form-group mb-4">
                 {{ form_label(form.dateDebut, 'Start Date', {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                 <div class="col-sm-10">
-                    {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control', 'style': 'background-color: #f4f1e1;'}}) }}
+                    {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control'}}) }}
                     {{ form_errors(form.dateDebut) }}
                 </div>
             </div>
@@ -26,7 +28,7 @@
             <div class="form-group mb-4">
                 {{ form_label(form.dateFin, 'End Date', {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                 <div class="col-sm-10">
-                    {{ form_widget(form.dateFin, {'attr': {'class': 'form-control', 'style': 'background-color: #f4f1e1;'}}) }}
+                    {{ form_widget(form.dateFin, {'attr': {'class': 'form-control'}}) }}
                     {{ form_errors(form.dateFin) }}
                 </div>
             </div>
@@ -34,7 +36,7 @@
             <div class="form-group mb-4">
                 {{ form_label(form.lieu, 'Location', {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                 <div class="col-sm-10">
-                    {{ form_widget(form.lieu, {'attr': {'class': 'form-control', 'style': 'background-color: #f4f1e1;'}}) }}
+                    {{ form_widget(form.lieu, {'attr': {'class': 'form-control'}}) }}
                     {{ form_errors(form.lieu) }}
                 </div>
             </div>
@@ -42,7 +44,7 @@
             <div class="form-group mb-4">
                 {{ form_label(form.statut, 'Status', {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                 <div class="col-sm-10">
-                    {{ form_widget(form.statut, {'attr': {'class': 'form-control', 'style': 'background-color: #f4f1e1;'}}) }}
+                    {{ form_widget(form.statut, {'attr': {'class': 'form-control'}}) }}
                     {{ form_errors(form.statut) }}
                 </div>
             </div>
@@ -50,78 +52,16 @@
             <div class="form-group mb-4">
                 {{ form_label(form.categorie, 'Category', {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                 <div class="col-sm-10">
-                    {{ form_widget(form.categorie, {'attr': {'class': 'form-control', 'style': 'background-color: #f4f1e1;'}}) }}
+                    {{ form_widget(form.categorie, {'attr': {'class': 'form-control'}}) }}
                     {{ form_errors(form.categorie) }}
                 </div>
             </div>
 
             <div class="form-group mb-4">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn" style="background-color: #4b8b3b; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">Edit Event</button>
+                   <button type="submit" class="btn" style="padding: 10px 20px; border-radius: 5px; font-weight: bold;">Edit Event</button>
                 </div>
             </div>
         {{ form_end(form) }}
     </div>
-
-    <style>
-        body {
-            background-color: #fff8e1; /* Beige background */
-            color: #4b8b3b; /* Earthy green text */
-        }
-
-        .container {
-            background-color: #f4f1e1; /* Light beige background for the container */
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-        }
-
-        .form-control {
-            background-color: #fff; /* White background for form fields */
-            border-radius: 5px;
-            border: 1px solid #dcdcdc;
-            padding: 10px;
-        }
-
-        .form-group label {
-            font-weight: bold;
-            color: #4b8b3b;
-        }
-
-        .btn {
-            font-weight: bold;
-            border-radius: 5px;
-            padding: 10px 20px;
-        }
-
-        .btn:hover {
-            opacity: 0.9;
-        }
-
-        .btn-primary {
-            background-color: #4b8b3b;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: #3e7a34; /* Darker green on hover */
-        }
-
-        .form-errors {
-            color: #e74c3c; /* Red for errors */
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .col-sm-2 {
-            font-weight: bold;
-            color: #4b8b3b;
-        }
-
-        .col-sm-10 {
-            margin-left: 10px;
-        }
-    </style>
 {% endblock %}

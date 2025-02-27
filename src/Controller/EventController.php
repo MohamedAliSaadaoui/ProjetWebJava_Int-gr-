@@ -10,6 +10,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\EventRepository;
 use App\Repository\ParticipeRepository;
+use App\Service\GeocodingService;
+
 
 class EventController extends AbstractController
 {
@@ -22,35 +24,53 @@ class EventController extends AbstractController
     }
 
     #[Route('/event/create', name: 'event_create')]
-public function create(Request $request, EntityManagerInterface $entityManager): Response
-{
-   
-    $event = new Event();
-
-    // Créer le formulaire en utilisant la classe EventType
-    $form = $this->createForm(EventType::class, $event);
-
+    public function create(Request $request, EntityManagerInterface $entityManager, GeocodingService $geocodingService): Response
+    {
+        // Créer une nouvelle instance de l'entité Event
+        $event = new Event();
     
-    $form->handleRequest($request);
-
+        // Créer le formulaire à partir de la classe EventType
+        $form = $this->createForm(EventType::class, $event);
     
-    if ($form->isSubmitted() && $form->isValid()) {
-       
-        $entityManager->persist($event);
-        $entityManager->flush();
-
-        // Ajouter un message flash pour notifier l'utilisateur
-        $this->addFlash('success', 'Event created successfully!');
-
-        // Rediriger vers une page de succès ou liste des événements
-        return $this->redirectToRoute('event_list'); 
+        // Traiter la soumission du formulaire
+        $form->handleRequest($request);
+    
+        // Vérifier si le formulaire est soumis et valide
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Récupérer le lieu de l'événement
+            $lieu = $event->getLieu();
+    
+            // Utiliser le service GeocodingService pour obtenir les coordonnées (latitude et longitude)
+            $coordinates = $geocodingService->getCoordinates($lieu);
+    
+            // Vérifier si des coordonnées ont été trouvées
+            if ($coordinates) {
+                // Assigner les coordonnées à l'événement
+                $event->setLatitude($coordinates['latitude']);
+                $event->setLongitude($coordinates['longitude']);
+            } else {
+                // Si aucune coordonnée n'est trouvée, ajouter un message flash d'erreur
+                $this->addFlash('error', 'Could not find coordinates for the specified location.');
+                return $this->redirectToRoute('event_create');
+            }
+    
+            // Persister l'événement dans la base de données
+            $entityManager->persist($event);
+            $entityManager->flush();
+    
+            // Ajouter un message flash pour informer l'utilisateur que l'événement a été créé
+            $this->addFlash('success', 'Event created successfully!');
+    
+            // Rediriger vers la liste des événements (ou une autre page selon ton besoin)
+            return $this->redirectToRoute('event_list');
+        }
+    
+        // Rendre la vue du formulaire
+        return $this->render('event/event_create.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
-
     
-    return $this->render('event/event_create.html.twig', [
-        'form' => $form->createView(),
-    ]);
-}
 #[Route('/event/list', name: 'event_list')]
     public function list(EventRepository $eventRepository): Response
     {
@@ -88,24 +108,40 @@ public function create(Request $request, EntityManagerInterface $entityManager):
     
 // #[IsGranted('ROLE_ADMIN')]
 #[Route('/event/edit/{id}', name: 'event_edit')]
-    public function edit(Event $event, Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(EventType::class, $event);
-        $form->handleRequest($request);
+public function edit(Event $event, Request $request, EntityManagerInterface $entityManager, GeocodingService $geocodingService): Response
+{
+    $form = $this->createForm(EventType::class, $event);
+    $form->handleRequest($request);
 
-        // Si le formulaire est soumis et valide
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Mettre à jour l'événement en base
-            $entityManager->flush();
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Récupérer le lieu de l'événement
+        $lieu = $event->getLieu();
 
-            $this->addFlash('success', 'Event updated successfully.');
+        // Utiliser le service de géocodage pour obtenir les nouvelles coordonnées
+        $coordinates = $geocodingService->getCoordinates($lieu);
 
-            return $this->redirectToRoute('event_list'); // Redirection vers la liste des événements
+        if ($coordinates) {
+            // Mettre à jour les coordonnées de l'événement
+            $event->setLatitude($coordinates['latitude']);
+            $event->setLongitude($coordinates['longitude']);
+        } else {
+            // Si aucune coordonnée trouvée, afficher un message d'erreur
+            $this->addFlash('error', 'Could not find coordinates for the specified location.');
+            return $this->redirectToRoute('event_edit', ['id' => $event->getId()]);
         }
 
-        return $this->render('event/event_edit.html.twig', [
-            'form' => $form->createView(),
-            'event' => $event,
-        ]);
+        // Sauvegarde des modifications
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Event updated successfully.');
+
+        return $this->redirectToRoute('event_list');
     }
+
+    return $this->render('event/event_edit.html.twig', [
+        'form' => $form->createView(),
+        'event' => $event,
+    ]);
+}
+
 }

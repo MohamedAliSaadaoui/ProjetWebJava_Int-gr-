@@ -4,110 +4,114 @@
 
 {% block body %}
     <div class="container py-5">
-        <h1 class="text-center mb-4" style="color: #4b8b3b;">Events List</h1>
+    <h1 class="text-center mb-4">Events List</h1>
 
-        <table class="table table-striped" style="background-color: #f4f1e1; border-radius: 8px;">
-            <thead class="thead-light" style="background-color: #4b8b3b; color: white;">
-            <a href="{{ path('event_create') }}" class="btn btn-primary">Create a new Event</a>
-                <tr>
-                    <th>Title</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Location</th>
-                    <th>Status</th>
-                    <th>Category</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for event in events %}
-                    <tr>
-                        <td>{{ event.titre }}</td>
-                        <td>{{ event.dateDebut|date('Y-m-d H:i') }}</td>
-                        <td>{{ event.dateFin|date('Y-m-d H:i') }}</td>
-                        <td>{{ event.lieu }}</td>
-                        <td>{{ event.statut }}</td>
-                        <td>{{ event.categorie }}</td>
-                        <td>
-                            <a href="{{ path('participation_create', {'id': event.id}) }}" class="btn" style="background-color: #4b8b3b; color: white; padding: 8px 15px; border-radius: 5px;">Participate</a>
-                            <a href="{{ path('event_edit', {'id': event.id}) }}" class="btn" style="background-color: #f9b347; color: white; padding: 8px 15px; border-radius: 5px;">Edit</a>
+    <a href="{{ path('event_create') }}" class="btn btn-primary mb-4">Create a new Event</a>
 
-                            <form method="post" action="{{ path('event_delete', {'id': event.id}) }}" onsubmit="return confirm('Are you sure you want to delete this event?');" class="d-inline-block">
+    <div class="row">
+        {% for event in events %}
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <!-- Titre de l'événement -->
+                        <h5 class="card-title">{{ event.titre }}</h5>
+
+                        <!-- Bouton pour afficher les détails -->
+                        <button class="btn btn-primary btn-sm toggle-details" data-id="{{ event.id }}">
+                            Show Details
+                        </button>
+
+                        <!-- Contenu masqué par défaut -->
+                        <div id="details-{{ event.id }}" class="event-details mt-3" style="display: none;">
+                            <p><strong>Start Date:</strong> {{ event.dateDebut|date('Y-m-d H:i') }}</p>
+                            <p><strong>End Date:</strong> {{ event.dateFin|date('Y-m-d H:i') }}</p>
+                            <p><strong>Location:</strong> {{ event.lieu }}</p>
+                            <p><strong>Status:</strong> {{ event.statut }}</p>
+                            <p><strong>Category:</strong> {{ event.categorie }}</p>
+
+                            <!-- Boutons d'actions -->
+                            <a href="{{ path('participation_create', {'id': event.id}) }}" class="btn btn-success btn-sm">Participate</a>
+                            <a href="{{ path('event_edit', {'id': event.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <form method="post" action="{{ path('event_delete', {'id': event.id}) }}" 
+                                  onsubmit="return confirm('Are you sure you want to delete this event?');" 
+                                  class="d-inline-block">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ event.id) }}">
-                                <button class="btn" type="submit" style="background-color: #e74c3c; color: white; padding: 8px 15px; border-radius: 5px;">Delete</button>
+                                <button class="btn btn-danger btn-sm" type="submit">Delete</button>
                             </form>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="7" class="text-center">No events found</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p class="text-center">No events found</p>
+        {% endfor %}
     </div>
+</div>
 
-    <style>
-        body {
-            background-color: #fff8e1; /* Beige background */
-            color: #4b8b3b; /* Earthy green text */
-        }
+<!-- JavaScript pour gérer l'affichage des détails -->
+<script>
+    document.querySelectorAll('.toggle-details').forEach(button => {
+        button.addEventListener('click', () => {
+            let detailsDiv = document.getElementById('details-' + button.dataset.id);
+            if (detailsDiv.style.display === 'none') {
+                detailsDiv.style.display = 'block';
+                button.textContent = 'Hide Details';
+            } else {
+                detailsDiv.style.display = 'none';
+                button.textContent = 'Show Details';
+            }
+        });
+    });
+</script>
 
-        .container {
-            background-color: #f4f1e1; /* Light beige background for the container */
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-        }
+<!-- Add Mapbox CSS and JS -->
+<div id="map" style="height: 400px;"></div>
 
-        .table {
-            background-color: #fff; /* White background for the table */
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
 
-        .thead-light {
-            background-color: #4b8b3b; /* Dark green background for the header */
-            color: white;
-        }
+<script>
+    // Initialize Mapbox
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic2FycmFtZXNzMSIsImEiOiJjbTdrcnlhbmEwM28zMmpzNmExcGR1eXp5In0.8O_U8p7Jkxoe5cd_QQe81g'; // Remplace par ton token Mapbox
+    var map = new mapboxgl.Map({
+        container: 'map', // L'élément où la carte sera affichée
+        style: 'mapbox://styles/mapbox/streets-v11', // Choisir le style de la carte
+        center: [9.5, 33.9], // Coordonnées de la Tunisie (longitude, latitude)
+        zoom: 6 // Niveau de zoom
+    });
 
-        .btn {
-            font-weight: bold;
-            border-radius: 5px;
-            padding: 8px 15px;
-        }
+    {% for event in events %}
+        // Ajouter un marqueur pour chaque événement
+        var marker = new mapboxgl.Marker()
+            .setLngLat([{{ event.longitude ?? 9.5 }}, {{ event.latitude ?? 33.9 }}]) // Coordonnées de chaque événement
+            .setPopup(new mapboxgl.Popup().setHTML('<h3>{{ event.titre }}</h3><p>{{ event.lieu }}</p>')) // Ajoute un popup avec le titre et le lieu
+            .addTo(map);
+    {% endfor %}
+</script>
 
-        .btn:hover {
-            opacity: 0.9;
-        }
+<style>
+    .card {
+        border-radius: 10px;
+        transition: 0.3s;
+    }
+    .card:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .btn {
+        border-radius: 5px;
+        margin-top: 5px;
+    }
+    
+    .btn:hover {
+        opacity: 0.9;
+    }
+    .table td, .table th {
+        padding: 12px 15px;
+        text-align: center;
+    }
+    #map {
+        margin-top: 30px;
+    }
+</style>
 
-        .btn-danger {
-            background-color: #e74c3c; /* Red for delete button */
-        }
-
-        .btn-primary {
-            background-color: #4b8b3b; /* Green for primary button */
-        }
-
-        .btn-warning {
-            background-color: #f9b347; /* Yellow for edit button */
-        }
-
-        .btn-primary:hover {
-            background-color: #3e7a34; /* Darker green on hover */
-        }
-
-        .btn-warning:hover {
-            background-color: #f7a100; /* Darker yellow on hover */
-        }
-
-        .btn-danger:hover {
-            background-color: #c0392b; /* Darker red on hover */
-        }
-
-        .table td, .table th {
-            padding: 12px 15px;
-            text-align: center;
-        }
-    </style>
 {% endblock %}
