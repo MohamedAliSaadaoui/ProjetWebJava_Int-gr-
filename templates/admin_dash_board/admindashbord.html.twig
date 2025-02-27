@@ -606,6 +606,40 @@
 
 				<!-- Main Content Area Start -->
                 <div class="content-area">
+                    <!-- ✅ Statistiques sous forme de Row (au-dessus du tableau et du filtre) -->
+                    <div class="row text-center mt-4">
+                        <div class="col-md-3">
+                            <div class="card bg-primary text-white p-3">
+                                <h5>Catégorie la plus signalée</h5>
+                                <h4>{{ mostReportedCategory ?: 'N/A' }}</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="card bg-success text-white p-3">
+                                <h5>Réclamations Résolues</h5>
+                                <h4>{{ resolvedCount }}</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="card bg-warning text-dark p-3">
+                                <h5>Réclamations en Cours</h5>
+                                <h4>{{ inProgressCount }}</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="card bg-info text-white p-3">
+                                <h5>Utilisateur le plus actif</h5>
+                                <h4>{{ topUser ?: 'Aucun utilisateur' }}</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-danger text-white p-3">
+                                <h5>Pic de Réclamations</h5>
+                                <h4>{{ peakDate ? peakDate|date('Y-m-d'): 'N/A' }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row"><br></div>
                     <!-- Formulaire de filtrage -->
                     <form method="GET" action="{{ path('app_reponse_index') }}" class="mb-4">
                         <div class="row">

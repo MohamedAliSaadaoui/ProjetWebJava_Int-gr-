@@ -21,9 +21,22 @@ final class ReponseController extends AbstractController
     #[Route('/', name: 'app_reponse_index', methods: ['GET'])]
     public function index(ReponseRepository $reponseRepository , ReclamationRepository $reclamationRepository): Response
     {
+
+        $mostReportedCategory = $reclamationRepository->getMostReportedCategory();
+        $resolvedCount = $reclamationRepository->countResolved();
+        $inProgressCount = $reclamationRepository->countInProgress();
+        $topUser = $reclamationRepository->getTopUser();
+        $peakDate = $reclamationRepository->getPeakComplaintDate();
+
+
         return $this->render('admin_dash_board/admindashbord.html.twig', [
             'responses' => $reponseRepository->findAll(),
             'reclamations' => $reclamationRepository->findAll(),
+            'mostReportedCategory' => $mostReportedCategory,
+            'resolvedCount' => $resolvedCount,
+            'inProgressCount' => $inProgressCount,
+            'topUser' => $topUser,
+            'peakDate' => $peakDate,
         ]);
     }
 

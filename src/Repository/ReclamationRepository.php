@@ -78,6 +78,109 @@ class ReclamationRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+// Catégorie la plus signalée
+    public function getMostReportedCategory(): ?string
+    {
+        $result = $this->createQueryBuilder('r')
+            ->select('r.category, COUNT(r.id_reclam) as count')
+            ->groupBy('r.category')
+            ->orderBy('count', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $result ? $result['category'] : null;
+    }
+
+
+// Nombre de réclamations résolues
+    public function countResolved(): int
+    {
+        return $this->createQueryBuilder('r')
+            ->select('COUNT(r.id_reclam)')
+            ->where('r.status = :status')
+            ->setParameter('status', 'résolue')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+// Nombre de réclamations en cours
+    public function countInProgress(): int
+    {
+        return $this->createQueryBuilder('r')
+            ->select('COUNT(r.id_reclam)')
+            ->where('r.status = :status')
+            ->setParameter('status', 'En Cours')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+// Utilisateur ayant fait le plus de réclamations
+    public function getTopUser(): ?string
+    {
+        $result = $this->createQueryBuilder('r')
+            ->leftJoin('r.user', 'u')
+            ->select('u.name, COUNT(r.id_reclam) as count')
+            ->groupBy('u.name')
+            ->orderBy('count', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $result ? $result['name'] : null;
+    }
+
+
+// Date avec le peak de réclamations
+    public function getPeakComplaintDate(): ?\DateTime
+    {
+        $result = $this->createQueryBuilder('r')
+            ->select('r.dateReclamation as date, COUNT(r.id_reclam) as count')
+            ->groupBy('date')
+            ->orderBy('count', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $result ? $result['date'] : null;
+    }
+
+    public function findFilteredReclamations(?string $search, ?string $sort, array $statuses): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->leftJoin('r.user', 'u') // Joindre l'utilisateur
+            ->addSelect('u');
+
+        // 🔎 Filtrer par username
+        if ($search) {
+            $qb->andWhere('u.name LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
+
+        // ✅ Filtrer par statut (cases cochées)
+        if (!empty($statuses)) {
+            $qb->andWhere('r.status IN (:statuses)')
+                ->setParameter('statuses', $statuses);
+        }
+
+        // 🔃 Appliquer le tri
+        switch ($sort) {
+            case 'date':
+                $qb->orderBy('r.dateReclamation', 'DESC');
+                break;
+            case 'status':
+                $qb->orderBy('r.status', 'ASC');
+                break;
+            case 'username':
+                $qb->orderBy('u.name', 'ASC');
+                break;
+            default:
+                $qb->orderBy('r.dateReclamation', 'DESC'); // Trier par date par défaut
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
 
 
 }
