@@ -20,6 +20,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use App\Form\NewPasswordType;
+use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 
 class UserController extends AbstractController
 {
@@ -256,5 +257,27 @@ public function newPassword(Request $request, EntityManagerInterface $entityMana
         return $this->render('user/profile.html.twig', [
             'user' => $this->getUser(),
         ]);
+    }
+
+
+
+    #[Route('/connect/google', name: 'connect_google')]
+public function connectGoogle(ClientRegistry $clientRegistry): Response
+{
+    // Rediriger vers Google pour l'authentification
+    return $clientRegistry
+        ->getClient('google')
+        ->redirect([
+            'profile', 
+            'email'
+        ], []);  // Ajouter un second argument (options)
+}
+
+    #[Route('/connect/google/check', name: 'connect_google_check')]
+    public function connectGoogleCheck(): Response
+    {
+        // Cette méthode ne sera jamais exécutée,
+        // car le firewall intercepte la route
+        return $this->redirectToRoute('app_profile');
     }
 }

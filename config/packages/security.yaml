@@ -30,6 +30,8 @@ security:
                 path: app_logout
                 target: app_login # Redirige vers la page de login après déconnexion
                 invalidate_session: true
+            entry_point: App\Security\GoogleAuthenticator
+                
     # Access control rules
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }  # Accès réservé aux administrateurs

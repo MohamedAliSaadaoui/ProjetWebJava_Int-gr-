@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 
+
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[Vich\Uploadable]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -258,6 +259,20 @@ public function getResetPasswordTokenExpiresAt(): ?\DateTimeInterface
 public function setResetPasswordTokenExpiresAt(?\DateTimeInterface $resetPasswordTokenExpiresAt): self
 {
     $this->resetPasswordTokenExpiresAt = $resetPasswordTokenExpiresAt;
+    return $this;
+}
+
+#[ORM\Column(type: 'string', length: 255, nullable: true)]
+private ?string $googleId = null;
+
+public function getGoogleId(): ?string
+{
+    return $this->googleId;
+}
+
+public function setGoogleId(?string $googleId): self
+{
+    $this->googleId = $googleId;
     return $this;
 }
 
