@@ -1,0 +1,17 @@
+{# templates/public_demande/edit.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la Demande - ReWear{% endblock %}
+
+{% block body %}
+<div class="container">
+    <main class="py-5">
+        <h2 class="text-center mb-4">Modifier la Demande</h2>
+
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button class="btn btn-primary">Enregistrer</button>
+        {{ form_end(form) }}
+    </main>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{# templates/public_demande/confirmation.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmation - ReWear{% endblock %}
+
+{% block body %}
+<div class="container">
+    <main class="py-5">
+        <div class="text-center">
+            <img class="d-block mx-auto mb-4" src="{{ asset('assets/brand/bootstrap-logo.svg') }}" 
+                 alt="Logo" width="72" height="57">
+            <h2>Confirmation</h2>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-7 col-lg-8">
+                <div class="alert alert-success" role="alert">
+                    Votre demande a été soumise avec succès !
+                </div>
+                <a href="{{ path('app_demande_new') }}" class="btn btn-primary">Retour au formulaire</a>
+            </div>
+        </div>
+
+        <a href="{{ path('app_demande_list') }}" class="btn btn-primary">Consulter Mes Demandes</a>
+    </main>
+</div>
+{% endblock %}

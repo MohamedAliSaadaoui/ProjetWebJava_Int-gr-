@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle Demande - ReWear{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+        (function () {
+            'use strict';
+
+            var forms = document.querySelectorAll('.needs-validation');
+
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <main class="py-5">
+        <div class="text-center">
+            <img class="d-block mx-auto mb-4" src="{{ asset('assets/brand/bootstrap-logo.svg') }}" 
+                 alt="Logo" width="72" height="57">
+            <h2>Formulaire de Demande</h2>
+        </div>
+
+        {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': true}}) }}
+        
+        <div class="row justify-content-center">
+            <div class="col-md-7 col-lg-8">
+                <h4 class="mb-3">Remplissez ce formulaire pour soumettre votre demande.</h4>
+                
+                <!-- Description -->
+                <div class="mb-3">
+                    {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.description, {
+                        'attr': {
+                            'class': 'form-control',
+                            'placeholder': 'Décrivez votre demande...',
+                            'rows': 3
+                        }
+                    }) }}
+                    {{ form_errors(form.description) }}
+                </div>
+
+                <!-- Catégorie -->
+                <div class="mb-3">
+                    {{ form_label(form.categorie, 'Catégorie', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.categorie, {
+        'attr': {
+            'class': 'form-select',
+            'placeholder': 'Choisir une catégorie...'
+        }
+    }) }}
+    {{ form_errors(form.categorie) }}
+                </div>
+
+                <!-- Localisation -->
+                <div class="mb-3">
+                    {{ form_label(form.localisation, 'Localisation', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.localisation, {
+                        'attr': {
+                            'class': 'form-control',
+                        }
+                    }) }}
+                    {{ form_errors(form.localisation) }}
+                </div>
+
+                <hr class="my-4">
+
+                <button class="w-100 btn btn-primary btn-lg" type="submit">Soumettre</button>
+                
+                {{ form_rest(form) }}  {# 👈 Important pour le CSRF et champs manquants #}
+            </div>
+        </div>
+        {{ form_end(form) }}  {# 👈 Fermeture du formulaire Symfony #}
+    </main>
+
+    <footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">&copy; 2025 ReWear</p>
+        <ul class="list-inline">
+            <li class="list-inline-item"><a href="#">Privacy</a></li>
+            <li class="list-inline-item"><a href="#">Terms</a></li>
+            <li class="list-inline-item"><a href="#">Support</a></li>
+        </ul>
+    </footer>
+</div>
+{% endblock %}
+
+
+
