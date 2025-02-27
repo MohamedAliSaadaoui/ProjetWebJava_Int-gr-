@@ -69,10 +69,10 @@ final class ReponseController extends AbstractController
             $email = (new Email())
                 ->from('shyhebboudaya@gmail.com') // Ton email d'envoi
                 ->to('libero1809@gmail.com') // Email du client
-                ->subject('Réclamation enregistrée')
+                ->subject('Réclamation résolue!')
                 ->html("<p>Bonjour {$reclamation->getUser()->getName()},</p>
-                    <p>Votre réclamation a bien été enregistrée avec l'objet : <strong>{$reclamation->getObjet()}</strong>.</p>
-                    <p>Nous reviendrons vers vous sous peu.</p>
+                    <p>Votre réclamation a bien été répondu : <strong>{$reclamation->getObjet()}</strong>.</p>
+                    <p>Vous pouvez la consulter immédiatement.</p>
                     <p>Cordialement, <br> L'équipe Support</p>");
 
             $mailer->send($email);
