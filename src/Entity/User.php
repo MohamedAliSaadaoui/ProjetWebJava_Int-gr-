@@ -244,4 +244,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
     }
+
+    // Ajouter la colonne pour l'expiration du token
+#[ORM\Column(type: 'datetime', nullable: true)]
+private ?\DateTimeInterface $resetPasswordTokenExpiresAt = null;
+
+// Getter et setter pour resetPasswordTokenExpiresAt
+public function getResetPasswordTokenExpiresAt(): ?\DateTimeInterface
+{
+    return $this->resetPasswordTokenExpiresAt;
+}
+
+public function setResetPasswordTokenExpiresAt(?\DateTimeInterface $resetPasswordTokenExpiresAt): self
+{
+    $this->resetPasswordTokenExpiresAt = $resetPasswordTokenExpiresAt;
+    return $this;
+}
+
 }

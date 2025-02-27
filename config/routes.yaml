@@ -3,4 +3,3 @@ controllers:
     type: attribute
 logout:
     path: /logout
-
