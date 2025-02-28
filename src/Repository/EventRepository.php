@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Event;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 
 /**
  * @extends ServiceEntityRepository<Event>
@@ -45,4 +47,15 @@ class EventRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+//public function getPaginatedEvents(int $page, int $limit = 10): Pagerfanta
+//{
+    //$queryBuilder = $this->createQueryBuilder('e')->orderBy('e.date_fin', 'DESC');
+
+
+   // $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
+   // $pagerfanta->setMaxPerPage($limit);
+    //$pagerfanta->setCurrentPage($page);
+
+    //return $pagerfanta;
+//}
 }

@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Repository\EventRepository;
 use App\Repository\ParticipeRepository;
 use App\Service\GeocodingService;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 
 
 class EventController extends AbstractController
@@ -71,12 +73,21 @@ class EventController extends AbstractController
         ]);
     }
     
-#[Route('/event/list', name: 'event_list')]
-    public function list(EventRepository $eventRepository): Response
+    #[Route('/event/list', name: 'event_list')]
+    public function list(EventRepository $eventRepository, Request $request): Response
     {
-        $events = $eventRepository->findAll();
+        $page = $request->query->getInt('page', 1); // Récupère le numéro de la page depuis l'URL (par défaut 1)
+        $limit = 5; // Nombre d'événements par page
+    
+        // Création de la pagination avec Pagerfanta
+        // Utilisez date_fin au lieu de date
+        $queryBuilder = $eventRepository->createQueryBuilder('e')->orderBy('e.dateFin', 'DESC');
+        $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
+        $pagerfanta->setMaxPerPage($limit);
+        $pagerfanta->setCurrentPage($page);
+    
         return $this->render('event/event_list.html.twig', [
-            'events' => $events,
+            'events' => $pagerfanta,
         ]);
     }
     // #[IsGranted('ROLE_ADMIN')]
