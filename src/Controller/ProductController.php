@@ -14,6 +14,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\User;
+use App\Entity\Favorite; // Import the Favorite entity
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\SecurityBundle\Security;
+
 
 class ProductController extends AbstractController
 { 
@@ -31,6 +36,65 @@ class ProductController extends AbstractController
         $this->validator = $validator;
     }
     
+    
+
+    #[Route('/product/{id}/favorite', name: 'app_add_to_favorite')]
+    public function addToFavorite(int $id, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $product = $entityManager->getRepository(Product::class)->find($id);
+        $user = $this->getUser();
+    
+        if (!$user instanceof User) {
+            return new JsonResponse(['success' => false, 'message' => 'User not authenticated'], Response::HTTP_UNAUTHORIZED);
+        }
+    
+        if (!$product) {
+            return new JsonResponse(['success' => false, 'message' => 'Product not found'], Response::HTTP_NOT_FOUND);
+        }
+    
+        // Check if favorite already exists
+        $existingFavorite = $entityManager->getRepository(Favorite::class)->findOneBy([
+            'user' => $user,
+            'product' => $product,
+        ]);
+    
+        if ($existingFavorite) {
+            return new JsonResponse(['success' => false, 'message' => 'Product already in favorites'], Response::HTTP_CONFLICT);
+        }
+    
+        $favorite = new Favorite();
+        $favorite->setProduct($product);
+        $favorite->setUser($user);
+    
+        $entityManager->persist($favorite);
+        $entityManager->flush();
+    
+        return new JsonResponse(['success' => true, 'message' => 'Product added to favorites!']);
+    }
+
+    #[Route('/Favorite', name: 'app_favorites')]
+public function showFavorites(EntityManagerInterface $entityManager): Response
+{
+    $user = $this->getUser(); // Get the logged-in user
+
+    if (!$user instanceof User) {
+        $this->addFlash('error', 'User not logged in!');
+        return $this->redirectToRoute('app_category');
+    }
+
+    // Fetch favorite products for the user
+    $favorites = $entityManager->getRepository(Favorite::class)->findBy(['user' => $user]);
+
+    if (empty($favorites)) {
+        $this->addFlash('error', 'No favorite products found!');
+    }
+
+    return $this->render('favoratepage/Favorite.html.twig', [
+        'favorites' => $favorites,
+    ]);
+}
+
+
     // add product 
     #[Route('/seller/add-product', name: 'app_add_product')]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
@@ -252,6 +316,9 @@ class ProductController extends AbstractController
         
         return $user;
     }
+    // sorted by time and price 
+    
+
     
     // show all product 
     #[Route('/category', name: 'app_category')]
@@ -268,7 +335,10 @@ class ProductController extends AbstractController
             'products' => $products,  // Passing products to the template
             'totalProducts' => $totalProducts,  // Pass the total count
         ]);
+
     }
+        //show product's in the landing page 
+    
     //product detail 
     #[Route('/produit/{id}', name: 'app_detail_produit_controler')]
     public function detailProduit($id, ProductRepository $productRepository): Response
@@ -284,6 +354,8 @@ class ProductController extends AbstractController
             
         ]);
     }
+    
+
     
     // add to cart 
     #[Route('/panier/add/{id}', name: 'app_panier_add')]
