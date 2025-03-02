@@ -20,7 +20,7 @@
                 <button type="submit" class="btn btn-success px-4 py-2 rounded-pill">
                     <i class="fas fa-save"></i> Enregistrer
                 </button>
-                <a href="{{ path('commentaireedit', {'id': commentaire.article.id}) }}" class="btn btn-secondary px-4 py-2 rounded-pill">Annuler</a>
+                <a href="{{ path('commentaire_edit', {'id': commentaire.article.id}) }}" class="btn btn-secondary px-4 py-2 rounded-pill">Annuler</a>
             </div>
 
         {{ form_end(form) }}

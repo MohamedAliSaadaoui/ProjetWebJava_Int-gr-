@@ -1,0 +1,6 @@
+fos_ck_editor:
+    default_config: default
+    configs:
+        default:
+            toolbar: full
+            language: 'fr'
