@@ -863,9 +863,9 @@
 							<div class="product-cat-widget">
 								<div class="d-flex flex-wrap gap-2">
 									{% set categories = [
-										{'name': "Men's Clothing", 'slug': 'mens-clothing'},
-										{'name': "Women's Clothing", 'slug': 'womens-clothing'},
-										{'name': "Kids' Clothing", 'slug': 'kids-clothing'},
+										{'name': "Men's Clothing", 'slug': 'homme'},
+										{'name': "Women's Clothing", 'slug': 'femme'},
+										{'name': "Kids' Clothing", 'slug': 'enfant'},
 										{'name': "Unisex", 'slug': 'unisex'}
 									] %}
 
@@ -1160,7 +1160,19 @@ type="hidden" id="update_max_price" value="">
                     url.searchParams.delete('category');
                 }
                 
-                // Keep other existing parameters
+                // Keep price range if set
+                const minPrice = document.getElementById('start_value').value;
+                const maxPrice = document.getElementById('end_value').value;
+                
+                if (minPrice) {
+                    url.searchParams.set('min', minPrice);
+                }
+                
+                if (maxPrice) {
+                    url.searchParams.set('max', maxPrice);
+                }
+                
+                // Keep sort parameter
                 const sort = document.getElementById('sortby').value;
                 if (sort) {
                     url.searchParams.set('sort', sort);
@@ -1169,7 +1181,7 @@ type="hidden" id="update_max_price" value="">
                 window.location.href = url.toString();
             });
             
-            // Initialize jQuery UI slider
+            // Initialize the price slider
             $(function() {
                 $("#slider-range").slider({
                     range: true,
@@ -1196,14 +1208,39 @@ type="hidden" id="update_max_price" value="">
                 url.searchParams.set('min', minPrice);
                 url.searchParams.set('max', maxPrice);
                 
+                // Keep category parameter if set
+                if (selectedCategory) {
+                    url.searchParams.set('category', selectedCategory);
+                }
+                
+                // Keep sort parameter
+                const sort = document.getElementById('sortby').value;
+                if (sort) {
+                    url.searchParams.set('sort', sort);
+                }
+                
+                window.location.href = url.toString();
+            });
+            
+            // Sort dropdown change event
+            document.getElementById('sortby').addEventListener('change', function() {
+                const url = new URL(window.location.href);
+                url.searchParams.set('sort', this.value);
+                
                 // Keep other parameters
                 if (selectedCategory) {
                     url.searchParams.set('category', selectedCategory);
                 }
                 
-                const sort = document.getElementById('sortby').value;
-                if (sort) {
-                    url.searchParams.set('sort', sort);
+                const minPrice = document.getElementById('start_value').value;
+                const maxPrice = document.getElementById('end_value').value;
+                
+                if (minPrice) {
+                    url.searchParams.set('min', minPrice);
+                }
+                
+                if (maxPrice) {
+                    url.searchParams.set('max', maxPrice);
                 }
                 
                 window.location.href = url.toString();
