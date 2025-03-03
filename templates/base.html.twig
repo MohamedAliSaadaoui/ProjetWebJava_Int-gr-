@@ -91,6 +91,28 @@
             });
         });
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update favorites count in header
+            function updateFavoritesCount() {
+                fetch('/product/favorite/count')
+                    .then(response => response.json())
+                    .then(data => {
+                        const wishlistCount = document.getElementById('wishlist-count');
+                        if (wishlistCount) {
+                            wishlistCount.textContent = data.count;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching favorites count:', error);
+                    });
+            }
+            
+            // Update count on page load
+            updateFavoritesCount();
+        });
+    </script>
 {% endblock %}
 
     </head>

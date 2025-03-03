@@ -322,20 +322,65 @@ public function showFavorites(EntityManagerInterface $entityManager): Response
     
     // show all product 
     #[Route('/category', name: 'app_category')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Fetch all products from the database
-        $products = $entityManager->getRepository(Product::class)->findAll();
+        // Get filter parameters
+        $category = $request->query->get('category');
+        $minPrice = $request->query->get('min');
+        $maxPrice = $request->query->get('max');
+        $sort = $request->query->get('sort', 'date_desc');
+        
+        // Create query builder
+        $queryBuilder = $entityManager->getRepository(Product::class)->createQueryBuilder('p');
+        
+        // Apply category filter
+        if ($category) {
+            $queryBuilder->andWhere('p.genre = :category')
+                         ->setParameter('category', $category);
+        }
+        
+        // Apply price filter - using prixDeVente field (correct field name)
+        if ($minPrice !== null) {
+            $queryBuilder->andWhere('p.prixDeVente >= :minPrice')
+                         ->setParameter('minPrice', $minPrice);
+        }
+        
+        if ($maxPrice !== null) {
+            $queryBuilder->andWhere('p.prixDeVente <= :maxPrice')
+                         ->setParameter('maxPrice', $maxPrice);
+        }
+        
+        // Apply sorting
+        switch ($sort) {
+            case 'genre_asc':
+                $queryBuilder->orderBy('p.genre', 'ASC');
+                break;
+            case 'genre_desc':
+                $queryBuilder->orderBy('p.genre', 'DESC');
+                break;
+            case 'price_asc':
+                $queryBuilder->orderBy('p.prixDeVente', 'ASC');
+                break;
+            case 'price_desc':
+                $queryBuilder->orderBy('p.prixDeVente', 'DESC');
+                break;
+            default:
+                $queryBuilder->orderBy('p.id', 'DESC'); // Default to newest products by ID
+                break;
+        }
+        
+        // Execute query
+        $products = $queryBuilder->getQuery()->getResult();
+        
         // Get the total number of products
         $totalProducts = count($products);
 
         // Render the template and pass the products to it
         return $this->render('category/category.html.twig', [
             'controller_name' => 'CategoryController',
-            'products' => $products,  // Passing products to the template
-            'totalProducts' => $totalProducts,  // Pass the total count
+            'products' => $products,
+            'totalProducts' => $totalProducts,
         ]);
-
     }
         //show product's in the landing page 
     
@@ -504,5 +549,132 @@ public function showFavorites(EntityManagerInterface $entityManager): Response
         }
 
         return $this->redirectToRoute('app_panier');
+    }
+
+    /**
+     * @Route("/product/favorite/{id}", name="app_product_favorite_toggle", methods={"POST"})
+     */
+    #[Route('/product/favorite/{id}', name: 'app_product_favorite_toggle', methods: ['POST'])]
+    public function toggleFavorite(Product $product, Request $request): Response
+    {
+        // Get the session
+        $session = $request->getSession();
+        
+        // Get current favorites from session
+        $favorites = $session->get('favorites', []);
+        
+        $productId = $product->getId();
+        $isInFavorites = false;
+        
+        // Check if product is already in favorites
+        if (in_array($productId, $favorites)) {
+            // Remove from favorites
+            $favorites = array_filter($favorites, function($id) use ($productId) {
+                return $id != $productId;
+            });
+            $message = 'Product removed from favorites';
+        } else {
+            // Add to favorites
+            $favorites[] = $productId;
+            $message = 'Product added to favorites';
+            $isInFavorites = true;
+        }
+        
+        // Save updated favorites to session
+        $session->set('favorites', $favorites);
+        
+        if ($request->isXmlHttpRequest()) {
+            return new JsonResponse([
+                'success' => true, 
+                'message' => $message,
+                'isInFavorites' => $isInFavorites
+            ]);
+        }
+        
+        $this->addFlash('success', $message);
+        return $this->redirectToRoute('app_detail_produit_controler', ['id' => $product->getId()]);
+    }
+
+    /**
+     * @Route("/product/favorite/check/{id}", name="app_product_favorite_check", methods={"GET"})
+     */
+    #[Route('/product/favorite/check/{id}', name: 'app_product_favorite_check', methods: ['GET'])]
+    public function checkFavorite(Product $product, Request $request): JsonResponse
+    {
+        // Get the session
+        $session = $request->getSession();
+        
+        // Get current favorites from session
+        $favorites = $session->get('favorites', []);
+        
+        // Check if product is in favorites
+        $isInFavorites = in_array($product->getId(), $favorites);
+        
+        return new JsonResponse(['isInFavorites' => $isInFavorites]);
+    }
+
+    /**
+     * @Route("/favorites", name="app_product_favorites")
+     */
+    #[Route('/favorites', name: 'app_product_favorites')]
+    public function favorites(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        // Get the session
+        $session = $request->getSession();
+        
+        // Get current favorites from session
+        $favoriteIds = $session->get('favorites', []);
+        
+        $favoriteProducts = [];
+        
+        if (!empty($favoriteIds)) {
+            // Get products by IDs
+            $favoriteProducts = $entityManager->getRepository(Product::class)
+                ->findBy(['id' => $favoriteIds]);
+        }
+        
+        return $this->render('favoratepage/Favorite.html.twig', [
+            'favoriteProducts' => $favoriteProducts,
+        ]);
+    }
+
+    /**
+     * @Route("/product/favorite/count", name="app_product_favorite_count", methods={"GET"})
+     */
+    #[Route('/product/favorite/count', name: 'app_product_favorite_count', methods: ['GET'])]
+    public function getFavoriteCount(Request $request): JsonResponse
+    {
+        // Get the session
+        $session = $request->getSession();
+        
+        // Get current favorites from session
+        $favorites = $session->get('favorites', []);
+        
+        // Return the count
+        return new JsonResponse(['count' => count($favorites)]);
+    }
+
+    /**
+     * @Route("/product/favorite/check-multiple", name="app_product_favorite_check_multiple", methods={"POST"})
+     */
+    #[Route('/product/favorite/check-multiple', name: 'app_product_favorite_check_multiple', methods: ['POST'])]
+    public function checkMultipleFavorites(Request $request): JsonResponse
+    {
+        // Get the session
+        $session = $request->getSession();
+        
+        // Get current favorites from session
+        $favorites = $session->get('favorites', []);
+        
+        // Get product IDs from request
+        $data = json_decode($request->getContent(), true);
+        $productIds = $data['productIds'] ?? [];
+        
+        // Filter product IDs to only those in favorites
+        $favoriteIds = array_filter($productIds, function($id) use ($favorites) {
+            return in_array($id, $favorites);
+        });
+        
+        return new JsonResponse(['favoriteIds' => array_values($favoriteIds)]);
     }
 }

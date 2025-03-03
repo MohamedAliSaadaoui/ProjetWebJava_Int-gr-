@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Facture #{{ command.id }}{% endblock %}
+
+{% block body %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <h1>FACTURE</h1>
+                        <h3>N° {{ command.id }}</h3>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5>Informations client</h5>
+                            <div><strong>Client:</strong> {{ command.user.username }}</div>
+                            <div><strong>Email:</strong> {{ command.user.email }}</div>
+                            <div><strong>Date:</strong> {{ command.createdAt|date('d/m/Y') }}</div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <h5>Adresse de livraison</h5>
+                            <div>{{ command.adresseLivraison }}</div>
+                            <div>{{ command.codePostalLivraison }} {{ command.villeLivraison }}</div>
+                            <div>{{ command.paysLivraison }}</div>
+                        </div>
+                    </div>
+                    
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th class="text-end">Prix</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in command.products %}
+                                <tr>
+                                    <td>{{ product.objetAVendre }}</td>
+                                    <td class="text-end">{{ product.prixDeVente|number_format(2, ',', ' ') }} €</td>
+                                </tr>
+                            {% endfor %}
+                            
+                            {% if command.livraisons|length > 0 %}
+                                {% set livraison = command.livraisons|first %}
+                                <tr>
+                                    <td>Livraison ({{ livraison.nom }})</td>
+                                    <td class="text-end">{{ livraison.tarif|number_format(2, ',', ' ') }} €</td>
+                                </tr>
+                            {% endif %}
+                            
+                            <tr class="table-active">
+                                <th>Total</th>
+                                <th class="text-end">{{ command.totalCommande|number_format(2, ',', ' ') }} €</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="mt-4">
+                        <strong>Méthode de paiement:</strong>
+                        {% if command.methodePaiement == 'cash_on_delivery' %}
+                            Paiement à la livraison
+                        {% else %}
+                            Paiement en ligne (Carte bancaire)
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mt-5 text-center">
+                        <p>Merci pour votre achat!</p>
+                        <p>Pour toute question concernant cette facture, veuillez contacter notre service client.</p>
+                    </div>
+                    
+                    <div class="mt-4 text-center">
+                        <a href="{{ path('checkout_invoice', {'id': command.id}) }}" class="btn btn-primary">
+                            <i class="fas fa-download"></i> Télécharger en PDF
+                        </a>
+                        <a href="{{ path('home') }}" class="btn btn-outline-secondary">
+                            Retour à l'accueil
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

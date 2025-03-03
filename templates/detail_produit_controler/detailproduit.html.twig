@@ -1260,136 +1260,49 @@
                 <div class="col-lg-6 wow-replaced" data-wow-delay=".2s">
                     <form>
                         <!-- product-info-wrapper  -->
-                        <div class="product-info-wrapper  ">
-<h3>{{ product.objetAVendre }}</h3>
+                        <div class="product-info-wrapper">
+                            <h3>{{ product.objetAVendre }}</h3>
                             <div class="price-wrapper">
-    <h5 id="sizeprice">{{ product.prixDeVente }}</h5>
-    <h5><del>{{ product.prixOriginal }}</del></h5>
+                                <h5 id="sizeprice">{{ product.prixDeVente }}€</h5>
+                                <h5><del>{{ product.prixOriginal }}€</del></h5>
 
-    {% set discountPercentage = ((product.prixOriginal - product.prixDeVente) / product.prixOriginal) * 100 %}
-    <span class="product-badge">-{{ discountPercentage|round(0) }}%</span>
-</div>
-
-                            <div class="rating-wrapper">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="23" viewBox="0 0 24 23"
-                                    fill="none">
-                                    <path
-                                        d="M12 0.5L14.6942 8.7918H23.4127L16.3593 13.9164L19.0534 22.2082L12 17.0836L4.94658 22.2082L7.64074 13.9164L0.587322 8.7918H9.30583L12 0.5Z"
-                                        fill="#EEAE0B" />
-                                </svg>
-                                <span class="rating">0.0
-                                    (0 Reviews)</span>
+                                {% set discountPercentage = ((product.prixOriginal - product.prixDeVente) / product.prixOriginal) * 100 %}
+                                <span class="product-badge">-{{ discountPercentage|round(0) }}%</span>
                             </div>
                         </div>
 
-
-
                         <!-- product stocks -->
+                        <hr>
+                        <div class="product-stocks-wraper">
+                            <ul>
+                                <li>
+                                    <span><b>Estimated Shipping Time : </b></span>
+                                    <span>72hrs</span>
+                                </li>
+                            </ul>
+                        </div>
 
-                                                    <hr>
+                        <!-- product colors -->
+                        <div class="variation-wrapper variation-colors">
+                            <span class="varition-title">Color: {{ product.couleur }}</span>
+                            <ul>
+                                <li class="active cart_color">
+                                    <input checked type="radio" data-price="0"
+                                        data-color="#e91c1c" id="color_0"
+                                        name="colors" value="0">
+                                    <label for="color_0"
+                                        data-color-code="#e91c1c"
+                                        data-outline-color-code="#e91c1c"></label>
+                                </li>
+                                <!-- Other color options can remain if needed -->
+                            </ul>
+                        </div>
 
-                            <div class="product-stocks-wraper">
-                                <ul>
-                                    <li>
-                                                                                    <span><b>Availability : </b></span>
-                                                                                             
-                                                                                    
-                                    </li>
+                        <input type="hidden" id="stock" value="98">
 
-
-                                                                            <li>
-                                            <span><b>Estimated Shipping Time : </b></span>
-                                            <span>72hrs</span>
-                                        </li>
-                                                                                                                <li>
-                                           
-                                        </li>
-                                    
-                                                                    </ul>
-                            </div>
-
-                        
-
-                        
-                        
-
-                                                                                    <!-- product size -->
-                                <div class="variation-wrapper variation-sizes">
-                                    <span class="varition-title">Size :</span>
-                                    <ul>
-                                                                                    <li class="active cart_size"
-                                                data-price="10">
-                                                <input checked type="radio"
-                                                    id="size_0" data-value="0"
-                                                    data-key="S"
-                                                    data-price="10"
-                                                    data-qty="98" value="0"
-                                                    name="size">
-                                                <label for="size_0">S</label>
-                                            </li>
-                                                                            </ul>
-                                </div>
-                            
-
-                                                            <!-- product colors -->
-                                <div class="variation-wrapper variation-colors">
-                                    <span class="varition-title">{{ product.couleur }}</span>
-                                    <ul>
-                                                                                    <li class="active cart_color">
-                                                <input checked type="radio" data-price="0"
-                                                    data-color="#e91c1c" id="color_0"
-                                                    name="colors" value="0">
-                                                <label for="color_0"
-                                                    data-color-code="#e91c1c"
-                                                    data-outline-color-code="#e91c1c"></label>
-                                            </li>
-                                                                                    <li class=" cart_color">
-                                                <input  type="radio" data-price="0"
-                                                    data-color="#790b0b" id="color_1"
-                                                    name="colors" value="1">
-                                                <label for="color_1"
-                                                    data-color-code="#790b0b"
-                                                    data-outline-color-code="#790b0b"></label>
-                                            </li>
-                                                                                    <li class=" cart_color">
-                                                <input  type="radio" data-price="0"
-                                                    data-color="#2f855d" id="color_2"
-                                                    name="colors" value="2">
-                                                <label for="color_2"
-                                                    data-color-code="#2f855d"
-                                                    data-outline-color-code="#2f855d"></label>
-                                            </li>
-                                                                                    <li class=" cart_color">
-                                                <input  type="radio" data-price="0"
-                                                    data-color="#c7da3d" id="color_3"
-                                                    name="colors" value="3">
-                                                <label for="color_3"
-                                                    data-color-code="#c7da3d"
-                                                    data-outline-color-code="#c7da3d"></label>
-                                            </li>
-                                                                                    <li class=" cart_color">
-                                                <input  type="radio" data-price="0"
-                                                    data-color="#e1dabd" id="color_4"
-                                                    name="colors" value="4">
-                                                <label for="color_4"
-                                                    data-color-code="#e1dabd"
-                                                    data-outline-color-code="#e1dabd"></label>
-                                            </li>
-                                        
-                                    </ul>
-                                </div>
-                            
-                        
+                        <!-- add-qty-wrapper -->
 
 
-                        
-                                                            <input type="hidden" id="stock" value="98">
-                            
-
-                            <!-- add-qty-wrapper -->
-
-
-                        
                         <input type="hidden" id="product_price"
                             value="110">
                         <input type="hidden" id="product_id" value="498">
@@ -1401,6 +1314,12 @@
 <div class="add-to-cart-wrapper mt-4">
     <div class="row">
         <div class="col-12">
+            <!-- Add this near the add to cart button -->
+            <div class="product-actions d-flex gap-2 mb-3">
+                <button id="addToFavorites" class="template-btn" data-id="{{ product.id }}">
+                    <i class="far fa-heart" id="favoriteIcon"></i> Add to Favorites
+                </button>
+            </div>
             <a href="{{ path('app_panier_add', {'id': product.id}) }}" class="add_cart_click btn btn-primary btn-lg w-100">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="me-2">
                     <path d="M2 2H3.74001C4.82001 2 5.67 2.93 5.58 4L4.75 13.96C4.61 15.59 5.89999 16.99 7.53999 16.99H18.19C19.63 16.99 20.89 15.81 21 14.38L21.54 6.88C21.66 5.22 20.4 3.87 18.73 3.87H5.82001" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1413,46 +1332,11 @@
     </div>
 </div>
 
-                        </div>
+<hr>
+
 
                         <!-- wish-compare-report-wrapper -->
-                        <div class="wish-compare-report-wrapper">
-                                                            <a href="user/login" class="link">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none">
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M11.9932 5.13581C9.9938 2.7984 6.65975 2.16964 4.15469 4.31001C1.64964 6.45038 1.29697 10.029 3.2642 12.5604C4.89982 14.6651 9.84977 19.1041 11.4721 20.5408C11.6536 20.7016 11.7444 20.7819 11.8502 20.8135C11.9426 20.8411 12.0437 20.8411 12.1361 20.8135C12.2419 20.7819 12.3327 20.7016 12.5142 20.5408C14.1365 19.1041 19.0865 14.6651 20.7221 12.5604C22.6893 10.029 22.3797 6.42787 19.8316 4.31001C17.2835 2.19216 13.9925 2.7984 11.9932 5.13581Z"
-                                            stroke="#030712" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                    </svg>
-                                    <span class="title">Add to Wishlist</span>
-                                </a>
-                            
-                                                            <a data-href="item/compare/add/498" href="javascript:;"
-                                    class="link compare_product">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none">
-                                        <path
-                                            d="M18.1777 8C23.2737 8 23.2737 16 18.1777 16C13.0827 16 11.0447 8 5.43875 8C0.85375 8 0.85375 16 5.43875 16C11.0447 16 13.0828 8 18.1788 8H18.1777Z"
-                                            stroke="#1F0300" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                    </svg>
-                                    <span class="title">Add to Compare</span>
-                                </a>
-                            
-                                                                                                <a href="user/login" class="link">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none">
-                                            <path
-                                                d="M4 15C4 15 5 14 8 14C11 14 13 16 16 16C19 16 20 15 20 15V3C20 3 19 4 16 4C13 4 11 2 8 2C5 2 4 3 4 3L4 22"
-                                                stroke="#1F0300" stroke-width="2" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                        </svg>
-                                        <span class="title">Report This Item</span>
 
-                                    </a>
-                                                            
-                        </div>
 
                         <hr>
 
@@ -1550,28 +1434,53 @@
                         <!-- store & seller -->
                         <div class="store-seller-wrapper">
                             <span> <b>Sold By :</b>
-
-                                                                    
-                                
-
+                                <span id="sellerName">Seller</span>
                             </span>
                             <span> <b>Total Items :</b>
-
-                                                            </span>
+                                <!-- You can add item count here if available -->
+                            </span>
 
                             <div class="action-btns-wrapper">
-
-                                
-
-                                
-
-                                                                            <a class="template-btn dark-outline" href="user/login">
-                                            <i class="icofont-ui-chat"></i>
-                                            Contact Seller
-                                        </a>
+                                <button id="showSellerContact" class="template-btn dark-outline" type="button">
+                                    <i class="icofont-ui-chat"></i>
+                                    Contact Seller
+                                </button>
+                            </div>
+                            
+                            <!-- Seller Contact Information (Hidden by default) -->
+                            <div id="sellerContactInfo" class="mt-3" style="display: none;">
+                                <div class="seller-info-card p-3 border rounded">
+                                    {% if product.telephone %}
+                                    <div class="seller-info-item mb-2">
+                                        <strong>Phone:</strong> 
+                                        <span>{{ product.telephone }}</span>
+                                    </div>
+                                    {% endif %}
                                     
-                                
-                                
+                                    {% if product.email %}
+                                    <div class="seller-info-item mb-2">
+                                        <strong>Email:</strong> 
+                                        <span>{{ product.email }}</span>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% if product.ville or product.codePostal %}
+                                    <div class="seller-info-item">
+                                        <strong>Location:</strong> 
+                                        <span>
+                                            {% if product.ville %}{{ product.ville }}{% endif %}
+                                            {% if product.ville and product.codePostal %}, {% endif %}
+                                            {% if product.codePostal %}{{ product.codePostal }}{% endif %}
+                                        </span>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% if not product.telephone and not product.email and not product.ville and not product.codePostal %}
+                                    <div class="seller-info-item">
+                                        <p>No contact information available for this seller.</p>
+                                    </div>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -1591,6 +1500,7 @@
                         aria-controls="description-tab-pane" aria-selected="true">
                         Description                    </button>
                 </li>
+
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="buy-return-policy-tab" data-bs-toggle="tab"
                         data-bs-target="#buy-return-policy-tab-pane" type="button" role="tab"
@@ -1772,51 +1682,91 @@
             </div>
         </form>
     </div>    
+
+    <!-- Contact Seller Section -->
+
 {% endblock %}
 
 {% block javascripts %}
-    
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let addToCartButton = document.getElementById('addtodetailscart');
-
-        if (addToCartButton) {
-            addToCartButton.addEventListener('click', function () {
-                const productId = this.getAttribute('data-id');
-                const productName = this.getAttribute('data-name');
-
-                if (!productName) {
-                    alert("Please enter a product name");
-                    return;
+{{ parent() }}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Contact seller functionality
+        const showSellerContactBtn = document.getElementById('showSellerContact');
+        const sellerContactInfo = document.getElementById('sellerContactInfo');
+        
+        if (showSellerContactBtn && sellerContactInfo) {
+            showSellerContactBtn.addEventListener('click', function(event) {
+                // Prevent default button behavior
+                event.preventDefault();
+                
+                if (sellerContactInfo.style.display === 'none') {
+                    sellerContactInfo.style.display = 'block';
+                    showSellerContactBtn.innerHTML = '<i class="icofont-close"></i> Hide Contact Info';
+                } else {
+                    sellerContactInfo.style.display = 'none';
+                    showSellerContactBtn.innerHTML = '<i class="icofont-ui-chat"></i> Contact Seller';
                 }
-
-                fetch(`/produit/${productId}?add_to_cart=true`, {
-                    method: 'GET',
+            });
+        }
+        
+        // Favorites functionality
+        const addToFavoritesBtn = document.getElementById('addToFavorites');
+        const favoriteIcon = document.getElementById('favoriteIcon');
+        
+        if (addToFavoritesBtn) {
+            // Check if product is already in favorites
+            const productId = addToFavoritesBtn.getAttribute('data-id');
+            
+            fetch(`/product/favorite/check/${productId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.isInFavorites) {
+                        favoriteIcon.classList.remove('far');
+                        favoriteIcon.classList.add('fas');
+                        favoriteIcon.style.color = 'red';
+                        addToFavoritesBtn.textContent = ' Remove from Favorites';
+                        addToFavoritesBtn.prepend(favoriteIcon);
+                    }
+                });
+            
+            // Add click event listener for favorites button
+            addToFavoritesBtn.addEventListener('click', function(event) {
+                event.preventDefault();
+                
+                fetch(`/product/favorite/${productId}`, {
+                    method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                    },
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
                 })
                 .then(response => response.json())
                 .then(data => {
-                    alert(`${productName} added to cart!`);
-                    updateCartDisplay();
+                    if (data.success) {
+                        if (data.isInFavorites) {
+                            // Redirect to favorites page after adding to favorites
+                            window.location.href = '/favorites';
+                        } else {
+                            favoriteIcon.classList.remove('fas');
+                            favoriteIcon.classList.add('far');
+                            favoriteIcon.style.color = '';
+                            addToFavoritesBtn.textContent = ' Add to Favorites';
+                            addToFavoritesBtn.prepend(favoriteIcon);
+                            alert(data.message);
+                        }
+                    } else {
+                        // User not logged in or other error
+                        alert(data.message);
+                        window.location.href = '/login';
+                    }
                 })
                 .catch(error => {
-                    console.error('Error adding product to cart:', error);
+                    console.error('Error:', error);
+                    alert('Failed to update favorites. Please try again.');
                 });
             });
-        } else {
-            console.error("Button with ID 'addtodetailscart' not found.");
         }
     });
-
-    function updateCartDisplay() {
-        fetch('/panier')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('cart-container').innerHTML = html;
-            });
-    }
 </script>
-    {% endblock %}
+{% endblock %}
 
