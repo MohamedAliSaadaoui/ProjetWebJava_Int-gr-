@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\RadioType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,6 +18,7 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\File;
 
 class ProductType extends AbstractType
 {
@@ -46,6 +48,22 @@ class ProductType extends AbstractType
                         'min' => 10,
                         'minMessage' => 'Description should be at least {{ limit }} characters long',
                     ]),
+                ],
+            ])
+            ->add('photoFile', FileType::class, [
+                'label' => 'Product Photo',
+                'mapped' => false, // This field is not directly mapped to the entity
+                'required' => false, // Make it optional for editing existing products
+                'constraints' => [
+                    new File([
+                        'maxSize' => '5M',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                            'image/webp',
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid image (JPEG, PNG, WEBP)',
+                    ])
                 ],
             ])
             ->add('genre', ChoiceType::class, [

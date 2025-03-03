@@ -998,7 +998,13 @@
 												</div>
 											</a>
 
-											<img class="product-img" src="https://cleandemo.geniusocean.net/geniuscart2/assets/images/thumbnails/1733223018AdbhV1Qn.jpg" alt="product img">
+											<div class="product-thumb">
+												{% if product.photo %}
+													<img class="product-img" src="{{ asset('uploads/products/' ~ product.photo) }}" alt="{{ product.objetAVendre }}">
+												{% else %}
+													<img src="{{ asset('images/placeholder.jpg') }}" alt="No image available" class="product-img">
+												{% endif %}
+											</div>
 											<div class="add-to-cart">
 												<a href="javascript:;" class="compare_product">
 													<div class="compare">

@@ -521,6 +521,21 @@
 									</div>
 								</div>
 							</div>
+
+							<div class="row">
+								<div class="col-12">
+									<div class="input-label-wrapper mb-3">
+										<label for="{{ form.photoFile.vars.id }}" class="form-label">Product Photo</label>
+										{{ form_widget(form.photoFile, { 'attr': {'class': 'form-control'} }) }}
+										<small class="form-text text-muted">Upload a product image (JPEG, PNG, WEBP, max 5MB)</small>
+										{% if app.request.method == 'POST' and not form.photoFile.vars.valid %}
+											<div class="text-danger">
+												{{ form_errors(form.photoFile) }}
+											</div>
+										{% endif %}
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 

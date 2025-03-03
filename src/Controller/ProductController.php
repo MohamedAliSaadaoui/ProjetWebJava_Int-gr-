@@ -18,6 +18,7 @@ use App\Entity\Favorite; // Import the Favorite entity
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 
 class ProductController extends AbstractController
@@ -97,25 +98,55 @@ public function showFavorites(EntityManagerInterface $entityManager): Response
 
     // add product 
     #[Route('/seller/add-product', name: 'app_add_product')]
-    public function add(Request $request, EntityManagerInterface $entityManager): Response
+    public function addProduct(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Get or create a default user
-            $user = $this->getOrCreateDefaultUser($entityManager);
+            // Set the user for the product
+            $user = $security->getUser();
             
-            $product->setUser($user); // Set the user
+            // If no user is logged in, use a default user
+            if (!$user instanceof User) {
+                $user = $this->getOrCreateDefaultUser($entityManager);
+            }
+            
+            $product->setUser($user);
+            
+            // Handle file upload
+            $photoFile = $form->get('photoFile')->getData();
+            
+            if ($photoFile) {
+                $originalFilename = pathinfo($photoFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // Generate a safe filename
+                $safeFilename = preg_replace('/[^A-Za-z0-9]/', '_', $originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$photoFile->guessExtension();
+                
+                // Move the file to the directory where product photos are stored
+                try {
+                    $photoFile->move(
+                        $this->getParameter('product_photos_directory'),
+                        $newFilename
+                    );
+                    
+                    // Update the 'photo' property to store the file name
+                    $product->setPhoto($newFilename);
+                } catch (FileException $e) {
+                    // Handle exception if something happens during file upload
+                    $this->addFlash('error', 'Failed to upload product photo: ' . $e->getMessage());
+                }
+            }
+            
+            // Save the product
             $entityManager->persist($product);
             $entityManager->flush();
-
+            
             $this->addFlash('success', 'Product added successfully!');
-
-            return $this->redirectToRoute('app_allproduct_seller'); // Redirect to product list page
+            return $this->redirectToRoute('app_allproduct_seller');
         }
-
+        
         return $this->render('seller_dashbord/addproduit.html.twig', [
             'form' => $form->createView(),
         ]);

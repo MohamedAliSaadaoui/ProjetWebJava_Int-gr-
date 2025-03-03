@@ -62,6 +62,9 @@ class Product
     #[ORM\Column(type: 'string', length: 100)]
     private ?string $ville = null;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $photo;
+
     public function __construct()
     {
         $this->commands = new ArrayCollection();
@@ -246,6 +249,18 @@ class Product
     public function removeCommand(Command $command): self
     {
         $this->commands->removeElement($command);
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?string $photo): self
+    {
+        $this->photo = $photo;
+        
         return $this;
     }
 }

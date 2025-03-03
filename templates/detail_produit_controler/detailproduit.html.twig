@@ -1231,8 +1231,12 @@
                 <div class="col-lg-6 wow-replaced" data-wow-delay=".1s">
                     <div class="gs-product-details-gallery-wrapper">
                         <div class="product-main-slider">
-                                <img class="product-img" src="https://cleandemo.geniusocean.net/geniuscart2/assets/images/thumbnails/1733223018AdbhV1Qn.jpg" alt="product img">                 
-                                                    </div>
+                            {% if product.photo %}
+                                <img class="product-img" src="{{ asset('uploads/products/' ~ product.photo) }}" alt="{{ product.objetAVendre }}">
+                            {% else %}
+                                <img class="product-img" src="{{ asset('images/no-image.jpg') }}" alt="No image available">
+                            {% endif %}
+                        </div>
 
                         <div class="product-nav-slider">
                             <img src="assets/images/products/1733223017bbbPPHVf.png"
@@ -1319,6 +1323,8 @@
                 <button id="addToFavorites" class="template-btn" data-id="{{ product.id }}">
                     <i class="far fa-heart" id="favoriteIcon"></i> Add to Favorites
                 </button>
+                
+                <!-- Your existing add to cart button -->
             </div>
             <a href="{{ path('app_panier_add', {'id': product.id}) }}" class="add_cart_click btn btn-primary btn-lg w-100">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="me-2">
