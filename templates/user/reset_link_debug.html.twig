@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lien de réinitialisation (Débogage){% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Lien de réinitialisation (Mode Débogage)</h1>
+        
+        <div class="alert alert-warning">
+            <p><strong>ATTENTION :</strong> Cette page est uniquement pour le développement!</p>
+        </div>
+        
+        <p>Un email aurait été envoyé à : <strong>{{ email }}</strong></p>
+        
+        <div class="card mb-3">
+            <div class="card-header">Lien de réinitialisation</div>
+            <div class="card-body">
+                <p>Cliquez sur ce lien ou copiez-le :</p>
+                <a href="{{ link }}" class="btn btn-primary mb-2">Réinitialiser le mot de passe</a>
+                <div class="input-group">
+                    <input type="text" class="form-control" value="{{ link }}" id="reset-link" readonly>
+                    <button class="btn btn-outline-secondary" type="button" onclick="copyLink()">Copier</button>
+                </div>
+            </div>
+        </div>
+        
+        <p><a href="{{ path('app_login') }}">Retour à la connexion</a></p>
+    </div>
+
+    <script>
+    function copyLink() {
+        var copyText = document.getElementById("reset-link");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+        alert("Lien copié!");
+    }
+    </script>
+{% endblock %}

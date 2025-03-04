@@ -1,0 +1,141 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="profile-container">
+        {% if user is defined and user is not null %}
+            <h1 class="profile-title">Bienvenue sur votre profil, {{ user.username }}</h1>
+
+            <div class="profile-card">
+                <div class="profile-info">
+                    <p><strong>Nom d'utilisateur :</strong> {{ user.username }}</p>
+                    <p><strong>Email :</strong> {{ user.email }}</p>
+                    <p><strong>Rôle :</strong> {{ user.roles|join(', ') }}</p>
+
+                    <!-- Vérification si l'utilisateur a une photo de profil -->
+                    {% if user.photo is not empty %}
+                        <p><strong>Photo de profil :</strong></p>
+                        <img src="{{ asset('uploads/photos/' ~ user.photo) }}" alt="Photo de profil" class="profile-photo" />
+                    {% else %}
+                        <p><strong>Photo de profil :</strong> Aucune photo disponible</p>
+                    {% endif %}
+
+                    <p><strong>Numéro de téléphone :</strong> {{ user.numTel }}</p>
+                </div>
+
+                <div class="profile-actions">
+                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-edit">Modifier mon profil</a>
+<a href="{{ path('app_logout') }}" class="btn btn-delete">Log out</a>
+
+                    <!-- Bouton de déconnexion -->
+
+                </div>
+            </div>
+        {% else %}
+            <p class="error-message">Utilisateur non connecté.</p>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+        }
+
+        .profile-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #f2f2f2;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .profile-title {
+            font-size: 2.5rem;
+            color: #4c5c44;
+            margin-bottom: 30px;
+        }
+
+        .profile-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-info p {
+            font-size: 1.2rem;
+            color: #333;
+            margin: 12px 0;
+        }
+
+        .profile-info strong {
+            color: #4c5c44;
+        }
+
+        .profile-actions {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            font-size: 1rem;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 10px;
+        }
+
+        .btn-edit {
+            background-color: #a1b88c;
+            color: white;
+            border: none;
+        }
+
+        .btn-edit:hover {
+            background-color: #8c9e6a;
+        }
+
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+        }
+
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-logout {
+            background-color: #3498db;
+            color: white;
+            border: none;
+        }
+
+        .btn-logout:hover {
+            background-color: #2980b9;
+        }
+
+        .profile-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-top: 15px;
+        }
+
+        .error-message {
+            font-size: 1.5rem;
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+{% endblock %}

@@ -3,55 +3,95 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use App\Enum\RoleEnum;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+#[Vich\Uploadable]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 100)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $username = null;
 
-    #[ORM\Column(type: 'string', length: 255, unique: true)]
-    private ?string $email = null;
-
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(length: 255)]
     private ?string $password = null;
 
-    #[ORM\Column(type: 'string')]
-    private ?string $roles = 'user' ;
+    #[ORM\Column(length: 255, unique: true)]
+    private ?string $email = null;
 
-    #[ORM\Column(type: 'datetime')]
-    private ?\DateTimeInterface $created_at = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photo = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Command::class)]
-    private Collection $commands;
+    /**
+     * @Vich\UploadableField(mapping="user_photo", fileNameProperty="photo")
+     * @var File|null
+     */
+    private ?File $photoFile = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Product::class)]
-    private Collection $products;
+    #[ORM\Column(length: 20)]
+    private ?string $num_tel = null;
 
-    // public function __construct()
-    // {
-    //     // Static User Details
-    //     $this->id = 1;
-    //     $this->username = 'staticuser';
-    //     $this->email = 'staticuser@example.com';
-    //     $this->password = password_hash('staticpassword', \PASSWORD_BCRYPT);
-    //     $this->roles = ['ROLE_USER'];
-    //     $this->created_at = new \DateTime();
-    //     $this->commands = new ArrayCollection();
-    //     $this->products = new ArrayCollection();
-    // }
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $date_naiss = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $adresse = null;
+
+    #[ORM\Column(type: Types::INTEGER)]
+    private int $nb_article_achetes = 0;
+
+    #[ORM\Column(type: Types::INTEGER)]
+    private int $nb_article_vendus = 0;
+
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
+
+    #[ORM\Column(type: "datetime", nullable: true)]
+    private ?\DateTimeInterface $updatedAt = null;
+
+    // Ajout de la propriété pour le token de réinitialisation
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $resetPasswordToken = null;
+
+    // Constructeur pour initialiser les rôles
+    public function __construct()
+    {
+        $this->roles = ['ROLE_USER'];
+    }
+
+    // Méthodes de récupération et d'attribution du token de réinitialisation
+    public function getResetPasswordToken(): ?string
+    {
+        return $this->resetPasswordToken;
+    }
+
+    public function setResetPasswordToken(?string $resetPasswordToken): self
+    {
+        $this->resetPasswordToken = $resetPasswordToken;
+        return $this;
+    }
+
+    // Autres méthodes de la classe User
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
     }
 
     public function getUsername(): ?string
@@ -59,22 +99,9 @@ class User
         return $this->username;
     }
 
-    public function setUsername(string $username): self
+    public function setUsername(string $username): static
     {
         $this->username = $username;
-
-        return $this;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-
         return $this;
     }
 
@@ -83,94 +110,170 @@ class User
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
-    public function getRoles(): ?string
+    public function getEmail(): ?string
     {
-        return $this->roles;
+        return $this->email;
     }
 
-    public function setRoles( string $roles): self
+    public function setEmail(string $email): static
     {
+        $this->email = $email;
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?string $photo): static
+    {
+        $this->photo = $photo ?? 'default.jpg';
+        return $this;
+    }
+
+    public function setPhotoFile(?File $photoFile = null): void
+    {
+        $this->photoFile = $photoFile;
+        if ($photoFile) {
+            $this->updatedAt = new \DateTime();
+        }
+    }
+
+    public function getPhotoFile(): ?File
+    {
+        return $this->photoFile;
+    }
+
+    public function getNumTel(): ?string
+    {
+        return $this->num_tel;
+    }
+
+    public function setNumTel(string $num_tel): static
+    {
+        $this->num_tel = $num_tel;
+        return $this;
+    }
+
+    public function getDateNaiss(): ?\DateTimeInterface
+    {
+        return $this->date_naiss;
+    }
+
+    public function setDateNaiss(\DateTimeInterface $date_naiss): static
+    {
+        $this->date_naiss = $date_naiss;
+        return $this;
+    }
+
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(string $adresse): static
+    {
+        $this->adresse = $adresse;
+        return $this;
+    }
+
+    public function getNbArticleAchetes(): int
+    {
+        return $this->nb_article_achetes;
+    }
+
+    public function setNbArticleAchetes(int $nb_article_achetes): static
+    {
+        $this->nb_article_achetes = $nb_article_achetes;
+        return $this;
+    }
+
+    public function getNbArticleVendus(): int
+    {
+        return $this->nb_article_vendus;
+    }
+
+    public function setNbArticleVendus(int $nb_article_vendus): static
+    {
+        $this->nb_article_vendus = $nb_article_vendus;
+        return $this;
+    }
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        if (!in_array('ROLE_USER', $roles)) {
+            $roles[] = 'ROLE_USER'; // Ajouter ROLE_USER si ce n'est pas déjà présent
+        }
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): static
+    {
+        foreach ($roles as $role) {
+            if (!in_array($role, RoleEnum::getRoles())) {
+                throw new \InvalidArgumentException("Rôle invalide : $role");
+            }
+        }
         $this->roles = $roles;
-
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
-        return $this->created_at;
+        return $this->updatedAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $created_at): self
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
     {
-        $this->created_at = $created_at;
-
+        $this->updatedAt = $updatedAt;
         return $this;
     }
 
-    /**
-     * @return Collection<int, Command>
-     */
-    public function getCommands(): Collection
+    public function getSalt(): ?string
     {
-        return $this->commands;
+        return null;
     }
 
-    public function addCommand(Command $command): self
+    public function eraseCredentials(): void
     {
-        if (!$this->commands->contains($command)) {
-            $this->commands[] = $command;
-            $command->setUser($this);
-        }
-
-        return $this;
     }
 
-    public function removeCommand(Command $command): self
-    {
-        if ($this->commands->removeElement($command)) {
-            // set the owning side to null (unless already changed)
-            if ($command->getUser() === $this) {
-                $command->setUser(null);
-            }
-        }
+    // Ajouter la colonne pour l'expiration du token
+#[ORM\Column(type: 'datetime', nullable: true)]
+private ?\DateTimeInterface $resetPasswordTokenExpiresAt = null;
 
-        return $this;
-    }
+// Getter et setter pour resetPasswordTokenExpiresAt
+public function getResetPasswordTokenExpiresAt(): ?\DateTimeInterface
+{
+    return $this->resetPasswordTokenExpiresAt;
+}
 
-    /**
-     * @return Collection<int, Product>
-     */
-    public function getProducts(): Collection
-    {
-        return $this->products;
-    }
+public function setResetPasswordTokenExpiresAt(?\DateTimeInterface $resetPasswordTokenExpiresAt): self
+{
+    $this->resetPasswordTokenExpiresAt = $resetPasswordTokenExpiresAt;
+    return $this;
+}
 
-    public function addProduct(Product $product): self
-    {
-        if (!$this->products->contains($product)) {
-            $this->products[] = $product;
-            $product->setUser($this);
-        }
+#[ORM\Column(type: 'string', length: 255, nullable: true)]
+private ?string $googleId = null;
 
-        return $this;
-    }
+public function getGoogleId(): ?string
+{
+    return $this->googleId;
+}
 
-    public function removeProduct(Product $product): self
-    {
-        if ($this->products->removeElement($product)) {
-            // set the owning side to null (unless already changed)
-            if ($product->getUser() === $this) {
-                $product->setUser(null);
-            }
-        }
+public function setGoogleId(?string $googleId): self
+{
+    $this->googleId = $googleId;
+    return $this;
+}
 
-        return $this;
-    }
 }
