@@ -1330,6 +1330,34 @@ type="hidden" id="update_max_price" value="">
             });
         });
     </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Search functionality
+        const searchIcon = document.getElementById('searchIcon');
+        const searchPopup = document.getElementById('searchPopup');
+        const closeSearch = document.getElementById('closeSearch');
+        
+        if (searchIcon && searchPopup && closeSearch) {
+            searchIcon.addEventListener('click', function() {
+                searchPopup.style.display = searchPopup.style.display === 'none' ? 'block' : 'none';
+            });
+            
+            closeSearch.addEventListener('click', function() {
+                searchPopup.style.display = 'none';
+            });
+            
+            // Close search popup when clicking outside
+            document.addEventListener('click', function(event) {
+                if (searchPopup.style.display === 'block' && 
+                    !searchPopup.contains(event.target) && 
+                    event.target !== searchIcon) {
+                    searchPopup.style.display = 'none';
+                }
+            });
+        }
+    });
+    </script>
 {% endblock %}
 
 

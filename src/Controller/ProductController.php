@@ -708,4 +708,43 @@ public function showFavorites(EntityManagerInterface $entityManager): Response
         
         return new JsonResponse(['favoriteIds' => array_values($favoriteIds)]);
     }
+
+    /**
+     * Search products by name
+     * 
+     * @Route("/search", name="app_product_search")
+     */
+    #[Route('/search', name: 'app_product_search')]
+    public function search(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        // Get the search query from the request
+        $query = $request->query->get('search', '');
+        
+        // Create query builder
+        $queryBuilder = $entityManager->getRepository(Product::class)->createQueryBuilder('p');
+        
+        // Apply search filter if query is not empty
+        if (!empty($query)) {
+            $queryBuilder->andWhere('p.objetAVendre LIKE :query OR p.description LIKE :query')
+                         ->setParameter('query', '%' . $query . '%');
+        }
+        
+        // Order by newest products
+        $queryBuilder->orderBy('p.id', 'DESC');
+        
+        // Execute query
+        $products = $queryBuilder->getQuery()->getResult();
+        
+        // Get the total number of products found
+        $totalProducts = count($products);
+        
+        // Render the search results using the category template
+        return $this->render('category/category.html.twig', [
+            'controller_name' => 'ProductController',
+            'products' => $products,
+            'totalProducts' => $totalProducts,
+            'searchQuery' => $query,
+            'isSearchResult' => true
+        ]);
+    }
 }
