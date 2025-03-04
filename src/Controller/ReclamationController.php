@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -71,7 +72,7 @@ final class ReclamationController extends AbstractController
             $reclamation->setDateReclamation(new \DateTime());
 
             $email = (new Email())
-                ->from('shyhebboudaya@gmail.com') // Ton email d'envoi
+                ->from('hello@demomailtrap.co') // Ton email d'envoi
                 ->to('libero1809@gmail.com') // Email du client
                 ->subject('Réclamation enregistrée')
                 ->html("<p>Bonjour {$reclamation->getUser()->getName()},</p>
@@ -79,7 +80,10 @@ final class ReclamationController extends AbstractController
                     <p>Nous reviendrons vers vous sous peu.</p>
                     <p>Cordialement, <br> L'équipe Support</p>");
 
-            $mailer->send($email);
+            try {
+                $mailer->send($email);
+            } catch (TransportExceptionInterface $e) {
+            }
 
             // Persist the reclamation entity
             $entityManager->persist($reclamation);
