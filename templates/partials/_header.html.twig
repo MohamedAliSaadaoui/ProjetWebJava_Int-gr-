@@ -34,6 +34,7 @@
 								
 
 							</li>
+
 						</ul>
 					</div>
 				</div>
@@ -131,23 +132,12 @@
 					<div class="nav-right">
 						<div class="icon-circle">
 							<button id="searchIcon">
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none">
-									<path d="M21 21L17.5001 17.5M20 11.5C20 16.1944 16.1944 20 11.5 20C6.80558 20 3 16.1944 3 11.5C3 6.80558 6.80558 3 11.5 3C16.1944 3 20 6.80558 20 11.5Z" stroke="#1F0300" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+									<path d="M21 21L17.5001 17.5M20 11.5C20 16.1944 16.1944 20 11.5 20C6.80558 20 3 16.1944 3 11.5C3 6.80558 6.80558 3 11.5 3C16.1944 3 20 6.80558 20 11.5Z" stroke="#1F0300" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
 								</svg>
 							</button>
-
 						</div>
 
-						<div class="icon-circle">
-							<a href="#" "/compare/view.html">
-								<span class="cart-count" id="compare-count">
-									0
-								</span>
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none">
-									<path d="M18.1777 8C23.2737 8 23.2737 16 18.1777 16C13.0827 16 11.0447 8 5.43875 8C0.85375 8 0.85375 16 5.43875 16C11.0447 16 13.0828 8 18.1788 8H18.1777Z" stroke="#1F0300" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-								</svg>
-							</a>
-						</div>
 
 						<div class="icon-circle">
 
@@ -214,6 +204,28 @@ console.error('Error adding to wishlist:', err);
 });
 });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const searchToggle = document.getElementById('headerSearchToggle');
+    const searchDropdown = document.querySelector('.header-search-dropdown');
+    
+    if (searchToggle && searchDropdown) {
+        searchToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            searchDropdown.classList.toggle('show');
+            if (searchDropdown.classList.contains('show')) {
+                searchDropdown.querySelector('input').focus();
+            }
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!searchToggle.contains(e.target) && !searchDropdown.contains(e.target)) {
+                searchDropdown.classList.remove('show');
+            }
+        });
+    }
+});
 });
 </script>{% endblock %}
 
@@ -231,3 +243,48 @@ console.error('Error adding to wishlist:', err);
     </form>
     <button class="close-search" id="closeSearch">×</button>
 </div>
+
+<!-- search bar -->
+<div class="search-bar" id="searchBar">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <form class="search-form" action="{{ path('app_product_search') }}" method="GET">
+                    <div class="input-group input__group">
+                        <input type="text" class="form-control form__control" name="search" placeholder="Search Any Product Here">
+                        <div class="input-group-append">
+                            <span class="search-separator"></span>
+                            <button class="dropdown-toggle btn btn-secondary search-category-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                All Categories
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item dropdown__item" href="{{ path('app_category', {'category': 'homme'}) }}">Homme</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item dropdown__item" href="{{ path('app_category', {'category': 'femme'}) }}">Femme</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item dropdown__item" href="{{ path('app_category', {'category': 'enfant'}) }}">Enfant</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item dropdown__item" href="{{ path('app_category', {'category': 'unisex'}) }}">Unisexe</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="input-group-append">
+                            <button class="btn btn-primary search-icn" type="submit">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none">
+                                    <path d="M21 21L17.5001 17.5M20 11.5C20 16.1944 16.1944 20 11.5 20C6.80558 20 3 16.1944 3 11.5C3 6.80558 6.80558 3 11.5 3C16.1944 3 20 6.80558 20 11.5Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- overlay -->
+<div class="overlay"></div>
