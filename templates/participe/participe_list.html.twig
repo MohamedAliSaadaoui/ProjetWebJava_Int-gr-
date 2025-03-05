@@ -21,6 +21,8 @@
                 <tr>
                     <td>{{ participation.dateParticipation ? participation.dateParticipation|date('d/m/Y') : 'N/A' }}</td>
                     <td>{{ participation.idEvent ? participation.idEvent.titre : 'N/A' }}</td>
+                    
+                    <!-- Toujours afficher le bouton "Participate" pour chaque ligne -->
                     <td>
                         <form action="{{ path('participation_edit', {'id': participation.id}) }}" method="get">
                             <button type="submit" class="btn">Edit</button>
@@ -32,6 +34,23 @@
                             <button type="submit" class="btn" onclick="return confirm('Are you sure you want to delete this participation?')">Delete</button>
                         </form>
                     </td>
+
+                    {# Ajouter une condition pour afficher les actions "Edit" et "Delete" seulement si l'utilisateur est le créateur de l'événement #}
+                    {% if participation.idEvent.creator == app.user %}
+                        <td>
+                            <!-- Bouton Edit pour l'événement -->
+                            <form action="{{ path('event_edit', {'id': participation.idEvent.id}) }}" method="get">
+                                <button type="submit" class="btn btn-warning btn-sm">Edit Event</button>
+                            </form>
+                        </td>
+                        <td>
+                            <!-- Formulaire de suppression d'événement -->
+                            <form method="post" action="{{ path('event_delete', {'id': participation.idEvent.id}) }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ participation.idEvent.id) }}">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this event?')">Delete Event</button>
+                            </form>
+                        </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </tbody>

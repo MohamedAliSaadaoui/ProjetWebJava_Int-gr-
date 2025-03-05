@@ -13,7 +13,7 @@ use App\Repository\ParticipeRepository;
 use App\Service\GeocodingService;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
-
+use App\Entity\User;
 
 class EventController extends AbstractController
 {
@@ -27,69 +27,91 @@ class EventController extends AbstractController
 
     #[Route('/event/create', name: 'event_create')]
     public function create(Request $request, EntityManagerInterface $entityManager, GeocodingService $geocodingService): Response
-    {
-        // Créer une nouvelle instance de l'entité Event
-        $event = new Event();
+{
+    // Récupérer l'utilisateur connecté
+    $user = $this->getUser();
     
-        // Créer le formulaire à partir de la classe EventType
-        $form = $this->createForm(EventType::class, $event);
+    // Vérifier si l'utilisateur est connecté
+    if (!$user) {
+        $this->addFlash('error', 'You must be logged in to create an event.');
+        return $this->redirectToRoute('app_login'); // Ajustez selon votre route de login
+    }
     
-        // Traiter la soumission du formulaire
-        $form->handleRequest($request);
+    // Créer une nouvelle instance de l'entité Event
+    $event = new Event();
     
-        // Vérifier si le formulaire est soumis et valide
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Récupérer le lieu de l'événement
-            $lieu = $event->getLieu();
+    // Définir l'utilisateur comme créateur de l'événement
+    $event->setCreator($user);
     
-            // Utiliser le service GeocodingService pour obtenir les coordonnées (latitude et longitude)
-            $coordinates = $geocodingService->getCoordinates($lieu);
+    // Créer le formulaire à partir de la classe EventType
+    $form = $this->createForm(EventType::class, $event);
     
-            // Vérifier si des coordonnées ont été trouvées
-            if ($coordinates) {
-                // Assigner les coordonnées à l'événement
-                $event->setLatitude($coordinates['latitude']);
-                $event->setLongitude($coordinates['longitude']);
-            } else {
-                // Si aucune coordonnée n'est trouvée, ajouter un message flash d'erreur
-                $this->addFlash('error', 'Could not find coordinates for the specified location.');
-                return $this->redirectToRoute('event_create');
-            }
+    // Traiter la soumission du formulaire
+    $form->handleRequest($request);
     
-            // Persister l'événement dans la base de données
-            $entityManager->persist($event);
-            $entityManager->flush();
+    // Vérifier si le formulaire est soumis et valide
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Récupérer le lieu de l'événement
+        $lieu = $event->getLieu();
     
-            // Ajouter un message flash pour informer l'utilisateur que l'événement a été créé
-            $this->addFlash('success', 'Event created successfully!');
+        // Utiliser le service GeocodingService pour obtenir les coordonnées (latitude et longitude)
+        $coordinates = $geocodingService->getCoordinates($lieu);
     
-            // Rediriger vers la liste des événements (ou une autre page selon ton besoin)
-            return $this->redirectToRoute('event_list');
+        // Vérifier si des coordonnées ont été trouvées
+        if ($coordinates) {
+            // Assigner les coordonnées à l'événement
+            $event->setLatitude($coordinates['latitude']);
+            $event->setLongitude($coordinates['longitude']);
+        } else {
+            // Si aucune coordonnée n'est trouvée, ajouter un message flash d'erreur
+            $this->addFlash('error', 'Could not find coordinates for the specified location.');
+            return $this->redirectToRoute('event_create');
         }
     
-        // Rendre la vue du formulaire
-        return $this->render('event/event_create.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        // Persister l'événement dans la base de données
+        $entityManager->persist($event);
+        $entityManager->flush();
+    
+        // Ajouter un message flash pour informer l'utilisateur que l'événement a été créé
+        $this->addFlash('success', 'Event created successfully!');
+    
+        // Rediriger vers la liste des événements (ou une autre page selon ton besoin)
+        return $this->redirectToRoute('event_list');
     }
     
-    #[Route('/event/list', name: 'event_list')]
-    public function list(EventRepository $eventRepository, Request $request): Response
-    {
-        $page = $request->query->getInt('page', 1); // Récupère le numéro de la page depuis l'URL (par défaut 1)
-        $limit = 5; // Nombre d'événements par page
+    // Rendre la vue du formulaire
+    return $this->render('event/event_create.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
     
-        // Création de la pagination avec Pagerfanta
-        // Utilisez date_fin au lieu de date
-        $queryBuilder = $eventRepository->createQueryBuilder('e')->orderBy('e.dateFin', 'DESC');
-        $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
-        $pagerfanta->setMaxPerPage($limit);
-        $pagerfanta->setCurrentPage($page);
-    
-        return $this->render('event/event_list.html.twig', [
-            'events' => $pagerfanta,
-        ]);
+#[Route('/event/list', name: 'event_list')]
+public function list(EventRepository $eventRepository, Request $request): Response
+{
+    $page = $request->query->getInt('page', 1); // Récupère le numéro de la page depuis l'URL (par défaut 1)
+    $limit = 5; // Nombre d'événements par page
+
+    // Création de la pagination avec Pagerfanta
+    $queryBuilder = $eventRepository->createQueryBuilder('e')->orderBy('e.dateFin', 'DESC');
+    $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
+    $pagerfanta->setMaxPerPage($limit);
+    $pagerfanta->setCurrentPage($page);
+
+    // Vérifie si l'utilisateur connecté est le créateur de l'événement
+    $events = $pagerfanta->getCurrentPageResults();
+    $editableEvents = [];
+    foreach ($events as $event) {
+        if ($event->getCreator() === $this->getUser()) {
+            $editableEvents[] = $event; // Ajoute les événements créés par l'utilisateur
+        }
     }
+
+    return $this->render('event/event_list.html.twig', [
+        'events' => $pagerfanta,
+        'editableEvents' => $editableEvents, // Passer les événements modifiables au template
+    ]);
+}
+
     // #[IsGranted('ROLE_ADMIN')]
     #[Route('/event/delete/{id}', name: 'event_delete', methods: ['POST'])]
     public function delete(

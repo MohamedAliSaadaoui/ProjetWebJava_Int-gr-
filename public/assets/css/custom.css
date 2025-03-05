@@ -1,0 +1,119 @@
+.add-to-cart {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.single-product:hover .add-to-cart {
+    opacity: 1;
+}
+
+.add-to-cart a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.add-to-cart .compare,
+.add-to-cart .details {
+    background: #fff;
+    padding: 8px;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.add-to-cart .add-cart {
+    background: #1F0300;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.add-to-cart .add-cart:hover {
+    background: #3a0600;
+    transform: translateY(-2px);
+}
+
+.add-to-cart .compare:hover,
+.add-to-cart .details:hover {
+    background: #f8f8f8;
+    transform: translateY(-2px);
+}
+
+.single-product {
+    position: relative;
+    overflow: hidden;
+}
+
+.single-product .img-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.product-img {
+    width: 100%;
+    height: auto;
+    transition: all 0.3s ease;
+}
+
+.single-product:hover .product-img {
+    transform: scale(1.05);
+}
+
+.add-to-cart-wrapper {
+    margin-top: 2rem;
+}
+
+.add-to-cart-wrapper .btn-primary {
+    background-color: #1F0300;
+    border-color: #1F0300;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.add-to-cart-wrapper .btn-primary:hover {
+    background-color: #3a0600;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.add-to-cart-wrapper .btn-primary svg {
+    margin-right: 10px;
+}
+
+/* Toast notifications */
+.toast-success {
+    background-color: #28a745;
+}
+
+.toast-error {
+    background-color: #dc3545;
+}
+
+.toast-info {
+    background-color: #17a2b8;
+}
+
+.toast-warning {
+    background-color: #ffc107;
+} 

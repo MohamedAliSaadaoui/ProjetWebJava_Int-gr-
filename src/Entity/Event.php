@@ -17,6 +17,7 @@ class Event
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+    
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Gedmo\Timestampable(on: "create")]
     private ?\DateTimeInterface $createdAt = null;
@@ -82,6 +83,10 @@ class Event
     #[ORM\Column(nullable: true)]
     private ?float $longitude = null;
 
+    #[ORM\ManyToOne(inversedBy: 'eventsCreated')]
+    #[ORM\JoinColumn(nullable: true)] // Changez de false à true
+    private ?User $creator = null;
+    
     public function __construct()
     {
         $this->participations = new ArrayCollection();
@@ -212,6 +217,18 @@ class Event
     public function setLongitude(?float $longitude): static
     {
         $this->longitude = $longitude;
+
+        return $this;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?User $creator): static
+    {
+        $this->creator = $creator;
 
         return $this;
     }

@@ -12,6 +12,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Entity\Event;
 use App\Entity\Participe;
+use App\Entity\User;
+use Symfony\Component\Security\Core\User\UserInterface;
+
 
 class ParticipeController extends AbstractController
 {
@@ -22,63 +25,73 @@ class ParticipeController extends AbstractController
             'controller_name' => 'ParticipeController',
         ]);
     }
-   #[Route('/participe/create/{id}', name: 'participation_create')]
-   public function new(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/participe/create/{id}', name: 'participation_create')]
+    public function new(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
+        // Récupérer l'utilisateur connecté
+        $user = $this->getUser();
+        
+        // Vérifier si l'utilisateur est connecté
+        if (!$user) {
+            $this->addFlash('error', 'Vous devez être connecté pour participer à un événement.');
+            return $this->redirectToRoute('app_login'); // Ajustez selon votre route de login
+        }
+        
         $event = $entityManager->getRepository(Event::class)->find($id);
-
+    
         if (!$event) {
             throw $this->createNotFoundException('Event not found.');
         }
-
+    
+        // Vérifier si l'utilisateur participe déjà à cet événement
+        $existingParticipation = $entityManager->getRepository(Participe::class)
+            ->findOneBy([
+                'id_event' => $event,
+                'user' => $user
+            ]);
+    
+        if ($existingParticipation) {
+            $this->addFlash('error', 'Vous participez déjà à cet événement.');
+            return $this->redirectToRoute('event_list');
+        }
+    
         $participation = new Participe();
         $participation->setIdEvent($event); // Pré-remplit l'événement
-
-        // Vérifier si une participation existe déjà pour cet event (optionnel)
-        $existingParticipation = $entityManager->getRepository(Participe::class)
-            ->findOneBy(['id_event' => $event]);
-
-        if ($existingParticipation) {
-            // Si une participation existe déjà, récupérer son nombre de places
-            $currentPlaces = $existingParticipation->getNbrPlace() ?? 0;
-            $participation->setNbrPlace($currentPlaces + 1);
-        } else {
-            // Sinon, initialiser à 1
-            $participation->setNbrPlace(1);
-        }
-
+        $participation->setUser($user);   // Définir l'utilisateur connecté
+    
+        // Initialiser le nombre de places à 1 pour une nouvelle participation
+        $participation->setNbrPlace(1);
+    
         // Créer le formulaire
         $form = $this->createForm(ParticipeType::class, $participation);
         $form->handleRequest($request);
-
-        // Debug temporaire : voir si le formulaire se soumet
-        // dd($form->isSubmitted(), $form->isValid(), $request->request->all());
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($participation);
             $entityManager->flush();
-
+    
             // Message flash
             $this->addFlash('success', 'You have successfully registered for the event.');
-
+    
             return $this->redirectToRoute('event_list'); // Redirection après succès
         }
-
+    
         return $this->render('participe/participe_create.html.twig', [
             'form' => $form->createView(),
             'event' => $event,
         ]);
     }
     #[Route('/participe/list', name: 'participation_list')]
-public function list(EntityManagerInterface $entityManager): Response
-{
-    // Récupérer toutes les participations avec leurs événements associés
-    $participations = $entityManager->getRepository(Participe::class)->findAll();
-
-    return $this->render('participe/participe_list.html.twig', [
-        'participations' => $participations,
-    ]);
-}
+    public function list(EntityManagerInterface $entityManager, UserInterface $user): Response
+    {
+        // Récupérer toutes les participations avec leurs événements associés
+        $participations = $entityManager->getRepository(Participe::class)->findBy(['user' => $user]);
+    
+        return $this->render('participe/participe_list.html.twig', [
+            'participations' => $participations,
+        ]);
+    }
+    
 #[Route('/participe/{id}/delete', name: 'participation_delete', methods: ['POST'])]
 public function delete(int $id, EntityManagerInterface $entityManager): Response
 {
@@ -103,6 +116,15 @@ public function delete(int $id, EntityManagerInterface $entityManager): Response
 #[Route('/participe/{id?0}/edit', name: 'participation_edit')]
 public function edit(int $id = null, Request $request, EntityManagerInterface $entityManager): Response
 {
+    // Récupérer l'utilisateur connecté
+    $user = $this->getUser();
+    
+    // Vérifier si l'utilisateur est connecté
+    if (!$user) {
+        $this->addFlash('error', 'Vous devez être connecté pour modifier une participation.');
+        return $this->redirectToRoute('app_login');
+    }
+    
     // Si un ID est fourni, on cherche la participation correspondante
     $participation = $id ? $entityManager->getRepository(Participe::class)->find($id) : new Participe();
 
@@ -110,6 +132,17 @@ public function edit(int $id = null, Request $request, EntityManagerInterface $e
     if (!$participation && $id) {
         $this->addFlash('error', 'Participation not found.');
         return $this->redirectToRoute('participation_list');
+    }
+
+    // Pour une nouvelle participation, définir l'utilisateur
+    if (!$id) {
+        $participation->setIdUser($user);
+    } else {
+        // Vérifier que l'utilisateur est autorisé à modifier cette participation
+        if ($participation->getUser() !== $user && !$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', 'Vous n\'êtes pas autorisé à modifier cette participation.');
+            return $this->redirectToRoute('participation_list');
+        }
     }
 
     // Créer ou réutiliser le formulaire pour la participation

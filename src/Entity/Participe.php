@@ -24,11 +24,10 @@ class Participe
     #[ORM\Column(nullable: true)]
     private ?int $nbr_place = null;
 
-  
-
     #[ORM\ManyToOne(inversedBy: 'participations')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Event $id_event = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Gedmo\Timestampable(on: "create")]
     private ?\DateTimeInterface $createdAt = null;
@@ -36,6 +35,14 @@ class Participe
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Gedmo\Timestampable(on: "update")]
     private ?\DateTimeInterface $updatedAt = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id", nullable: true)]
+    private ?User $user = null;
+
+    public function __construct() {
+        $this->nbr_place = 0; // Assurer une valeur initiale
+    }
 
     public function getId(): ?int
     {
@@ -77,26 +84,31 @@ class Participe
 
         return $this;
     }
-    public function __construct()
-{
-    $this->nbr_place = 0; // Assurer une valeur initiale
-}
 
-#[Assert\Callback]
-public function validateDateParticipation(ExecutionContextInterface $context): void
-{
-    if ($this->date_participation && $this->id_event) {
-        $dateDebut = $this->id_event->getDateDebut();
-        $dateFin = $this->id_event->getDateFin();
+    #[Assert\Callback]
+    public function validateDateParticipation(ExecutionContextInterface $context): void
+    {
+        if ($this->date_participation && $this->id_event) {
+            $dateDebut = $this->id_event->getDateDebut();
+            $dateFin = $this->id_event->getDateFin();
 
-        if ($this->date_participation < $dateDebut || $this->date_participation > $dateFin) {
-            $context->buildViolation("La date de participation doit être entre le {$dateDebut->format('d/m/Y')} et le {$dateFin->format('d/m/Y')}.")
-                ->atPath('date_participation')
-                ->addViolation();
+            if ($this->date_participation < $dateDebut || $this->date_participation > $dateFin) {
+                $context->buildViolation("La date de participation doit être entre le {$dateDebut->format('d/m/Y')} et le {$dateFin->format('d/m/Y')}.")
+                    ->atPath('date_participation')
+                    ->addViolation();
+            }
         }
     }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+        
+        return $this;
+    }
 }
-
-
-}
-

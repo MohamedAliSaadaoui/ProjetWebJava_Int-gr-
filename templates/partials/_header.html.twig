@@ -1,0 +1,247 @@
+	<header class="header-section position-relative z-2 header-stikcy">
+		<div class="info-bar d-nonee d-md-blockk">
+			<div class="container custom-containerr">
+				<div class="info-row d-flex">
+					<div class="info-left">
+						<ul class="wows align-items-center">
+							<li>
+								<a href="#" "tel:+1(234)567-8901">
+							</li>
+						</ul>
+					</div>
+					<div class="info-right">
+						<ul class="d-flex wows align-items-center">
+
+							<li class="d-none d-lg-block">
+								<a href="#" "user/vendor-login.html" class="info-bar-btn">
+									Vendor Login
+								</a>
+							</li>
+
+							<li class="d-none d-lg-block">
+								<a href="#" "rider/login.html" class="info-bar-btn">
+									Rider Login
+								</a>
+							</li>
+
+							<li class="d-none  d-md-flex gap-2 align-items-center">
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewbox="0 0 20 21" fill="none">
+									<path d="M9.99955 13C7.35782 13 5.00855 14.2755 3.51288 16.255C3.19097 16.681 3.03002 16.894 3.03528 17.1819C3.03935 17.4043 3.17902 17.6849 3.35402 17.8222C3.58054 18 3.89444 18 4.52224 18H15.4769C16.1047 18 16.4186 18 16.6451 17.8222C16.8201 17.6849 16.9598 17.4043 16.9638 17.1819C16.9691 16.894 16.8081 16.681 16.4862 16.255C14.9906 14.2755 12.6413 13 9.99955 13Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+									<path d="M9.99955 10.5C12.0706 10.5 13.7496 8.82107 13.7496 6.75C13.7496 4.67893 12.0706 3 9.99955 3C7.92848 3 6.24955 4.67893 6.24955 6.75C6.24955 8.82107 7.92848 10.5 9.99955 10.5Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+
+								<a href="{{ path('app_login') }}">My Account</a>
+								
+
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="header-top">
+			<div class="container custom-containerr">
+				<div class="create-navbar d-flex">
+
+					<div class="nav-left">
+						<button type="button" class="header-toggle mobile-menu-toggle d-flex d-xl-none">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none">
+								<path d="M3 12H21M3 6H21M3 18H15" stroke="#1F0300" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+							</svg>
+						</button>
+
+
+					</div>
+					<div class="nav-center">
+						<ul class="d-flex align-items-center nav-menus">
+							<li class="">
+								<a href="/" class="nav-link active">Home</a>
+							</li>
+							<li class="has-megamenu ">
+								<a href="category">
+									Products
+								</a>
+								<span class="has-submenu-icon">
+									<svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M18.7098 8.20986C18.6169 8.11613 18.5063 8.04174 18.3844 7.99097C18.2625 7.9402 18.1318 7.91406 17.9998 7.91406C17.8678 7.91406 17.7371 7.9402 17.6152 7.99097C17.4934 8.04174 17.3828 8.11613 17.2898 8.20986L12.7098 12.7899C12.6169 12.8836 12.5063 12.958 12.3844 13.0088C12.2625 13.0595 12.1318 13.0857 11.9998 13.0857C11.8678 13.0857 11.7371 13.0595 11.6152 13.0088C11.4934 12.958 11.3828 12.8836 11.2898 12.7899L6.70982 8.20986C6.61685 8.11613 6.50625 8.04174 6.38439 7.99097C6.26253 7.9402 6.13183 7.91406 5.99982 7.91406C5.8678 7.91406 5.7371 7.9402 5.61524 7.99097C5.49338 8.04174 5.38278 8.11613 5.28982 8.20986C5.10356 8.39722 4.99902 8.65067 4.99902 8.91486C4.99902 9.17905 5.10356 9.4325 5.28982 9.61986L9.87982 14.2099C10.4423 14.7717 11.2048 15.0872 11.9998 15.0872C12.7948 15.0872 13.5573 14.7717 14.1198 14.2099L18.7098 9.61986C18.8961 9.4325 19.0006 9.17905 19.0006 8.91486C19.0006 8.65067 18.8961 8.39722 18.7098 8.20986Z" fill="#180207"/>
+									</svg>
+								</span>
+
+
+								<div class="megamenu cat-megamenu">
+									<div class="row w-100">
+										<div class="col-lg-3">
+											<div class="single-menu mt-30">
+												<h5>
+													<a href="{{ path('app_category', {'category': 'homme'}) }}">Homme</a>
+												</h5>
+												<ul>
+													<li><a href="{{ path('app_category', {'category': 'homme', 'subcategory': 'Hauts'}) }}">Hauts</a></li>
+													<li><a href="{{ path('app_category', {'category': 'homme', 'subcategory': 'Bas'}) }}">Bas</a></li>
+													<li><a href="{{ path('app_category', {'category': 'homme', 'subcategory': 'Vestes'}) }}">Vestes</a></li>
+													<li><a href="{{ path('app_category', {'category': 'homme', 'subcategory': 'Sport'}) }}">Sport</a></li>
+												</ul>
+											</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="single-menu mt-30">
+												<h5>
+													<a href="{{ path('app_category', {'category': 'femme'}) }}">Femme</a>
+												</h5>
+												<ul>
+													<li><a href="{{ path('app_category', {'category': 'femme', 'subcategory': 'Hauts'}) }}">Hauts</a></li>
+													<li><a href="{{ path('app_category', {'category': 'femme', 'subcategory': 'Bas'}) }}">Bas</a></li>
+													<li><a href="{{ path('app_category', {'category': 'femme', 'subcategory': 'Robes'}) }}">Robes</a></li>
+													<li><a href="{{ path('app_category', {'category': 'femme', 'subcategory': 'Vestes'}) }}">Vestes</a></li>
+													<li><a href="{{ path('app_category', {'category': 'femme', 'subcategory': 'Sport'}) }}">Sport</a></li>
+												</ul>
+											</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="single-menu mt-30">
+												<h5>
+													<a href="{{ path('app_category', {'category': 'enfant'}) }}">Enfant</a>
+												</h5>
+												<ul>
+													<li><a href="{{ path('app_category', {'category': 'enfant', 'subcategory': 'Garcon'}) }}">Garçon</a></li>
+													<li><a href="{{ path('app_category', {'category': 'enfant', 'subcategory': 'Fille'}) }}">Fille</a></li>
+													<li><a href="{{ path('app_category', {'category': 'enfant', 'subcategory': 'Bebe'}) }}">Bébé</a></li>
+												</ul>
+											</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="single-menu mt-30">
+												<h5>
+													<a href="{{ path('app_category', {'category': 'unisex'}) }}">Unisexe</a>
+												</h5>
+												<ul>
+													<li><a href="{{ path('app_category', {'category': 'unisex', 'subcategory': 'Sweats'}) }}">Sweats</a></li>
+													<li><a href="{{ path('app_category', {'category': 'unisex', 'subcategory': 'T-Shirts'}) }}">T-Shirts</a></li>
+													<li><a href="{{ path('app_category', {'category': 'unisex', 'subcategory': 'Sport'}) }}">Sport</a></li>
+												</ul>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</li>
+							<ul class="navbar-nav">
+   <ul class="navbar-nav">
+    <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Events
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <li><a class="dropdown-item" href="{{ path('event_list') }}">Voir tous les événements</a></li>
+        <li><a class="dropdown-item" href="{{ path('app_user_events') }}">Voir mes événements</a></li>
+    </ul>
+</li>
+
+
+
+						</ul>
+					</div>
+
+					<div class="nav-right">
+						<div class="icon-circle">
+							<button id="searchIcon">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none">
+									<path d="M21 21L17.5001 17.5M20 11.5C20 16.1944 16.1944 20 11.5 20C6.80558 20 3 16.1944 3 11.5C3 6.80558 6.80558 3 11.5 3C16.1944 3 20 6.80558 20 11.5Z" stroke="#1F0300" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							</button>
+
+						</div>
+
+						<div class="icon-circle">
+							<a href="#" "/compare/view.html">
+								<span class="cart-count" id="compare-count">
+									0
+								</span>
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none">
+									<path d="M18.1777 8C23.2737 8 23.2737 16 18.1777 16C13.0827 16 11.0447 8 5.43875 8C0.85375 8 0.85375 16 5.43875 16C11.0447 16 13.0828 8 18.1788 8H18.1777Z" stroke="#1F0300" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							</a>
+						</div>
+
+						<div class="icon-circle">
+
+
+                                <a href="{{ path('app_product_favorites') }}">
+								<span class="cart-count" id="wishlist-count">
+									0
+								</span>
+
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none">
+									<path d="M16.1111 3C19.6333 3 22 6.3525 22 9.48C22 15.8138 12.1778 21 12 21C11.8222 21 2 15.8138 2 9.48C2 6.3525 4.36667 3 7.88889 3C9.91111 3 11.2333 4.02375 12 4.92375C12.7667 4.02375 14.0889 3 16.1111 3Z" stroke="#1F0300" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							</a>
+
+
+						</div>
+						<div class="icon-circle">
+                            <a href="{{ path('app_panier') }}" class="cart-icon">
+                                <span class="cart-count" id="cart-count">
+                                    {{ app.session.get('cart_total_quantity', 0) }}
+                                </span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M2 2H3.74001C4.82001 2 5.67 2.93 5.58 4L4.75 13.96C4.61 15.59 5.89999 16.99 7.53999 16.99H18.19C19.63 16.99 20.89 15.81 21 14.38L21.54 6.88C21.66 5.22 20.4 3.87 18.73 3.87H5.82001" stroke="#1F0300" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M16.25 22C16.9404 22 17.5 21.4404 17.5 20.75C17.5 20.0596 16.9404 19.5 16.25 19.5C15.5596 19.5 15 20.0596 15 20.75C15 21.4404 15.5596 22 16.25 22Z" stroke="#1F0300" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M8.25 22C8.94036 22 9.5 21.4404 9.5 20.75C9.5 20.0596 8.94036 19.5 8.25 19.5C7.55964 19.5 7 20.0596 7 20.75C7 21.4404 7.55964 22 8.25 22Z" stroke="#1F0300" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M9 8H21" stroke="#1F0300" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+
+
+					</div>
+
+				</div>
+
+
+			</div>
+
+		</div>
+
+	</header>
+    {% block javascripts %}
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+const wishlistButtons = document.querySelectorAll('.wishlist');
+
+wishlistButtons.forEach(button => {
+button.addEventListener('click', function () {
+const href = this.dataset.href;
+    // Make AJAX request to add item to wishlist
+fetch(href, {
+method: 'GET', // Or 'POST' depending on your setup
+headers: {
+'X-Requested-With': 'XMLHttpRequest'
+}
+}).then(response => response.json()).then(data => {
+if (data.success) {
+alert('Added to your favorites!');
+} else {
+alert('Failed to add to favorites.');
+}
+}).catch(err => {
+console.error('Error adding to wishlist:', err);
+});
+});
+});
+});
+</script>{% endblock %}
+
+<!-- Search Form Popup -->
+<div class="search-popup" id="searchPopup" style="display: none;">
+    <form action="{{ path('app_product_search') }}" method="GET" class="search-form">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Search products..." aria-label="Search products">
+            <button class="btn btn-primary" type="submit">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 21L17.5001 17.5M20 11.5C20 16.1944 16.1944 20 11.5 20C6.80558 20 3 16.1944 3 11.5C3 6.80558 6.80558 3 11.5 3C16.1944 3 20 6.80558 20 11.5Z"></path>
+                </svg>
+            </button>
+        </div>
+    </form>
+    <button class="close-search" id="closeSearch">×</button>
+</div>
