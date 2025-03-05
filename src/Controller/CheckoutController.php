@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use App\Entity\Product;
 
 #[Route('/checkout')]
 class CheckoutController extends AbstractController
@@ -33,7 +35,7 @@ class CheckoutController extends AbstractController
     }
 
     #[Route('/', name: 'checkout')]
-    public function checkout(Request $request): Response
+    public function checkout(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
         // Get the current command or create a new one
         $command = $this->getCurrentCommand();
@@ -41,60 +43,107 @@ class CheckoutController extends AbstractController
         // Get all delivery methods
         $livraisonOptions = $this->livraisonRepository->findAll();
         
+        // Get cart data from session
+        $cart = $session->get('cart', []);
+        $cartWithProducts = [];
+        $cartTotal = 0;
+        
+        // Fetch product details for each cart item
+        foreach ($cart as $id => $quantity) {
+            $product = $entityManager->getRepository(Product::class)->find($id);
+            if ($product) {
+                // Ensure we have numeric values for calculations
+                $prix = (float)$product->getPrixDeVente();
+                $qty = (int)$quantity;
+                
+                // Calculate item total and add to cart total
+                $itemTotal = $prix * $qty;
+                $cartTotal += $itemTotal;
+                
+                $cartWithProducts[] = [
+                    'product' => $product,
+                    'quantity' => $qty,
+                    'total' => $itemTotal
+                ];
+            }
+        }
+        
+        // Handle form submission
         if ($request->isMethod('POST')) {
-            // Handle delivery method selection
-            if ($request->request->has('livraison')) {
-                $livraisonId = $request->request->get('livraison');
+            // Get form data
+            $livraisonId = $request->request->get('livraison');
+            $adresse = $request->request->get('adresse');
+            $codePostal = $request->request->get('codePostal');
+            $ville = $request->request->get('ville');
+            $pays = $request->request->get('pays');
+            $paymentMethod = $request->request->get('payment_method');
+            
+            // Update command with delivery information
+            if ($livraisonId) {
                 $livraison = $this->livraisonRepository->find($livraisonId);
                 
+                // Remove existing livraisons if any
+                foreach ($command->getLivraisons() as $existingLivraison) {
+                    $command->removeLivraison($existingLivraison);
+                    $entityManager->remove($existingLivraison);
+                }
+                
+                // Add new livraison to command
                 if ($livraison) {
-                    // Clear existing livraisons
-                    foreach ($command->getLivraisons() as $existingLivraison) {
-                        $command->removeLivraison($existingLivraison);
-                        $this->entityManager->remove($existingLivraison);
-                    }
+                    $commandLivraison = new Livraison();
+                    $commandLivraison->setNom($livraison->getNom());
+                    $commandLivraison->setDescription($livraison->getDescription());
+                    $commandLivraison->setTarif($livraison->getTarif());
+                    $commandLivraison->setDelai($livraison->getDelai());
+                    $commandLivraison->setCommand($command);
                     
-                    // Add the selected livraison
-                    $command->addLivraison($livraison);
-                    $this->entityManager->persist($livraison);
-                    $this->entityManager->flush();
+                    $entityManager->persist($commandLivraison);
                 }
             }
             
-            // Handle address information
-            if ($request->request->has('adresse')) {
-                $command->setAdresseLivraison($request->request->get('adresse'));
-                $command->setCodePostalLivraison($request->request->get('codePostal'));
-                $command->setVilleLivraison($request->request->get('ville'));
-                $command->setPaysLivraison($request->request->get('pays'));
-                $this->entityManager->flush();
-            }
+            // Update address information
+            $command->setAdresseLivraison($adresse);
+            $command->setCodePostalLivraison($codePostal);
+            $command->setVilleLivraison($ville);
+            $command->setPaysLivraison($pays);
             
-            // Handle payment method
-            if ($request->request->has('payment_method')) {
-                $paymentMethod = $request->request->get('payment_method');
-                $command->setMethodePaiement($paymentMethod);
-                
-                // Calculate and set the total
-                $command->setTotalCommande($command->calculateTotal());
-                $this->entityManager->flush();
-                
-                if ($paymentMethod === 'cash_on_delivery') {
-                    // For cash on delivery, mark as pending and go to confirmation
-                    $command->setEtat('pending');
-                    $this->entityManager->flush();
-                    
-                    return $this->redirectToRoute('checkout_confirmation');
-                } else if ($paymentMethod === 'stripe') {
-                    // For Stripe, redirect to Stripe payment
-                    return $this->redirectToRoute('checkout_stripe_payment');
-                }
+            // Update payment method
+            $command->setMethodePaiement($paymentMethod);
+            
+            // Update order status
+            $command->setEtat('confirmed');
+            
+            // Persist changes
+            $entityManager->persist($command);
+            $entityManager->flush();
+            
+            // Clear the cart after successful order
+            $session->remove('cart');
+            
+            // Add a flash message
+            $this->addFlash('success', 'Votre commande a été passée avec succès!');
+            
+            // Redirect to appropriate page based on payment method
+            if ($paymentMethod === 'stripe') {
+                return $this->redirectToRoute('stripe_checkout', ['id' => $command->getId()]);
+            } else {
+                // For cash on delivery, redirect to confirmation page
+                return $this->redirectToRoute('checkout_confirmation', ['id' => $command->getId()]);
             }
+        }
+        
+        // Get selected shipping option if any
+        $selectedShipping = null;
+        if (!$command->getLivraisons()->isEmpty()) {
+            $selectedShipping = $command->getLivraisons()->first();
         }
         
         return $this->render('checkout/checkout.html.twig', [
             'command' => $command,
-            'livraisonOptions' => $livraisonOptions
+            'livraisonOptions' => $livraisonOptions,
+            'cart' => $cartWithProducts,
+            'cartTotal' => $cartTotal,
+            'selectedShipping' => $selectedShipping
         ]);
     }
     

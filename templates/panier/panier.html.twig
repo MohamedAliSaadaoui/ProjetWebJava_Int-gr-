@@ -87,9 +87,14 @@
             <a href="{{ path('app_category') }}" class="btn btn-outline-secondary">
                 <i class="fas fa-arrow-left"></i> Continuer mes achats
             </a>
-            <a href="#" class="btn btn-primary">
-                Procéder au paiement <i class="fas fa-arrow-right"></i>
-            </a>
+            <div>
+                <a href="{{ path('app_user_orders') }}" class="btn btn-outline-info me-2">
+                    <i class="fas fa-history"></i> Mes commandes
+                </a>
+                <a href="{{ path('checkout') }}" class="btn btn-primary">
+                    Procéder au paiement <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
         </div>
     {% else %}
         <div class="text-center py-5">

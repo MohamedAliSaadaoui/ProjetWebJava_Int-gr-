@@ -21,6 +21,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use App\Form\NewPasswordType;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
+use App\Entity\Command;
 
 class UserController extends AbstractController
 {

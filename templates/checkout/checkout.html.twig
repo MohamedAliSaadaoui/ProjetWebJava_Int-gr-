@@ -8,41 +8,54 @@
     
     <div class="row">
         <div class="col-md-8">
-            <!-- Step 1: Delivery Method -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5>1. Choisir votre méthode de livraison</h5>
-                </div>
-                <div class="card-body">
-                    <form method="post" id="delivery-form">
+            <!-- Single form for all checkout steps -->
+            <form method="post" id="checkout-form">
+                <!-- Step 1: Delivery Method -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>1. Choisir votre méthode de livraison</h5>
+                    </div>
+                    <div class="card-body">
                         <div class="mb-4">
-                            {% for option in livraisonOptions %}
-                                <div class="form-check mb-3">
-                                    <input class="form-check-input" type="radio" name="livraison" id="livraison{{ option.id }}" 
-                                           value="{{ option.id }}" required
-                                           {% if command.livraisons|length > 0 and command.livraisons[0].id == option.id %}checked{% endif %}>
-                                    <label class="form-check-label" for="livraison{{ option.id }}">
-                                        <strong>{{ option.nom }}</strong> - {{ option.tarif|number_format(2, ',', ' ') }} €
-                                        <div class="text-muted">Délai: {{ option.delai }}</div>
-                                    </label>
-                                </div>
-                            {% endfor %}
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="radio" name="delivery_type" id="delivery_home" value="home" checked>
+                                <label class="form-check-label" for="delivery_home">
+                                    <strong>Livraison à domicile</strong>
+                                    <div class="text-muted">Recevez votre commande directement chez vous</div>
+                                </label>
+                            </div>
+                            
+                            <div class="mt-4">
+                                {% if livraisonOptions|length > 0 %}
+                                    {% for option in livraisonOptions %}
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="radio" name="livraison" id="livraison{{ option.id }}" 
+                                                   value="{{ option.id }}" required
+                                                   {% if loop.first %}checked{% endif %}>
+                                            <label class="form-check-label" for="livraison{{ option.id }}">
+                                                <strong>{{ option.nom }}</strong> - {{ option.tarif|number_format(2, ',', ' ') }} €
+                                                <div class="text-muted">Délai: {{ option.delai }}</div>
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="alert alert-warning">
+                                        Aucune option de livraison n'est disponible pour le moment.
+                                    </div>
+                                    <!-- Add a hidden input to prevent validation error -->
+                                    <input type="hidden" name="livraison" value="default">
+                                {% endif %}
+                            </div>
                         </div>
-                        
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Sélectionner cette livraison</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
-            
-            <!-- Step 2: Address -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5>2. Adresse de livraison</h5>
-                </div>
-                <div class="card-body">
-                    <form method="post" id="address-form">
+                
+                <!-- Step 2: Address -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>2. Adresse de livraison</h5>
+                    </div>
+                    <div class="card-body">
                         <div class="mb-3">
                             <label for="adresse" class="form-label">Adresse</label>
                             <input type="text" class="form-control" id="adresse" name="adresse" 
@@ -66,21 +79,15 @@
                             <input type="text" class="form-control" id="pays" name="pays" 
                                    value="{{ command.paysLivraison ?? 'France' }}" required>
                         </div>
-                        
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Enregistrer l'adresse</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
-            
-            <!-- Step 3: Payment Method -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5>3. Méthode de paiement</h5>
-                </div>
-                <div class="card-body">
-                    <form method="post" id="payment-form">
+                
+                <!-- Step 3: Payment Method -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>3. Méthode de paiement</h5>
+                    </div>
+                    <div class="card-body">
                         <div class="mb-4">
                             <div class="form-check mb-3">
                                 <input class="form-check-input" type="radio" name="payment_method" id="cash_on_delivery" 
@@ -104,11 +111,11 @@
                         </div>
                         
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Confirmer la commande</button>
+                            <button type="submit" class="btn btn-primary">Finaliser la commande</button>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
         
         <div class="col-md-4">
@@ -120,31 +127,60 @@
                 <div class="card-body">
                     <table class="table">
                         <tbody>
-                            {% for product in command.products %}
-                                <tr>
-                                    <td>{{ product.objetAVendre }}</td>
-                                    <td class="text-end">{{ product.prixDeVente|number_format(2, ',', ' ') }} €</td>
-                                </tr>
+                            {% set subtotal = 0 %}
+                            {% for item in cart %}
+                                {% set price = item.product.prixDeVente %}
+                                {% set qty = item.quantity %}
+                                {% if price is not null and qty is not null %}
+                                    <tr>
+                                        <td>{{ item.product.objetAVendre }} {% if qty > 1 %}(x{{ qty }}){% endif %}</td>
+                                        <td class="text-end">{{ (price * qty)|number_format(2, ',', ' ') }} €</td>
+                                    </tr>
+                                    {% set subtotal = subtotal + (price * qty) %}
+                                {% endif %}
                             {% endfor %}
                             
-                            {% if command.livraisons|length > 0 %}
-                                {% set livraison = command.livraisons|first %}
-                                <tr>
-                                    <td>Livraison ({{ livraison.nom }})</td>
-                                    <td class="text-end">{{ livraison.tarif|number_format(2, ',', ' ') }} €</td>
-                                </tr>
+                            <tr class="border-top">
+                                <td>Sous-total</td>
+                                <td class="text-end">{{ subtotal|number_format(2, ',', ' ') }} €</td>
+                            </tr>
+                            
+                            {% set shipping_cost = 0 %}
+                            {% if selectedShipping %}
+                                {% set shipping_tarif = selectedShipping.tarif %}
+                                {% if shipping_tarif is not null %}
+                                    <tr>
+                                        <td>Livraison ({{ selectedShipping.nom }})</td>
+                                        <td class="text-end">{{ shipping_tarif|number_format(2, ',', ' ') }} €</td>
+                                    </tr>
+                                    {% set shipping_cost = shipping_tarif %}
+                                {% endif %}
+                            {% elseif livraisonOptions is defined and livraisonOptions|length > 0 and livraisonOptions[0] is defined %}
+                                {% set shipping_tarif = livraisonOptions[0].tarif %}
+                                {% if shipping_tarif is not null %}
+                                    <tr>
+                                        <td>Livraison ({{ livraisonOptions[0].nom }})</td>
+                                        <td class="text-end">{{ shipping_tarif|number_format(2, ',', ' ') }} €</td>
+                                    </tr>
+                                    {% set shipping_cost = shipping_tarif %}
+                                {% endif %}
                             {% endif %}
                             
-                            <tr class="table-active">
+                            {% set total = subtotal + shipping_cost %}
+                            <tr class="table-active fw-bold">
                                 <th>Total</th>
-                                <th class="text-end">{{ command.calculateTotal|number_format(2, ',', ' ') }} €</th>
+                                <th class="text-end">{{ total|number_format(2, ',', ' ') }} €</th>
                             </tr>
                         </tbody>
                     </table>
                     
-                    <a href="{{ path('cart_index') }}" class="btn btn-outline-secondary w-100">
+                    <a href="{{ path('app_panier') }}" class="btn btn-outline-secondary w-100 mb-3">
                         Retour au panier
                     </a>
+                    
+                    <button type="submit" form="checkout-form" class="btn btn-primary w-100">
+                        Passer la commande
+                    </button>
                 </div>
             </div>
         </div>
@@ -154,27 +190,18 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
-    // JavaScript to enhance the checkout experience
     document.addEventListener('DOMContentLoaded', function() {
-        // Auto-submit the delivery form when a delivery option is selected
-        const deliveryInputs = document.querySelectorAll('input[name="livraison"]');
-        deliveryInputs.forEach(input => {
-            input.addEventListener('change', function() {
-                document.getElementById('delivery-form').submit();
-            });
-        });
-        
-        // Validate the payment form before submission
-        const paymentForm = document.getElementById('payment-form');
-        paymentForm.addEventListener('submit', function(event) {
-            // Check if delivery method is selected
-            if (document.querySelectorAll('input[name="livraison"]:checked').length === 0) {
+        const checkoutForm = document.getElementById('checkout-form');
+        checkoutForm.addEventListener('submit', function(event) {
+            // Check if delivery method is selected (skip if we have the hidden field)
+            const livraisonInputs = document.querySelectorAll('input[name="livraison"]');
+            if (livraisonInputs.length > 1 && document.querySelectorAll('input[name="livraison"]:checked').length === 0) {
                 event.preventDefault();
                 alert('Veuillez sélectionner une méthode de livraison');
                 return;
             }
             
-            // Check if address is filled
+            // Check if address fields are filled
             const addressFields = ['adresse', 'codePostal', 'ville', 'pays'];
             for (const field of addressFields) {
                 const input = document.getElementById(field);
@@ -183,6 +210,13 @@
                     alert('Veuillez remplir tous les champs d\'adresse');
                     return;
                 }
+            }
+            
+            // Check if payment method is selected
+            if (document.querySelectorAll('input[name="payment_method"]:checked').length === 0) {
+                event.preventDefault();
+                alert('Veuillez sélectionner une méthode de paiement');
+                return;
             }
         });
     });

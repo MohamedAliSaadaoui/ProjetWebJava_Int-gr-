@@ -361,16 +361,19 @@ public function showFavorites(EntityManagerInterface $entityManager): Response
         $maxPrice = $request->query->get('max');
         $sort = $request->query->get('sort', 'date_desc');
         
+        // Add pagination parameters
+        $page = max(1, $request->query->getInt('page', 1));
+        $limit = 12; // Items per page
+        
         // Create query builder
         $queryBuilder = $entityManager->getRepository(Product::class)->createQueryBuilder('p');
         
-        // Apply category filter
+        // Apply any existing filters
         if ($category) {
             $queryBuilder->andWhere('p.genre = :category')
                          ->setParameter('category', $category);
         }
         
-        // Apply price filter - using prixDeVente field (correct field name)
         if ($minPrice !== null) {
             $queryBuilder->andWhere('p.prixDeVente >= :minPrice')
                          ->setParameter('minPrice', $minPrice);
@@ -396,21 +399,31 @@ public function showFavorites(EntityManagerInterface $entityManager): Response
                 $queryBuilder->orderBy('p.prixDeVente', 'DESC');
                 break;
             default:
-                $queryBuilder->orderBy('p.id', 'DESC'); // Default to newest products by ID
+                $queryBuilder->orderBy('p.id', 'DESC');
                 break;
         }
+        
+        // Get total items for pagination
+        $countQuery = clone $queryBuilder;
+        $totalItems = count($countQuery->getQuery()->getResult());
+        $totalPages = ceil($totalItems / $limit);
+        
+        // Add pagination limit
+        $queryBuilder->setFirstResult(($page - 1) * $limit)
+                    ->setMaxResults($limit);
         
         // Execute query
         $products = $queryBuilder->getQuery()->getResult();
         
-        // Get the total number of products
-        $totalProducts = count($products);
-
-        // Render the template and pass the products to it
+        // Return the response with pagination data added
         return $this->render('category/category.html.twig', [
             'controller_name' => 'CategoryController',
             'products' => $products,
-            'totalProducts' => $totalProducts,
+            'categories' => $entityManager->getRepository(Product::class)->findAll(),
+            'totalProducts' => $totalItems,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'limit' => $limit
         ]);
     }
         //show product's in the landing page 
@@ -720,6 +733,10 @@ public function showFavorites(EntityManagerInterface $entityManager): Response
         // Get the search query from the request
         $query = $request->query->get('search', '');
         
+        // Add pagination parameters
+        $page = max(1, $request->query->getInt('page', 1));
+        $limit = 12; // Items per page
+        
         // Create query builder
         $queryBuilder = $entityManager->getRepository(Product::class)->createQueryBuilder('p');
         
@@ -732,19 +749,28 @@ public function showFavorites(EntityManagerInterface $entityManager): Response
         // Order by newest products
         $queryBuilder->orderBy('p.id', 'DESC');
         
+        // Get total items for pagination
+        $countQuery = clone $queryBuilder;
+        $totalItems = count($countQuery->getQuery()->getResult());
+        $totalPages = ceil($totalItems / $limit);
+        
+        // Add pagination limit
+        $queryBuilder->setFirstResult(($page - 1) * $limit)
+                    ->setMaxResults($limit);
+        
         // Execute query
         $products = $queryBuilder->getQuery()->getResult();
         
-        // Get the total number of products found
-        $totalProducts = count($products);
-        
-        // Render the search results using the category template
+        // Return the response with pagination data added
         return $this->render('category/category.html.twig', [
             'controller_name' => 'ProductController',
             'products' => $products,
-            'totalProducts' => $totalProducts,
+            'totalProducts' => $totalItems,
             'searchQuery' => $query,
-            'isSearchResult' => true
+            'isSearchResult' => true,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'limit' => $limit
         ]);
     }
 }
