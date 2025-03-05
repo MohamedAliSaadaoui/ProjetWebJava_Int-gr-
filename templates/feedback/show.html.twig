@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Feedback{% endblock %}
+
+{% block body %}
+    <h1>Feedback</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>IdF</th>
+                <td>{{ feedback.idF }}</td>
+            </tr>
+            <tr>
+                <th>Feedback_text</th>
+                <td>{{ feedback.feedbackText }}</td>
+            </tr>
+            <tr>
+                <th>AnsweredAt</th>
+                <td>{{ feedback.answeredAt ? feedback.answeredAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_feedback_index') }}">back to list</a>
+
+    <a href="{{ path('app_feedback_edit', {'idF': feedback.idF}) }}">edit</a>
+
+    {{ include('feedback/_delete_form.html.twig') }}
+{% endblock %}

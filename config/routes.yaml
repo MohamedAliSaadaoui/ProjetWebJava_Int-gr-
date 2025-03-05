@@ -1,3 +1,8 @@
 controllers:
     resource: ../src/Controller/
     type: attribute
+
+question_show:
+    path: /question/{idQ}
+    controller: App\Controller\QuestionController::show
+    methods: GET
