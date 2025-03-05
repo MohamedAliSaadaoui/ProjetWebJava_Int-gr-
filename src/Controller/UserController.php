@@ -21,6 +21,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use App\Form\NewPasswordType;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
+use Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator;
 
 class UserController extends AbstractController
 {
@@ -143,71 +144,73 @@ class UserController extends AbstractController
 
     
     #[Route('/reset-password', name: 'app_reset_password')]
-public function requestResetPassword(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
-{
-    $form = $this->createForm(ResetPasswordType::class);
-    $form->handleRequest($request);
-    
-    if ($form->isSubmitted() && $form->isValid()) {
-        $email = $form->get('email')->getData();
-        $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+    public function requestResetPassword(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
+    {
+        $form = $this->createForm(ResetPasswordType::class);
+        $form->handleRequest($request);
         
-        if (!$user) {
-            $this->addFlash('error', 'Aucun utilisateur trouvé avec cet e-mail.');
-            return $this->redirectToRoute('app_reset_password');
-        }
-        
-        // Générer un token unique
-        $token = bin2hex(random_bytes(32));
-        $user->setResetPasswordToken($token);
-        $user->setResetPasswordTokenExpiresAt(new \DateTime('+1 hour'));
-        
-        $entityManager->flush();
-        
-        // Générer le lien (URL absolue)
-        $link = $this->generateUrl('app_new_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
-        
-        // MODE DE DÉBOGAGE - Affiche le lien directement au lieu d'envoyer un email
-        if ($_ENV['APP_ENV'] === 'dev') {
-            // Toujours envoyer l'email pour le flux normal (optionnel en dev)
-            try {
-                $emailMessage = (new Email())
-                    ->from('no-reply@tonsite.com')
-                    ->to($user->getEmail())
-                    ->subject('Réinitialisation du mot de passe')
-                    ->html('<p>Cliquez sur le lien pour réinitialiser votre mot de passe :</p>
-                            <p><a href="' . $link . '">Réinitialiser mon mot de passe</a></p>');
-                
-                $mailer->send($emailMessage);
-            } catch (\Exception $e) {
-                // Ignorer les erreurs d'envoi d'email en mode dev
+        if ($form->isSubmitted() && $form->isValid()) {
+            $email = $form->get('email')->getData();
+            $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+            
+            if (!$user) {
+                $this->addFlash('error', 'Aucun utilisateur trouvé avec cet e-mail.');
+                return $this->redirectToRoute('app_reset_password');
             }
             
-            // Afficher le lien de réinitialisation directement
-            return $this->render('user/reset_link_debug.html.twig', [
-                'link' => $link,
-                'email' => $user->getEmail()
-            ]);
+            // Générer un token unique avec TokenGenerator de Symfony
+            $tokenGenerator = new UriSafeTokenGenerator();
+            $token = $tokenGenerator->generateToken();
+            
+            $user->setResetPasswordToken($token);
+            $user->setResetPasswordTokenExpiresAt(new \DateTime('+1 hour'));
+            
+            $entityManager->flush();
+            
+            // Générer le lien (URL absolue)
+            $link = $this->generateUrl('app_new_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+            
+            // MODE DE DÉBOGAGE - Affiche le lien directement au lieu d'envoyer un email
+            if ($_ENV['APP_ENV'] === 'dev') {
+                // Toujours envoyer l'email pour le flux normal (optionnel en dev)
+                try {
+                    $emailMessage = (new Email())
+                        ->from('no-reply@tonsite.com')
+                        ->to($user->getEmail())
+                        ->subject('Réinitialisation du mot de passe')
+                        ->html('<p>Cliquez sur le lien pour réinitialiser votre mot de passe :</p>
+                                <p><a href="' . $link . '">Réinitialiser mon mot de passe</a></p>');
+                    
+                    $mailer->send($emailMessage);
+                } catch (\Exception $e) {
+                    // Ignorer les erreurs d'envoi d'email en mode dev
+                }
+                
+                // Afficher le lien de réinitialisation directement
+                return $this->render('user/reset_link_debug.html.twig', [
+                    'link' => $link,
+                    'email' => $user->getEmail()
+                ]);
+            }
+            
+            // MODE PRODUCTION - Comportement normal
+            $emailMessage = (new Email())
+                ->from('no-reply@tonsite.com')
+                ->to($user->getEmail())
+                ->subject('Réinitialisation du mot de passe')
+                ->html('<p>Cliquez sur le lien pour réinitialiser votre mot de passe :</p>
+                        <p><a href="' . $link . '">Réinitialiser mon mot de passe</a></p>');
+            
+            $mailer->send($emailMessage);
+            
+            $this->addFlash('success', 'Un email de réinitialisation a été envoyé.');
+            return $this->redirectToRoute('app_login');
         }
         
-        // MODE PRODUCTION - Comportement normal
-        $emailMessage = (new Email())
-            ->from('no-reply@tonsite.com')
-            ->to($user->getEmail())
-            ->subject('Réinitialisation du mot de passe')
-            ->html('<p>Cliquez sur le lien pour réinitialiser votre mot de passe :</p>
-                    <p><a href="' . $link . '">Réinitialiser mon mot de passe</a></p>');
-        
-        $mailer->send($emailMessage);
-        
-        $this->addFlash('success', 'Un email de réinitialisation a été envoyé.');
-        return $this->redirectToRoute('app_login');
+        return $this->render('user/reset_password.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
-    
-    return $this->render('user/reset_password.html.twig', [
-        'form' => $form->createView()
-    ]);
-}
 
 #[Route('/reset-password/{token}', name: 'app_new_password')]
 public function newPassword(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, string $token): Response
