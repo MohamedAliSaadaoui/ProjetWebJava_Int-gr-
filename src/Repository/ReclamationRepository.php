@@ -135,9 +135,9 @@ class ReclamationRepository extends ServiceEntityRepository
     public function getPeakComplaintDate(): ?\DateTime
     {
         $result = $this->createQueryBuilder('r')
-            ->select('r.dateReclamation as date, COUNT(r.id_reclam) as count')
+            ->select('r.dateReclamation as date, MAX(r.id_reclam) as max')
             ->groupBy('date')
-            ->orderBy('count', 'DESC')
+            ->orderBy('max', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
@@ -180,6 +180,43 @@ class ReclamationRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+
+    public function findByFilters(?string $search, ?string $sort, array $status, ?string $date): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->leftJoin('r.user', 'u');
+
+        // 🔍 Filtrer par Username
+        if ($search) {
+            $qb->andWhere('u.name LIKE :search')
+                ->setParameter('search', "%$search%");
+        }
+
+        // ✅ Filtrer par Statut
+        if (!empty($status)) {
+            $qb->andWhere('r.status IN (:status)')
+                ->setParameter('status', $status);
+        }
+
+        // 📅 Filtrer par Date unique
+        if ($date) {
+            $qb->andWhere('r.dateReclamation LIKE :date')
+                ->setParameter('date', "$date%");
+        }
+
+        // 📌 Trier les résultats
+        if ($sort === 'date') {
+            $qb->orderBy('r.dateReclamation', 'DESC');
+        } elseif ($sort === 'status') {
+            $qb->orderBy('r.status', 'ASC');
+        } elseif ($sort === 'username') {
+            $qb->orderBy('u.name', 'ASC');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
 
 
 

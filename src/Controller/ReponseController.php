@@ -20,8 +20,15 @@ use Symfony\Component\Mime\Email;
 final class ReponseController extends AbstractController
 {
     #[Route('/', name: 'app_reponse_index', methods: ['GET'])]
-    public function index(ReponseRepository $reponseRepository , ReclamationRepository $reclamationRepository): Response
+    public function index(Request $request,ReponseRepository $reponseRepository , ReclamationRepository $reclamationRepository): Response
     {
+
+        $search = $request->query->get('search'); // Nom d'utilisateur
+        $sort = $request->query->get('sort'); // Tri
+        $status = $request->query->all('status'); // Tableau des statuts cochés
+        $date = $request->query->get('date'); // Date unique sélectionnée
+
+        $reclamation = $reclamationRepository->findByFilters($search, $sort, $status, $date);
 
         $mostReportedCategory = $reclamationRepository->getMostReportedCategory();
         $resolvedCount = $reclamationRepository->countResolved();
@@ -32,7 +39,7 @@ final class ReponseController extends AbstractController
 
         return $this->render('admin_dash_board/admindashbord.html.twig', [
             'responses' => $reponseRepository->findAll(),
-            'reclamations' => $reclamationRepository->findAll(),
+            'reclamations' => $reclamation,
             'mostReportedCategory' => $mostReportedCategory,
             'resolvedCount' => $resolvedCount,
             'inProgressCount' => $inProgressCount,
