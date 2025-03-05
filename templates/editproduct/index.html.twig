@@ -543,28 +543,38 @@
 
 
     <div class="input-label-wrapper">
-        <label for="{{ form.name.vars.id }}">Product Name* (In Any Language)</label>
-        {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Product Name'} }) }}
+        <label for="{{ form.objetAVendre.vars.id }}">Product Name* (In Any Language)</label>
+        {{ form_widget(form.objetAVendre, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Product Name'} }) }}
     </div>
     
     <div class="input-label-wrapper">
-        <label for="{{ form.category.vars.id }}">Category</label>
-        {{ form_widget(form.category, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Category'} }) }}
+        <label for="{{ form.genre.vars.id }}">Genre/Category</label>
+        {{ form_widget(form.genre, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Genre'} }) }}
     </div>
 
     <div class="input-label-wrapper">
-        <label for="{{ form.productCondition.vars.id }}">Condition</label>
-        {{ form_widget(form.productCondition, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Condition'} }) }}
+        <label for="{{ form.etat.vars.id }}">Condition</label>
+        {{ form_widget(form.etat, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Condition'} }) }}
     </div>
 
     <div class="input-label-wrapper">
-        <label for="{{ form.color.vars.id }}">Color</label>
-        {{ form_widget(form.color, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Color'} }) }}
+        <label for="{{ form.couleur.vars.id }}">Color</label>
+        {{ form_widget(form.couleur, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Color'} }) }}
     </div>
 
     <div class="input-label-wrapper">
-        <label for="{{ form.stock.vars.id }}">Stock</label>
-        {{ form_widget(form.stock, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Stock Quantity'} }) }}
+        <label for="{{ form.taille.vars.id }}">Size</label>
+        {{ form_widget(form.taille, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Size'} }) }}
+    </div>
+
+    <div class="input-label-wrapper">
+        <label for="{{ form.prixDeVente.vars.id }}">Sale Price</label>
+        {{ form_widget(form.prixDeVente, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Sale Price'} }) }}
+    </div>
+
+    <div class="input-label-wrapper">
+        <label for="{{ form.prixOriginal.vars.id }}">Original Price</label>
+        {{ form_widget(form.prixOriginal, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Original Price'} }) }}
     </div>
 
     <div class="input-label-wrapper">
@@ -573,8 +583,34 @@
     </div>
 
     <div class="input-label-wrapper">
-        <label for="{{ form.returnPolicy.vars.id }}">Return Policy</label>
-        {{ form_widget(form.returnPolicy, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Return Policy'} }) }}
+        <label for="{{ form.photoFile.vars.id }}">Product Photo</label>
+        {{ form_widget(form.photoFile, { 'attr': {'class': 'form-control'} }) }}
+        <small class="form-text text-muted">Upload a product image (JPEG, PNG, WEBP, max 5MB)</small>
+    </div>
+
+    <div class="input-label-wrapper">
+        <label for="{{ form.telephone.vars.id }}">Telephone</label>
+        {{ form_widget(form.telephone, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Telephone Number'} }) }}
+    </div>
+
+    <div class="input-label-wrapper">
+        <label for="{{ form.email.vars.id }}">Email</label>
+        {{ form_widget(form.email, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Email'} }) }}
+    </div>
+
+    <div class="input-label-wrapper">
+        <label for="{{ form.adresse.vars.id }}">Address</label>
+        {{ form_widget(form.adresse, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Address'} }) }}
+    </div>
+
+    <div class="input-label-wrapper">
+        <label for="{{ form.codePostal.vars.id }}">Postal Code</label>
+        {{ form_widget(form.codePostal, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Postal Code'} }) }}
+    </div>
+
+    <div class="input-label-wrapper">
+        <label for="{{ form.ville.vars.id }}">City</label>
+        {{ form_widget(form.ville, { 'attr': {'class': 'form-control', 'placeholder': 'Enter City'} }) }}
     </div>
 
     <button type="submit" class="btn btn-primary">Update Product</button>

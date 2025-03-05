@@ -11,7 +11,7 @@
     </div>
         <ul class="gs-dashboard-user-sidebar-wrapper">
             <li class="active">
-                <a href="/vendor/dashboard">
+                <a href="{{ path('app_seller_dashbord') }}">
                     <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M19.6483 21.5H13.6017C12.581 21.5 11.75 20.669 11.75 19.6483V12.1017C11.75 11.081 12.581 10.25 13.6017 10.25H19.6483C20.669 10.25 21.5 11.081 21.5 12.1017V19.6483C21.5 20.669 20.669 21.5 19.6483 21.5ZM13.6017 11.75C13.4075 11.75 13.25 11.9075 13.25 12.1017V19.6483C13.25 19.8425 13.4075 20 13.6017 20H19.6483C19.8425 20 20 19.8425 20 19.6483V12.1017C20 11.9075 19.8425 11.75 19.6483 11.75H13.6017Z"
@@ -155,7 +155,7 @@
     </div>
     <ul class="gs-dashboard-user-sidebar-wrapper">
         <li class="active">
-            <a href="/vendor/dashboard">
+            <a href="{{ path('app_seller_dashbord') }}">
                 <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M19.6483 21.5H13.6017C12.581 21.5 11.75 20.669 11.75 19.6483V12.1017C11.75 11.081 12.581 10.25 13.6017 10.25H19.6483C20.669 10.25 21.5 11.081 21.5 12.1017V19.6483C21.5 20.669 20.669 21.5 19.6483 21.5ZM13.6017 11.75C13.4075 11.75 13.25 11.9075 13.25 12.1017V19.6483C13.25 19.8425 13.4075 20 13.6017 20H19.6483C19.8425 20 20 19.8425 20 19.6483V12.1017C20 11.9075 19.8425 11.75 19.6483 11.75H13.6017Z"
@@ -507,296 +507,67 @@
                                 </tr>
                             </thead>
                             <tbody>
-
-                                                                    <!-- table data row 1 start  -->
+                                {% if products|length > 0 %}
+                                    {% for product in products %}
+                                        <!-- table data row start -->
+                                        <tr>
+                                            <td>
+                                                <img class="table-img"
+                                                    src="{{ product.photo ? asset(product.photo) : '/assets/images/no-image.png' }}"
+                                                    alt="{{ product.objetAVendre }}">
+                                            </td>
+                                            <td class="text-start">
+                                                <div class="product-name">
+                                                    <span class="content">
+                                                        {{ product.objetAVendre }}
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td class="text-start">
+                                                <div class="category">
+                                                    <span class="content">
+                                                        {{ product.genre }}
+                                                        {% if product.taille %}
+                                                            <br>
+                                                            {{ product.taille }}
+                                                        {% endif %}
+                                                        {% if product.couleur %}
+                                                            <br>
+                                                            {{ product.couleur }}
+                                                        {% endif %}
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td><span class="content">{{ product.etat }}</span></td>
+                                            <td><span class="content">{{ product.prixDeVente }}€</span></td>
+                                            <td>
+                                                <div class="table-icon-btns-wrapper">
+                                                    <a href="{{ path('app_editproduct', {'id': product.id}) }}" class="view-btn">
+                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <g clip-path="url(#clip0_548_165892)">
+                                                                <path
+                                                                    d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
+                                                                    fill="white" />
+                                                            </g>
+                                                            <defs>
+                                                                <clipPath id="clip0_548_165892">
+                                                                    <rect width="24" height="24" fill="white" />
+                                                                </clipPath>
+                                                            </defs>
+                                                        </svg>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <!-- table data row end -->
+                                    {% endfor %}
+                                {% else %}
                                     <tr>
-                                        <td>
-                                            <img class="table-img"
-                                                src="/assets/images/products/1739703763BH1p7zDB.png"
-                                                alt="">
-                                        </td>
-                                        <td class="text-start">
-                                            <div class="product-name">
-                                                <span class="content">
-                                                    bjbjbjhbn
-                                                </span>
-                                            </div>
-                                        </td>
-                                        <td class="text-start">
-                                            <div class="category">
-                                                <span class="content">
-                                                    Women&#039;s Clothing
-                                                                                                            <br>
-                                                        Tops
-                                                                                                                                                                <br>
-                                                        Blouses
-                                                                                                    </span>
-                                            </div>
-                                        </td>
-                                        <td><span class="content">Physical</span></td>
-                                        <td><span class="content">1,265$</span></td>
-                                        <td>
-                                            <div class="table-icon-btns-wrapper">
-                                                <a href="/vendor/products/edit/500" class="view-btn">
-                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg">
-                                                        <g clip-path="url(#clip0_548_165892)">
-                                                            <path
-                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
-                                                                fill="white" />
-                                                        </g>
-                                                        <defs>
-                                                            <clipPath id="clip0_548_165892">
-                                                                <rect width="24" height="24" fill="white" />
-                                                            </clipPath>
-                                                        </defs>
-                                                    </svg>
-                                                </a>
-                                            </div>
-                                        </td>
+                                        <td colspan="6" class="text-center">No products found. <a href="{{ path('app_add_product') }}">Add your first product</a></td>
                                     </tr>
-                                    <!-- table data row 1 end  -->
-                                                                    <!-- table data row 1 start  -->
-                                    <tr>
-                                        <td>
-                                            <img class="table-img"
-                                                src="/assets/images/products/1739376672jtNb8rlN.png"
-                                                alt="">
-                                        </td>
-                                        <td class="text-start">
-                                            <div class="product-name">
-                                                <span class="content">
-                                                    SASV
-                                                </span>
-                                            </div>
-                                        </td>
-                                        <td class="text-start">
-                                            <div class="category">
-                                                <span class="content">
-                                                    Men&#039;s Clothing
-                                                                                                            <br>
-                                                        Tops
-                                                                                                                                                                <br>
-                                                        T-Shirts
-                                                                                                    </span>
-                                            </div>
-                                        </td>
-                                        <td><span class="content">Physical</span></td>
-                                        <td><span class="content">1,265$</span></td>
-                                        <td>
-                                            <div class="table-icon-btns-wrapper">
-                                                <a href="/vendor/products/edit/499" class="view-btn">
-                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg">
-                                                        <g clip-path="url(#clip0_548_165892)">
-                                                            <path
-                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
-                                                                fill="white" />
-                                                        </g>
-                                                        <defs>
-                                                            <clipPath id="clip0_548_165892">
-                                                                <rect width="24" height="24" fill="white" />
-                                                            </clipPath>
-                                                        </defs>
-                                                    </svg>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!-- table data row 1 end  -->
-                                                                    <!-- table data row 1 start  -->
-                                    <tr>
-                                        <td>
-                                            <img class="table-img"
-                                                src="/assets/images/products/1733286614zJxOszbG.png"
-                                                alt="">
-                                        </td>
-                                        <td class="text-start">
-                                            <div class="product-name">
-                                                <span class="content">
-                                                    Fashion Physical product title will be here
-                                                </span>
-                                            </div>
-                                        </td>
-                                        <td class="text-start">
-                                            <div class="category">
-                                                <span class="content">
-                                                    Women&#039;s Clothing
-                                                                                                            <br>
-                                                        Tops
-                                                                                                                                                                <br>
-                                                        Tank Tops
-                                                                                                    </span>
-                                            </div>
-                                        </td>
-                                        <td><span class="content">Physical</span></td>
-                                        <td><span class="content">225$</span></td>
-                                        <td>
-                                            <div class="table-icon-btns-wrapper">
-                                                <a href="/vendor/products/edit/494" class="view-btn">
-                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg">
-                                                        <g clip-path="url(#clip0_548_165892)">
-                                                            <path
-                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
-                                                                fill="white" />
-                                                        </g>
-                                                        <defs>
-                                                            <clipPath id="clip0_548_165892">
-                                                                <rect width="24" height="24" fill="white" />
-                                                            </clipPath>
-                                                        </defs>
-                                                    </svg>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!-- table data row 1 end  -->
-                                                                    <!-- table data row 1 start  -->
-                                    <tr>
-                                        <td>
-                                            <img class="table-img"
-                                                src="/assets/images/products/1733288399E1W8lVZ4.png"
-                                                alt="">
-                                        </td>
-                                        <td class="text-start">
-                                            <div class="product-name">
-                                                <span class="content">
-                                                    Fashion Physical product title will be here
-                                                </span>
-                                            </div>
-                                        </td>
-                                        <td class="text-start">
-                                            <div class="category">
-                                                <span class="content">
-                                                    Unisex Clothing
-                                                                                                            <br>
-                                                        Hoodies
-                                                                                                                                                                <br>
-                                                        
-                                                                                                    </span>
-                                            </div>
-                                        </td>
-                                        <td><span class="content">Physical</span></td>
-                                        <td><span class="content">272.25$</span></td>
-                                        <td>
-                                            <div class="table-icon-btns-wrapper">
-                                                <a href="/vendor/products/edit/490" class="view-btn">
-                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg">
-                                                        <g clip-path="url(#clip0_548_165892)">
-                                                            <path
-                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
-                                                                fill="white" />
-                                                        </g>
-                                                        <defs>
-                                                            <clipPath id="clip0_548_165892">
-                                                                <rect width="24" height="24" fill="white" />
-                                                            </clipPath>
-                                                        </defs>
-                                                    </svg>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!-- table data row 1 end  -->
-                                                                    <!-- table data row 1 start  -->
-                                    <tr>
-                                        <td>
-                                            <img class="table-img"
-                                                src="/assets/images/products/1733288620C1mIVljA.png"
-                                                alt="">
-                                        </td>
-                                        <td class="text-start">
-                                            <div class="product-name">
-                                                <span class="content">
-                                                    Fashion Physical product title will be here
-                                                </span>
-                                            </div>
-                                        </td>
-                                        <td class="text-start">
-                                            <div class="category">
-                                                <span class="content">
-                                                    Men&#039;s Clothing
-                                                                                                            <br>
-                                                        Tops
-                                                                                                                                                                <br>
-                                                        T-Shirts
-                                                                                                    </span>
-                                            </div>
-                                        </td>
-                                        <td><span class="content">Physical</span></td>
-                                        <td><span class="content">256.50$</span></td>
-                                        <td>
-                                            <div class="table-icon-btns-wrapper">
-                                                <a href="/vendor/products/edit/486" class="view-btn">
-                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg">
-                                                        <g clip-path="url(#clip0_548_165892)">
-                                                            <path
-                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
-                                                                fill="white" />
-                                                        </g>
-                                                        <defs>
-                                                            <clipPath id="clip0_548_165892">
-                                                                <rect width="24" height="24" fill="white" />
-                                                            </clipPath>
-                                                        </defs>
-                                                    </svg>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!-- table data row 1 end  -->
-                                                                    <!-- table data row 1 start  -->
-                                    <tr>
-                                        <td>
-                                            <img class="table-img"
-                                                src="/assets/images/products/1733290619poTvl9yp.png"
-                                                alt="">
-                                        </td>
-                                        <td class="text-start">
-                                            <div class="product-name">
-                                                <span class="content">
-                                                    Fashion Physical product title will be here
-                                                </span>
-                                            </div>
-                                        </td>
-                                        <td class="text-start">
-                                            <div class="category">
-                                                <span class="content">
-                                                    Women&#039;s Shoes
-                                                                                                            <br>
-                                                        Flats
-                                                                                                                                                                <br>
-                                                        
-                                                                                                    </span>
-                                            </div>
-                                        </td>
-                                        <td><span class="content">Physical</span></td>
-                                        <td><span class="content">88.50$</span></td>
-                                        <td>
-                                            <div class="table-icon-btns-wrapper">
-                                                <a href="/vendor/products/edit/482" class="view-btn">
-                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg">
-                                                        <g clip-path="url(#clip0_548_165892)">
-                                                            <path
-                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
-                                                                fill="white" />
-                                                        </g>
-                                                        <defs>
-                                                            <clipPath id="clip0_548_165892">
-                                                                <rect width="24" height="24" fill="white" />
-                                                            </clipPath>
-                                                        </defs>
-                                                    </svg>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!-- table data row 1 end  -->
-                                                            </tbody>
+                                {% endif %}
+                            </tbody>
                         </table>
                     </div>
                 </div>

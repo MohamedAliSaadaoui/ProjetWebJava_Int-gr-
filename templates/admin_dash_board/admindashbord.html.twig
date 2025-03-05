@@ -206,10 +206,10 @@
     </a>
     <ul class="collapse list-unstyled" id="menu2" data-parent="#accordion">
         <li>
-            <a href="https://cleandemo.geniusocean.net/geniuscart2/admin/products/types"><span>Add New Product</span></a>
+            <a href="{{ path('app_admin_add_product') }}"><span>Add New Product</span></a>
         </li>
         <li>
-            <a href="https://cleandemo.geniusocean.net/geniuscart2/admin/products"><span>All Products</span></a>
+            <a href="{{ path('app_admin_products') }}"><span>All Products</span></a>
         </li>
         <li>
             <a href="https://cleandemo.geniusocean.net/geniuscart2/admin/products/deactive"><span>Deactivated Product</span></a>
@@ -651,8 +651,8 @@
             <div class="mycard bg4">
                 <div class="left">
                     <h5 class="title">Total Products!</h5>
-                    <span class="number">23</span>
-                    <a href="https://cleandemo.geniusocean.net/geniuscart2/admin/products" class="link">View All</a>
+                    <span class="number">{{ productCount }}</span>
+                    <a href="{{ path('app_admin_products') }}" class="link">View All</a>
                 </div>
                 <div class="right d-flex align-self-center">
                     <div class="icon">

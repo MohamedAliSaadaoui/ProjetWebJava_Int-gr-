@@ -1,0 +1,244 @@
+{% extends 'base_back.html.twig' %}
+
+{% block title %}Admin - Add New Product{% endblock %}
+
+{% block body %}
+<div class="page">
+    <div class="page-main">
+        <!-- Header Menu Area Start -->
+        <div class="header">
+            <div class="container-fluid">
+                <div class="d-flex mobile-menu-check justify-content-between">
+                    <a class="admin-logo" href="#" target="_blank">
+                        <img src="{{ asset('assets/BackAssets/admin/images/logo.png') }}" alt="Admin Logo">
+                    </a>
+                    <div class="menu-toggle-button">
+                        <a class="nav-link" href="javascript:;" id="sidebarCollapse">
+                            <div class="my-toggl-icon">
+                                <span class="bar1"></span>
+                                <span class="bar2"></span>
+                                <span class="bar3"></span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="right-eliment">
+                        <ul class="list">
+                            <li class="bell-area">
+                                <a class="dropdown-toggle-1" target="_blank" href="#">
+                                    <i class="fas fa-globe-americas"></i>
+                                </a>
+                            </li>
+                            <li class="login-profile-area">
+                                <a class="dropdown-toggle-1" href="javascript:;">
+                                    <div class="user-img">
+                                        <img src="{{ asset('assets/BackAssets/admin/images/user.png') }}" alt="Admin">
+                                    </div>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <div class="dropdownmenu-wrapper">
+                                        <ul>
+                                            <li>
+                                                <a href="#"><i class="fas fa-user"></i> Profile</a>
+                                            </li>
+                                            <li>
+                                                <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Header Menu Area End -->
+
+        <div class="wrapper">
+            <!-- Side Menu Area Start -->
+            <nav id="sidebar" class="nav-sidebar">
+                <ul class="list-unstyled components" id="accordion">
+                    <li>
+                        <a href="{{ path('app_admin_dash_board') }}" class="wave-effect"><i class="fa fa-home mr-2"></i>Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="#menu2" class="accordion-toggle wave-effect" data-toggle="collapse" aria-expanded="true">
+                            <i class="icofont-cart"></i>Products
+                        </a>
+                        <ul class="collapse show list-unstyled" id="menu2" data-parent="#accordion">
+                            <li class="active">
+                                <a href="{{ path('app_admin_add_product') }}"><span>Add New Product</span></a>
+                            </li>
+                            <li>
+                                <a href="{{ path('app_admin_products') }}"><span>All Products</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <!-- Main Content Area Start -->
+            <div class="content-area">
+                <div class="container-fluid">
+                    <div class="d-flex justify-content-between mb-4">
+                        <h3>Add New Product</h3>
+                        <a href="{{ path('app_admin_products') }}" class="btn btn-secondary">
+                            <i class="fa fa-list"></i> Back to Products
+                        </a>
+                    </div>
+                    
+                    {% for message in app.flashes('success') %}
+                        <div class="alert alert-success">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    
+                    {% for message in app.flashes('error') %}
+                        <div class="alert alert-danger">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    
+                    <div class="card">
+                        <div class="card-body">
+                            {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="{{ form.objetAVendre.vars.id }}" class="form-label">Product Name</label>
+                                        {{ form_widget(form.objetAVendre, { 'attr': {'class': 'form-control', 'placeholder': 'Enter Product Name'} }) }}
+                                        {{ form_errors(form.objetAVendre) }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="{{ form.genre.vars.id }}" class="form-label">Category/Genre</label>
+                                        {{ form_widget(form.genre, { 'attr': {'class': 'form-control'} }) }}
+                                        {{ form_errors(form.genre) }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group mb-3">
+                                        <label for="{{ form.etat.vars.id }}" class="form-label">Condition</label>
+                                        {{ form_widget(form.etat, { 'attr': {'class': 'form-control'} }) }}
+                                        {{ form_errors(form.etat) }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="form-group mb-3">
+                                        <label for="{{ form.taille.vars.id }}" class="form-label">Size</label>
+                                        {{ form_widget(form.taille, { 'attr': {'class': 'form-control'} }) }}
+                                        {{ form_errors(form.taille) }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="form-group mb-3">
+                                        <label for="{{ form.couleur.vars.id }}" class="form-label">Color</label>
+                                        {{ form_widget(form.couleur, { 'attr': {'class': 'form-control'} }) }}
+                                        {{ form_errors(form.couleur) }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="{{ form.prixDeVente.vars.id }}" class="form-label">Sale Price</label>
+                                        {{ form_widget(form.prixDeVente, { 'attr': {'class': 'form-control'} }) }}
+                                        {{ form_errors(form.prixDeVente) }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="{{ form.prixOriginal.vars.id }}" class="form-label">Original Price</label>
+                                        {{ form_widget(form.prixOriginal, { 'attr': {'class': 'form-control'} }) }}
+                                        {{ form_errors(form.prixOriginal) }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label for="{{ form.description.vars.id }}" class="form-label">Description</label>
+                                {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'rows': 4} }) }}
+                                {{ form_errors(form.description) }}
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label for="{{ form.photoFile.vars.id }}" class="form-label">Product Photo</label>
+                                {{ form_widget(form.photoFile, { 'attr': {'class': 'form-control'} }) }}
+                                <small class="text-muted">Upload a product image (JPEG, PNG, WEBP, max 5MB)</small>
+                                {{ form_errors(form.photoFile) }}
+                            </div>
+                            
+                            <h4 class="mt-4 mb-3">Contact Information</h4>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="{{ form.telephone.vars.id }}" class="form-label">Telephone</label>
+                                        {{ form_widget(form.telephone, { 'attr': {'class': 'form-control'} }) }}
+                                        {{ form_errors(form.telephone) }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="{{ form.email.vars.id }}" class="form-label">Email</label>
+                                        {{ form_widget(form.email, { 'attr': {'class': 'form-control'} }) }}
+                                        {{ form_errors(form.email) }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label for="{{ form.adresse.vars.id }}" class="form-label">Address</label>
+                                        {{ form_widget(form.adresse, { 'attr': {'class': 'form-control'} }) }}
+                                        {{ form_errors(form.adresse) }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="{{ form.codePostal.vars.id }}" class="form-label">Postal Code</label>
+                                        {{ form_widget(form.codePostal, { 'attr': {'class': 'form-control'} }) }}
+                                        {{ form_errors(form.codePostal) }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="{{ form.ville.vars.id }}" class="form-label">City</label>
+                                        {{ form_widget(form.ville, { 'attr': {'class': 'form-control'} }) }}
+                                        {{ form_errors(form.ville) }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group mt-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-save"></i> Add Product
+                                </button>
+                            </div>
+                            
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Main Content Area End -->
+        </div>
+    </div>
+</div>
+{% endblock %}
