@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Panel{% endblock %}</title>
+    
+    {# Admin Dashboard Styles #}
+    <link href="{{ asset('assets/BackAssets/admin/css/bootstrap.min.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('assets/BackAssets/admin/css/fontawesome.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/BackAssets/admin/css/icofont.min.css') }}">
+    <link href="{{ asset('assets/BackAssets/admin/plugins/fullside-menu/css/dark-side-style.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/BackAssets/admin/plugins/fullside-menu/waves.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/BackAssets/admin/css/plugin.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/BackAssets/admin/css/jquery.tagit.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('assets/BackAssets/admin/css/bootstrap-colorpicker.css') }}">
+    <link href="{{ asset('assets/BackAssets/admin/css/style.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/BackAssets/admin/css/custom.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/BackAssets/admin/css/responsive.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/BackAssets/admin/css/common.css') }}" rel="stylesheet" />
+</head>
+<body>
+
+        <style>
+        /* Loading Spinner Style */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            visibility: hidden;
+        }
+
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+
+    {% block body %}{% endblock %}
+
+    
+
+    {# Admin Dashboard Scripts #}
+    <script src="{{ asset('assets/BackAssets/admin/js/vendors/jquery-1.12.4.min.js') }}"></script>
+    <script src="{{ asset('assets/BackAssets/admin/js/vendors/vue.js') }}"></script>
+    <script src="{{ asset('assets/BackAssets/admin/js/vendors/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/BackAssets/admin/js/jqueryui.min.js') }}"></script>
+    <script src="{{ asset('assets/BackAssets/admin/plugins/fullside-menu/jquery.slimscroll.min.js') }}"></script>
+    <script src="{{ asset('assets/BackAssets/admin/plugins/fullside-menu/waves.min.js') }}"></script>
+    <script src="{{ asset('assets/BackAssets/admin/js/plugin.js') }}"></script>
+    <script src="{{ asset('assets/BackAssets/admin/js/Chart.min.js') }}"></script>
+    <script src="{{ asset('assets/BackAssets/admin/js/tag-it.js') }}"></script>
+    <script src="{{ asset('assets/BackAssets/admin/js/nicEdit.js') }}"></script>
+    <script src="{{ asset('assets/BackAssets/admin/js/bootstrap-colorpicker.min.js') }}"></script>
+    <script src="{{ asset('assets/BackAssets/admin/js/notify.js') }}"></script>
+    <script src="{{ asset('assets/BackAssets/admin/js/jquery.canvasjs.min.js') }}"></script>
+    <script src="{{ asset('assets/BackAssets/admin/js/load.js') }}"></script>
+    <script src="{{ asset('assets/BackAssets/admin/js/custom.js') }}"></script>
+    <script src="{{ asset('assets/BackAssets/admin/js/myscript.js') }}"></script>
+
+        
+
+</body>
+</html>

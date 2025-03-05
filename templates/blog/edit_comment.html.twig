@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier votre commentaire{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h3>📝 Modifier votre commentaire</h3>
+
+        {{ form_start(form, {'attr': {'class': 'form-group'}}) }}
+
+            <!-- Champ du commentaire -->
+            <div class="mb-3">
+                {{ form_label(form.contenuComm, 'Votre commentaire', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.contenuComm, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.contenuComm) }}
+            </div>
+
+            <!-- Boutons -->
+            <div class="text-end">
+                <button type="submit" class="btn btn-success px-4 py-2 rounded-pill">
+                    <i class="fas fa-save"></i> Enregistrer
+                </button>
+                <a href="{{ path('commentaire_edit', {'id': commentaire.article.id}) }}" class="btn btn-secondary px-4 py-2 rounded-pill">Annuler</a>
+            </div>
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

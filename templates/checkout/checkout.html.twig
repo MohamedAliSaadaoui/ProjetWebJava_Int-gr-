@@ -1,0 +1,191 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Finaliser votre commande{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4">Finaliser votre commande</h1>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Step 1: Delivery Method -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>1. Choisir votre méthode de livraison</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" id="delivery-form">
+                        <div class="mb-4">
+                            {% for option in livraisonOptions %}
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" name="livraison" id="livraison{{ option.id }}" 
+                                           value="{{ option.id }}" required
+                                           {% if command.livraisons|length > 0 and command.livraisons[0].id == option.id %}checked{% endif %}>
+                                    <label class="form-check-label" for="livraison{{ option.id }}">
+                                        <strong>{{ option.nom }}</strong> - {{ option.tarif|number_format(2, ',', ' ') }} €
+                                        <div class="text-muted">Délai: {{ option.delai }}</div>
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Sélectionner cette livraison</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Step 2: Address -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>2. Adresse de livraison</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" id="address-form">
+                        <div class="mb-3">
+                            <label for="adresse" class="form-label">Adresse</label>
+                            <input type="text" class="form-control" id="adresse" name="adresse" 
+                                   value="{{ command.adresseLivraison ?? app.user.adresse ?? '' }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="codePostal" class="form-label">Code Postal</label>
+                            <input type="text" class="form-control" id="codePostal" name="codePostal" 
+                                   value="{{ command.codePostalLivraison ?? app.user.codePostal ?? '' }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="ville" class="form-label">Ville</label>
+                            <input type="text" class="form-control" id="ville" name="ville" 
+                                   value="{{ command.villeLivraison ?? app.user.ville ?? '' }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="pays" class="form-label">Pays</label>
+                            <input type="text" class="form-control" id="pays" name="pays" 
+                                   value="{{ command.paysLivraison ?? 'France' }}" required>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Enregistrer l'adresse</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Step 3: Payment Method -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>3. Méthode de paiement</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" id="payment-form">
+                        <div class="mb-4">
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="radio" name="payment_method" id="cash_on_delivery" 
+                                       value="cash_on_delivery" required
+                                       {% if command.methodePaiement == 'cash_on_delivery' %}checked{% endif %}>
+                                <label class="form-check-label" for="cash_on_delivery">
+                                    <strong>Paiement à la livraison</strong>
+                                    <div class="text-muted">Payez en espèces ou par carte lors de la livraison</div>
+                                </label>
+                            </div>
+                            
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="radio" name="payment_method" id="stripe" 
+                                       value="stripe"
+                                       {% if command.methodePaiement == 'stripe' %}checked{% endif %}>
+                                <label class="form-check-label" for="stripe">
+                                    <strong>Paiement en ligne (Carte bancaire)</strong>
+                                    <div class="text-muted">Paiement sécurisé par Stripe</div>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Confirmer la commande</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <!-- Order Summary -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Récapitulatif de la commande</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tbody>
+                            {% for product in command.products %}
+                                <tr>
+                                    <td>{{ product.objetAVendre }}</td>
+                                    <td class="text-end">{{ product.prixDeVente|number_format(2, ',', ' ') }} €</td>
+                                </tr>
+                            {% endfor %}
+                            
+                            {% if command.livraisons|length > 0 %}
+                                {% set livraison = command.livraisons|first %}
+                                <tr>
+                                    <td>Livraison ({{ livraison.nom }})</td>
+                                    <td class="text-end">{{ livraison.tarif|number_format(2, ',', ' ') }} €</td>
+                                </tr>
+                            {% endif %}
+                            
+                            <tr class="table-active">
+                                <th>Total</th>
+                                <th class="text-end">{{ command.calculateTotal|number_format(2, ',', ' ') }} €</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <a href="{{ path('cart_index') }}" class="btn btn-outline-secondary w-100">
+                        Retour au panier
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+    // JavaScript to enhance the checkout experience
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-submit the delivery form when a delivery option is selected
+        const deliveryInputs = document.querySelectorAll('input[name="livraison"]');
+        deliveryInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                document.getElementById('delivery-form').submit();
+            });
+        });
+        
+        // Validate the payment form before submission
+        const paymentForm = document.getElementById('payment-form');
+        paymentForm.addEventListener('submit', function(event) {
+            // Check if delivery method is selected
+            if (document.querySelectorAll('input[name="livraison"]:checked').length === 0) {
+                event.preventDefault();
+                alert('Veuillez sélectionner une méthode de livraison');
+                return;
+            }
+            
+            // Check if address is filled
+            const addressFields = ['adresse', 'codePostal', 'ville', 'pays'];
+            for (const field of addressFields) {
+                const input = document.getElementById(field);
+                if (!input.value.trim()) {
+                    event.preventDefault();
+                    alert('Veuillez remplir tous les champs d\'adresse');
+                    return;
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %} 
