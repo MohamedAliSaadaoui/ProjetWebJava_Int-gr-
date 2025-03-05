@@ -7,6 +7,7 @@ use App\Entity\Reponse;
 use App\Form\ReponseType;
 use App\Repository\ReclamationRepository;
 use App\Repository\ReponseRepository;
+use App\Service\MailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,7 +45,7 @@ final class ReponseController extends AbstractController
     public function createReponse(
         Request $request,
         EntityManagerInterface $entityManager,
-        ReclamationRepository $reclamationRepository, MailerInterface $mailer // Inject the repository
+        ReclamationRepository $reclamationRepository, MailService $mailService
     ): Response {
 
         $idReclamation = $request->query->get('id_reclamation'); // Récupérer l'ID depuis l'URL
@@ -66,16 +67,37 @@ final class ReponseController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $email = (new Email())
-                ->from('shyhebboudaya@gmail.com') // Ton email d'envoi
-                ->to('libero1809@gmail.com') // Email du client
-                ->subject('Réclamation résolue!')
-                ->html("<p>Bonjour {$reclamation->getUser()->getName()},</p>
-                    <p>Votre réclamation a bien été répondu : <strong>{$reclamation->getObjet()}</strong>.</p>
-                    <p>Vous pouvez la consulter immédiatement.</p>
-                    <p>Cordialement, <br> L'équipe Support</p>");
 
-            $mailer->send($email);
+
+            $mailService->sendEmail('shyhebboudaya@gmail.com','Réclamation résolue!',"<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;'>
+                <div style='text-align: center; padding-bottom: 20px;'>
+                    <h2 style='color: #28a745;'>Votre réclamation a été résolue ! 🎉</h2>
+                    <p style='color: #555;'>Bonjour <strong>{$reclamation->getUser()->getName()}</strong>,</p>
+                </div>
+
+                <div style='background: white; padding: 15px; border-radius: 5px;'>
+                    <p><strong>Objet :</strong> {$reclamation->getObjet()}</p>
+                    <p><strong>Description :</strong> {$reclamation->getDescription()}</p>
+                    <p><strong>Date :</strong> " . $reclamation->getDateReclamation()->format('d/m/Y H:i') . "</p>
+                    <p><strong>Statut :</strong> <span style='color: green;'>Résolue</span></p>
+                    <p><strong>Réponse :</strong> {$reponse->getReponse()}</p>
+                </div>
+
+                <div style='text-align: center; margin-top: 20px;'>
+                    <a href='https://mon-site.com/reclamations/{$reclamation->getId()}' 
+                       style='background: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; display: inline-block;'>
+                        Voir les détails
+                    </a>
+                </div>
+
+                <div style='margin-top: 20px; padding-top: 10px; border-top: 1px solid #ddd; text-align: center; color: #777; font-size: 12px;'>
+                    <p>&copy; " . date('Y') . " MonSite - Nous restons à votre disposition !</p>
+                </div>
+            </div>");
+
+
+
+
 
             $reclamation->setStatus('Résolue');
             $entityManager->persist($reponse);

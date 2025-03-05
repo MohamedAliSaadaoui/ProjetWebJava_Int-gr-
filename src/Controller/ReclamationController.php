@@ -6,14 +6,15 @@ use App\Entity\Reclamation;
 use App\Form\ReclamationType;
 use App\Repository\ReclamationRepository;
 use App\Repository\UserRepository;
+use App\Service\MailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+
+
 
 #[Route('/reclamation')]
 final class ReclamationController extends AbstractController
@@ -30,8 +31,11 @@ final class ReclamationController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     */
     #[Route('/new', name: 'app_reclamation_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, MailerInterface $mailer): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository,MailService $mailService): Response
     {
         $reclamation = new Reclamation();
 
@@ -71,23 +75,35 @@ final class ReclamationController extends AbstractController
 
             $reclamation->setDateReclamation(new \DateTime());
 
-            $email = (new Email())
-                ->from('hello@demomailtrap.co') // Ton email d'envoi
-                ->to('libero1809@gmail.com') // Email du client
-                ->subject('Réclamation enregistrée')
-                ->html("<p>Bonjour {$reclamation->getUser()->getName()},</p>
-                    <p>Votre réclamation a bien été enregistrée avec l'objet : <strong>{$reclamation->getObjet()}</strong>.</p>
-                    <p>Nous reviendrons vers vous sous peu.</p>
-                    <p>Cordialement, <br> L'équipe Support</p>");
-
-            try {
-                $mailer->send($email);
-            } catch (TransportExceptionInterface $e) {
-            }
-
             // Persist the reclamation entity
             $entityManager->persist($reclamation);
             $entityManager->flush();
+
+
+            $mailService->sendEmail('shyhebboudaya@gmail.com','Réclamation enregistrée!',"<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;'>
+            <div style='text-align: center; padding-bottom: 20px;'>
+                <h2 style='color: #007bff;'>Votre réclamation a été enregistrée !</h2>
+                <p style='color: #555;'>Bonjour <strong>{$reclamation->getUser()->getName()}</strong>,</p>
+            </div>
+
+            <div style='background: white; padding: 15px; border-radius: 5px;'>
+                <p><strong>Objet :</strong> {$reclamation->getObjet()}</p>
+                <p><strong>Description :</strong> {$reclamation->getDescription()}</p>
+                <p><strong>Date :</strong> " . $reclamation->getDateReclamation()->format('d/m/Y H:i') . "</p>
+                <p><strong>Statut :</strong> <span style='color: red;'>En cours</span></p>
+            </div>
+
+            <div style='text-align: center; margin-top: 20px;'>
+                <a href='https://mon-site.com/reclamations/{$reclamation->getId()}'
+                   style='background: #007bff; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; display: inline-block;'>
+                       Voir ma réclamation
+            </a>
+            </div>
+
+            <div style='margin-top: 20px; padding-top: 10px; border-top: 1px solid #ddd; text-align: center; color: #777; font-size: 12px;'>
+                <p>&copy; " . date('Y') . " ReWear - Tous droits réservés.</p>
+            </div>
+        </div>");
 
             return $this->redirectToRoute('app_reclamation_index');
         }

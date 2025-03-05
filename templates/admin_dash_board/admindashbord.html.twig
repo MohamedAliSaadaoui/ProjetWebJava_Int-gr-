@@ -642,43 +642,107 @@
                     <div class="row"><br></div>
                     <!-- Formulaire de filtrage -->
                     <form method="GET" action="{{ path('app_reponse_index') }}" class="mb-4">
-                        <div class="row">
-                            <!-- Barre de recherche par Username -->
-                            <div class="col-md-4">
-                                <input type="text" name="search" value="{{ app.request.get('search') }}" class="form-control"
-                                       placeholder="Rechercher par username">
-                            </div>
+                        <div class="row g-3 align-items-end">
 
-                            <!-- Liste de tri -->
+                            <!-- Tri des réponses (EN PREMIER) -->
                             <div class="col-md-3">
-                                <select name="sort" class="form-control">
-                                    <option value="">Trier par</option>
+                                <label for="sort" class="form-label">Trier par</label>
+                                <select id="sort" name="sort" class="form-select" onchange="toggleFilterFields()">
+                                    <option value="">-- Sélectionner --</option>
                                     <option value="date" {% if app.request.get('sort') == 'date' %}selected{% endif %}>Date</option>
                                     <option value="status" {% if app.request.get('sort') == 'status' %}selected{% endif %}>Statut</option>
                                     <option value="username" {% if app.request.get('sort') == 'username' %}selected{% endif %}>Username</option>
+                                    <option value="category" {% if app.request.get('sort') == 'category' %}selected{% endif %}>Catégorie</option>
                                 </select>
                             </div>
 
-                            <!-- Case à cocher pour le statut -->
-                            <div class="col-md-3">
-                                <label>
-                                    <input type="checkbox" name="status[]" value="En Cours"
-                                           {% if 'En Cours' in app.request.get('status', []) %}checked{% endif %}>
-                                    En cours
-                                </label>
-                                <label>
-                                    <input type="checkbox" name="status[]" value="Résolue"
-                                           {% if 'Résolue' in app.request.get('status', []) %}checked{% endif %}>
-                                    Résolue
-                                </label>
+                            <!-- Recherche par username (Masqué par défaut) -->
+                            <div class="col-md-3" id="username-filter" style="display: none;">
+                                <label for="search" class="form-label">Rechercher par username</label>
+                                <input type="text" id="search" name="search" value="{{ app.request.get('search') }}" class="form-control"
+                                       placeholder="Nom d'utilisateur">
                             </div>
 
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-primary">Filtrer</button>
-                                <a href="{{ path('app_reponse_index') }}" class="btn btn-secondary">Réinitialiser</a>
+                            <div class="col-md-3" id="category-filter">
+                                <label class="form-label">Catégorie</label>
+                                <select class="form-select" name="category" id="category-filter">
+                                    <option value="">Sélectionnez une catégorie</option>
+                                    <option value="Produit défectueux" {% if app.request.get('category') == 'Produit défectueux' %}selected{% endif %}>Produit défectueux</option>
+                                    <option value="Livraison en retard" {% if app.request.get('category') == 'Livraison en retard' %}selected{% endif %}>Livraison en retard</option>
+                                    <option value="Service client" {% if app.request.get('category') == 'Service client' %}selected{% endif %}>Service client</option>
+                                    <option value="Autre" {% if app.request.get('category') == 'Autre' %}selected{% endif %}>Autre</option>
+                                </select>
+                            </div>
+
+                            <!-- Filtrage par statut (Masqué par défaut) -->
+                            <div class="col-md-3" id="status-filter" style="display: none;">
+                                <label class="form-label">Statut</label>
+                                <div class="d-flex gap-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="status[]" value="En Cours"
+                                               id="status-en-cours"
+                                               {% if 'En Cours' in app.request.get('status', []) %}checked{% endif %}>
+                                        <label class="form-check-label" for="status-en-cours">En cours</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="status[]" value="Résolue"
+                                               id="status-resolue"
+                                               {% if 'Résolue' in app.request.get('status', []) %}checked{% endif %}>
+                                        <label class="form-check-label" for="status-resolue">Résolue</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Filtrage par date (Masqué par défaut) -->
+                            <div class="col-md-3" id="date-filter" style="display: none;">
+                                <label for="date" class="form-label">Date</label>
+                                <input type="date" id="date" name="date" value="{{ app.request.get('date') }}" class="form-control">
+                            </div>
+
+                            <!-- Boutons -->
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+                                <a href="{{ path('app_reponse_index') }}" class="btn btn-secondary w-100 ms-2">Réinitialiser</a>
                             </div>
                         </div>
                     </form>
+
+                    <!-- JavaScript pour gérer l'affichage dynamique -->
+                    <script>
+                        function toggleFilterFields() {
+                            var sortValue = document.getElementById('sort').value;
+                            var statusFilter = document.getElementById('status-filter');
+                            var dateFilter = document.getElementById('date-filter');
+                            var usernameFilter = document.getElementById('username-filter');
+                            var categoryFilter = document.getElementById('category-filter');
+
+                            // Masquer tous les champs par défaut
+                            statusFilter.style.display = 'none';
+                            dateFilter.style.display = 'none';
+                            usernameFilter.style.display = 'none';
+                            categoryFilter.style.display = 'none';
+
+                            // Afficher les champs selon le tri sélectionné
+                            if (sortValue === 'status') {
+                                statusFilter.style.display = 'block';
+                            } else if (sortValue === 'date') {
+                                dateFilter.style.display = 'block';
+                            } else if (sortValue === 'username') {
+                                usernameFilter.style.display = 'block';
+                            }else if (sortValue === 'category') {
+                                categoryFilter.style.display = 'block';
+                            }
+                        }
+
+                        // Appel de la fonction au chargement de la page pour garder les champs visibles si un tri est déjà sélectionné
+                        document.addEventListener("DOMContentLoaded", function() {
+                            toggleFilterFields();
+                        });
+                    </script>
+
+
+
+
                     <div class="table-responsive">
                         <h3 class="table-title">Complaints</h3>
                         <table class="table custom-table">
