@@ -17,11 +17,17 @@ class OrganisationController extends AbstractController
     #[Route('/', name: 'app_organisation_index', methods: ['GET'])]
     public function index(OrganisationRepository $organisationRepository): Response
     {
+        return $this->render('organisation/organisations.html.twig', [
+            'organisations' => $organisationRepository->findAll(),
+        ]);
+    }
+    #[Route('/client', name: 'app_organisation_client', methods: ['GET'])]
+    public function indexclient(OrganisationRepository $organisationRepository): Response
+    {
         return $this->render('organisation/index.html.twig', [
             'organisations' => $organisationRepository->findAll(),
         ]);
     }
-
     #[Route('/new', name: 'app_organisation_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -36,7 +42,7 @@ class OrganisationController extends AbstractController
             return $this->redirectToRoute('app_organisation_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('organisation/new.html.twig', [
+        return $this->render('organisation/new.html.twig', [
             'organisation' => $organisation,
             'form' => $form,
         ]);
@@ -62,7 +68,7 @@ class OrganisationController extends AbstractController
             return $this->redirectToRoute('app_organisation_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('organisation/edit.html.twig', [
+        return $this->render('organisation/edit.html.twig', [
             'organisation' => $organisation,
             'form' => $form,
         ]);

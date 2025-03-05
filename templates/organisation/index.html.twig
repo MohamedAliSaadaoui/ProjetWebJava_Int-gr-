@@ -1,43 +1,67 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Organisation index{% endblock %}
+{% block title %}Organisations{% endblock %}
 
 {% block body %}
-    <h1>Organisation index</h1>
+<div class="container">
+    <h1 class="text-center my-4">Liste des Organisations</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Email</th>
-                <th>Description</th>
-                <th>Telephone</th>
-                <th>Adresse</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="row">
         {% for organisation in organisations %}
-            <tr>
-                <td>{{ organisation.id }}</td>
-                <td>{{ organisation.nom }}</td>
-                <td>{{ organisation.email }}</td>
-                <td>{{ organisation.description }}</td>
-                <td>{{ organisation.telephone }}</td>
-                <td>{{ organisation.adresse }}</td>
-                <td>
-                    <a href="{{ path('app_organisation_show', {'id': organisation.id}) }}">show</a>
-                    <a href="{{ path('app_organisation_edit', {'id': organisation.id}) }}">edit</a>
-                </td>
-            </tr>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">{{ organisation.nom }}</h5>
+                        <p class="card-text"><strong>Email :</strong> {{ organisation.email }}</p>
+                        <p class="card-text"><strong>Téléphone :</strong> {{ organisation.telephone }}</p>
+                        <p class="card-text"><strong>Adresse :</strong> {{ organisation.adresse }}</p>
+                        <p class="card-text"><strong>Description :</strong> {{ organisation.description|length > 100 ? organisation.description|slice(0, 100) ~ '...' : organisation.description }}</p>
+                        
+<a href="{{ path('app_demande_liste', {'organisationId': organisation.id}) }}" class="btn btn-info btn-sm">👁 Voir demande</a>
+                    </div>
+                </div>
+            </div>
         {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
+            <div class="col-12">
+                <p class="text-center">Aucune organisation trouvée.</p>
+            </div>
         {% endfor %}
-        </tbody>
-    </table>
+    </div>
 
-    <a href="{{ path('app_organisation_new') }}">Create new</a>
+    
+</div>
+
+<style>
+.card {
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.03);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.btn-info {
+    background: linear-gradient(45deg, #17a2b8, #138496);
+    color: white;
+    border: none;
+    transition: 0.3s;
+}
+
+.btn-info:hover {
+    background: linear-gradient(45deg, #138496, #117a8b);
+    transform: scale(1.05);
+}
+
+.btn-success {
+    padding: 10px 20px;
+    font-size: 18px;
+}
+</style>
 {% endblock %}

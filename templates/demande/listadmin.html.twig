@@ -1,0 +1,78 @@
+{% extends 'baseadmin.html.twig' %}
+
+{% block title %}Liste des Demandes - {{ organisation.nom }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .demande-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .demande-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .demande-card p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .demande-card .badge {
+            font-size: 0.9em;
+            padding: 8px 12px;
+            border-radius: 20px;
+        }
+        .demande-card .badge-en-cours {
+            background-color: #ffc107;
+            color: #000;
+        }
+        .demande-card .badge-termine {
+            background-color: #28a745;
+            color: #fff;
+        }
+        .demande-card .badge-annule {
+            background-color: #dc3545;
+            color: #fff;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+
+        <h1 class="mb-4">Demandes pour {{ organisation.nom }}</h1>
+
+        {% if demandes is empty %}
+            <div class="alert alert-info" role="alert">
+                Aucune demande trouvée pour cette organisation.
+            </div>
+        {% else %}
+            <div class="row">
+                {% for demande in demandes %}
+                    <div class="col-md-6">
+                        <div class="demande-card">
+                            <h3>{{ demande.categorie }}</h3>
+                            <p><strong>Description:</strong> {{ demande.description }}</p>
+                            <p><strong>Localisation:</strong> {{ demande.localisation }}</p>
+                            <p>
+                                <strong>Statut:</strong>
+                                <span class="badge 
+                                    {% if demande.statut == 'En cours' %}badge-en-cours
+                                    {% elseif demande.statut == 'Terminé' %}badge-termine
+                                    {% elseif demande.statut == 'Annulé' %}badge-annule
+                                    {% endif %}">
+                                    {{ demande.statut }}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

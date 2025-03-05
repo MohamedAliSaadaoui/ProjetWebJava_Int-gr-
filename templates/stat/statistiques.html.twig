@@ -1,0 +1,54 @@
+{% extends 'baseadmin.html.twig' %}
+
+{% block title %}Statistiques{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <h1 class="my-4">Statistiques des demandes</h1>
+
+    <!-- Section du graphique -->
+    <div class="card">
+      <div class="card-body">
+        <canvas id="statistiquesChart"></canvas>
+      </div>
+    </div>
+
+    <a href="{{ path('app_organisation_index') }}" class="btn btn-primary my-2">Retour à l'organisation</a>
+  </div>
+
+  <!-- Charger Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Récupérer les données depuis le contrôleur
+    const statistiques = {{ statistiques|json_encode()|raw }};
+    
+    // Extraire les labels (statuts) et les valeurs (nombres de demandes) des statistiques
+    const labels = statistiques.map(item => item.statut);
+    const data = statistiques.map(item => item.total);
+
+    // Créer le graphique avec Chart.js
+    const ctx = document.getElementById('statistiquesChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Nombre de demandes par statut',
+          data: data,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+
+{% endblock %}

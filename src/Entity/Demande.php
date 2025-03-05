@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Repository\DemandeRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert; // 👈 Ajout pour la validation
+use Symfony\Component\Validator\Constraints as Assert; 
 
 #[ORM\Entity(repositoryClass: DemandeRepository::class)]
 class Demande
@@ -15,7 +15,7 @@ class Demande
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank(message: "La description ne peut pas être vide.")] // 👈 Validation
+    #[Assert\NotBlank(message: "La description ne peut pas être vide.")] 
     #[Assert\Length(
         min: 10,
         max: 255,
@@ -25,7 +25,7 @@ class Demande
     private $description;
 
     #[ORM\Column(type: 'string', length: 100)]
-    #[Assert\NotBlank(message: "La localisation ne peut pas être vide.")] // 👈 Validation
+    #[Assert\NotBlank(message: "La localisation ne peut pas être vide.")] 
     #[Assert\Length(
         min: 3,
         max: 100,
@@ -34,17 +34,19 @@ class Demande
     )]
     private $localisation;
 
-    #[ORM\Column(type: 'string', length: 50)] // 👈 Ajout du champ categorie
-    #[Assert\NotBlank(message: "La catégorie ne peut pas être vide.")] // 👈 Validation
+    #[ORM\Column(type: 'string', length: 50)]
+    #[Assert\NotBlank(message: "La catégorie ne peut pas être vide.")] 
     private $categorie;
 
      #[ORM\Column(type: 'string', length: 50, options: ["default" => "En cours"])]
-     private string $statut = 'En cours'; // 👈 Valeur par défaut
+     private string $statut = 'En cours';
 
 
      #[ORM\ManyToOne(targetEntity: Organisation::class, inversedBy: 'demandes')]
-    #[ORM\JoinColumn(nullable: true)] // nullable: true car une demande peut ne pas être attribuée immédiatement
+    #[ORM\JoinColumn(nullable: true)] 
     private ?Organisation $organisation = null;
+
+     
 
     // Getters et Setters
 
@@ -110,5 +112,7 @@ public function getOrganisation(): ?Organisation
         $this->organisation = $organisation;
         return $this;
     }
+
+    
 
 }

@@ -29,5 +29,13 @@ class DemandeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    public function countDemandesByStatut()
+{
+    return $this->createQueryBuilder('d')
+        ->select('d.statut, COUNT(d.id) as total')
+        ->groupBy('d.statut')
+        ->getQuery()
+        ->getResult();
+}
 
 }

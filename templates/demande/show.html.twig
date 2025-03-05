@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demande{% endblock %}
+
+{% block body %}
+    <h1>Demande</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ demande.id }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ demande.description }}</td>
+            </tr>
+            <tr>
+                <th>Localisation</th>
+                <td>{{ demande.localisation }}</td>
+            </tr>
+            <tr>
+                <th>Categorie</th>
+                <td>{{ demande.categorie }}</td>
+            </tr>
+            <tr>
+                <th>Statut</th>
+                <td>{{ demande.statut }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_demande_index') }}">back to list</a>
+
+    <a href="{{ path('app_demande_edit', {'id': demande.id}) }}">edit</a>
+
+    {{ include('demande/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends 'baseadmin.html.twig' %}
+
+{% block title %}Liste des Organisations - ReWear{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .search-container {
+            margin: 20px 0;
+        }
+
+        .card {
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+
+<main>
+  <section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light">Organisations Partenaires</h1>
+        <p class="lead text-muted">Découvrez les organisations qui collaborent avec ReWear pour faciliter les dons et les échanges.</p>
+
+ 
+
+        <p>
+          <a href="{{ path('app_organisation_new') }}" class="btn btn-primary my-2">Ajouter une organisation</a>
+          <a href="{{ path('stat') }}" class="btn btn-secondary my-2">Statistiques</a>
+        </p>
+      </div>
+    </div>
+  </section>
+       <!-- Champ de recherche -->
+        <div class="search-container">
+          <input type="text" id="searchInput" class="form-control" placeholder="Rechercher une organisation" onkeyup="searchOrganisations()">
+        </div>
+  <div class="album py-5 bg-light">
+    <div class="container">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="organisationList">
+        {% for organisation in organisations %}
+        <div class="col organisation-card">
+          <div class="card shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+              <title>{{ organisation.nom }}</title>
+              <rect width="100%" height="100%" fill="#55595c"/>
+              <text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ organisation.nom }}</text>
+            </svg>
+
+            <div class="card-body">
+              <p class="card-text">{{ organisation.description|default('Aucune description disponible.') }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <a href="{{ path('app_organisation_show', {'id': organisation.id}) }}" class="btn btn-sm btn-outline-secondary">Voir</a>
+                  <a href="{{ path('app_organisation_edit', {'id': organisation.id}) }}" class="btn btn-sm btn-outline-secondary">Modifier</a>
+                  <a href="{{ path('demande_liste', {'organisationId': organisation.id}) }}" class="btn btn-sm btn-outline-secondary">Voir les demandes</a>
+                </div>
+                <small class="text-muted">{{ organisation.email }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+          <p class="text-center">Aucune organisation trouvée.</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="text-muted py-5">
+  <div class="container">
+    <p class="float-end mb-1">
+      <a href="#">Retour en haut</a>
+    </p>
+    <p class="mb-1">ReWear &copy; 2023. Tous droits réservés.</p>
+    <p class="mb-0">Nouveau sur ReWear ? <a href="/">Visitez la page d'accueil</a>.</p>
+  </div>
+</footer>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/dist/js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+        function searchOrganisations() {
+            // Récupérer la valeur de recherche
+            let input = document.getElementById('searchInput');
+            let filter = input.value.toLowerCase();
+            let organisationList = document.getElementById('organisationList');
+            let organisations = organisationList.getElementsByClassName('organisation-card');
+
+            // Boucler à travers les organisations et les filtrer
+            for (let i = 0; i < organisations.length; i++) {
+                let card = organisations[i];
+                let title = card.querySelector('svg text').textContent || card.querySelector('.card-body p').textContent;
+                if (title.toLowerCase().indexOf(filter) > -1) {
+                    card.style.display = "";
+                } else {
+                    card.style.display = "none";
+                }
+            }
+        }
+    </script>
+{% endblock %}
