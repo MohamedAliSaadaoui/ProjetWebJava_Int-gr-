@@ -57,9 +57,9 @@ class Command
 
     public function __construct()
     {
-        $this->livraisons = new ArrayCollection();
         $this->products = new ArrayCollection();
-        $this->createdAt = new \DateTime(); // Initialize createdAt with current date/time
+        $this->livraisons = new ArrayCollection();
+        $this->createdAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -91,7 +91,6 @@ class Command
         if (!$this->products->contains($product)) {
             $this->products[] = $product;
         }
-
         return $this;
     }
 

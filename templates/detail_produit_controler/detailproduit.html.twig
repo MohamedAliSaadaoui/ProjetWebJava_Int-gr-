@@ -1238,24 +1238,7 @@
                             {% endif %}
                         </div>
 
-                        <div class="product-nav-slider">
-                            <img src="assets/images/products/1733223017bbbPPHVf.png"
-                                alt="Thumb Image"
-                                data-zoom-image="assets/images/products/1733223017bbbPPHVf.png"
-                                class="nav-img" alt="gallery-img">
-                                                            <img src="assets/images/galleries/1733223027riYPm8kj.jpg"
-                                    data-image="assets/images/galleries/1733223027riYPm8kj.jpg" class="nav-img"
-                                    alt="gallery-img">
-                                                            <img src="assets/images/galleries/17332230274csfZy5h.jpg"
-                                    data-image="assets/images/galleries/17332230274csfZy5h.jpg" class="nav-img"
-                                    alt="gallery-img">
-                                                            <img src="assets/images/galleries/1733223027DLZXmm2E.jpg"
-                                    data-image="assets/images/galleries/1733223027DLZXmm2E.jpg" class="nav-img"
-                                    alt="gallery-img">
-                                                            <img src="assets/images/galleries/1733223027TKI64M5x.jpg"
-                                    data-image="assets/images/galleries/1733223027TKI64M5x.jpg" class="nav-img"
-                                    alt="gallery-img">
-                                                    </div>
+
                     </div>
                 </div>
 
@@ -1292,13 +1275,13 @@
                             <ul>
                                 <li class="active cart_color">
                                     <input checked type="radio" data-price="0"
-                                        data-color="#e91c1c" id="color_0"
+                                        data-color="{{ product.couleur|lower }}" id="color_0"
                                         name="colors" value="0">
                                     <label for="color_0"
-                                        data-color-code="#e91c1c"
-                                        data-outline-color-code="#e91c1c"></label>
+                                        data-color-code="{{ product.couleur|lower }}"
+                                        data-outline-color-code="{{ product.couleur|lower }}"
+                                        style="background-color: {{ product.couleur|lower }}; border: 1px solid #ddd;"></label>
                                 </li>
-                                <!-- Other color options can remain if needed -->
                             </ul>
                         </div>
 
@@ -1318,33 +1301,27 @@
 <div class="add-to-cart-wrapper mt-4">
     <div class="row">
         <div class="col-12">
-            <!-- Add this near the add to cart button -->
-            <div class="product-actions d-flex gap-2 mb-3">
-                <button id="addToFavorites" class="template-btn" data-id="{{ product.id }}">
-                    <i class="far fa-heart" id="favoriteIcon"></i> Add to Favorites
-                </button>
+            <!-- Product action buttons side by side -->
+            <div class="d-flex gap-2 mb-3">
+                <a href="{{ path('app_panier_add', {'id': product.id}) }}" class="add_cart_click btn btn-primary flex-grow-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="me-2">
+                        <path d="M2 2H3.74001C4.82001 2 5.67 2.93 5.58 4L4.75 13.96C4.61 15.59 5.89999 16.99 7.53999 16.99H18.19C19.63 16.99 20.89 15.81 21 14.38L21.54 6.88C21.66 5.22 20.4 3.87 18.73 3.87H5.82001" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16.25 22C16.9404 22 17.5 21.4404 17.5 20.75C17.5 20.0596 16.9404 19.5 16.25 19.5C15.5596 19.5 15 20.0596 15 20.75C15 21.4404 15.5596 22 16.25 22Z" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8.25 22C8.94036 22 9.5 21.4404 9.5 20.75C9.5 20.0596 8.94036 19.5 8.25 19.5C7.55964 19.5 7 20.0596 7 20.75C7 21.4404 7.55964 22 8.25 22Z" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Ajouter au panier
+                </a>
                 
-                <!-- Your existing add to cart button -->
+                <button id="addToFavorites" class="btn btn-outline-danger flex-grow-1" data-id="{{ product.id }}">
+                    <i class="far fa-heart" id="favoriteIcon"></i> 
+                    <span class="ms-1">Favoris</span>
+                </button>
             </div>
-            <a href="{{ path('app_panier_add', {'id': product.id}) }}" class="add_cart_click btn btn-primary btn-lg w-100">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="me-2">
-                    <path d="M2 2H3.74001C4.82001 2 5.67 2.93 5.58 4L4.75 13.96C4.61 15.59 5.89999 16.99 7.53999 16.99H18.19C19.63 16.99 20.89 15.81 21 14.38L21.54 6.88C21.66 5.22 20.4 3.87 18.73 3.87H5.82001" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M16.25 22C16.9404 22 17.5 21.4404 17.5 20.75C17.5 20.0596 16.9404 19.5 16.25 19.5C15.5596 19.5 15 20.0596 15 20.75C15 21.4404 15.5596 22 16.25 22Z" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M8.25 22C8.94036 22 9.5 21.4404 9.5 20.75C9.5 20.0596 8.94036 19.5 8.25 19.5C7.55964 19.5 7 20.0596 7 20.75C7 21.4404 7.55964 22 8.25 22Z" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Ajouter au panier
-            </a>
         </div>
     </div>
 </div>
 
-<hr>
 
-
-                        <!-- wish-compare-report-wrapper -->
-
-
-                        <hr>
 
                         <!-- share links -->
                         <div class="share-links social-linkss social-sharing a2a_kit a2a_kit_size_32">
@@ -1505,27 +1482,7 @@
                         data-bs-target="#description-tab-pane" type="button" role="tab"
                         aria-controls="description-tab-pane" aria-selected="true">
                         Description                    </button>
-                </li>
-
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="buy-return-policy-tab" data-bs-toggle="tab"
-                        data-bs-target="#buy-return-policy-tab-pane" type="button" role="tab"
-                        aria-controls="buy-return-policy-tab-pane" aria-selected="false">
-                        Buy / Return Policy                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews-tab-pane"
-                        type="button" role="tab" aria-controls="reviews-tab-pane" aria-selected="false">
-                        Reviews                    </button>
-                </li>
-
-                                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="whole-sell-tab" data-bs-toggle="tab"
-                            data-bs-target="#whole-sell-tab-pane" type="button" role="tab"
-                            aria-controls="whole-sell-tab-pane" aria-selected="false">
-                            Whole sell                        </button>
-                    </li>
-                
+                </li>                
             </ul>
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane show active wow-replaced" data-wow-delay=".1s" id="description-tab-pane"
@@ -1588,15 +1545,108 @@
     <!-- Related Products slider start -->
     <div class="gs-product-cards-slider-area wow-replaced" data-wow-delay=".1s">
         <div class="container">
-            <h2 class="title text-center">Related Products</h2>
-            <div class="product-cards-slider">
-                                    <div class="not">
-
-    </div>
-                            </div>
+            <h2 class="title text-center mb-4">Related Products</h2>
+            
+            {% if relatedProducts is defined and relatedProducts|length > 0 %}
+                <div class="product-cards-slider slick-initialized slick-slider slick-dotted">
+                    <div class="slick-list draggable">
+                        <div class="slick-track">
+                            {% for relatedProduct in relatedProducts %}
+                                {% if relatedProduct.id != product.id %}
+                                    <div class="slick-slide">
+                                        <div class="single-product shadow-sm rounded h-100">
+                                            <div class="img-wrapper" style="height: 400px; overflow: hidden; border-radius: 8px 8px 0 0;">
+                                                <a href="{{ path('app_detail_produit_controler', { id: relatedProduct.id }) }}" class="d-block h-100">
+                                                    {% if relatedProduct.photo %}
+                                                        <img class="product-img" src="{{ asset('uploads/products/' ~ relatedProduct.photo) }}" 
+                                                             alt="{{ relatedProduct.objetAVendre }}"
+                                                             style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+                                                    {% else %}
+                                                        <img src="{{ asset('images/placeholder.jpg') }}" 
+                                                             alt="No image available" 
+                                                             class="product-img"
+                                                             style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+                                                    {% endif %}
+                                                </a>
+                                            </div>
+                                            <div class="content-wrapper p-3">
+                                                <a href="{{ path('app_detail_produit_controler', { id: relatedProduct.id }) }}">
+                                                    <h5 class="product-title">{{ relatedProduct.objetAVendre }}</h5>
+                                                </a>
+                                                <div class="price-wrapper my-2">
+                                                    <h5 class="text-primary mb-0">{{ relatedProduct.prixDeVente }}€</h5>
+                                                    {% if relatedProduct.prixOriginal and relatedProduct.prixOriginal > relatedProduct.prixDeVente %}
+                                                        <h6><del class="text-muted">{{ relatedProduct.prixOriginal }}€</del></h6>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="product-actions d-flex justify-content-between mt-3">
+                                                    <a href="{{ path('app_detail_produit_controler', { 'id': relatedProduct.id }) }}" class="btn btn-outline-secondary">View Details</a>
+                                                    <a href="javascript:;" class="btn btn-outline-danger toggle-favorite" data-id="{{ relatedProduct.id }}">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 24 24" fill="none" class="favorite-icon">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M11.9932 5.13581C9.9938 2.7984 6.65975 2.16964 4.15469 4.31001C1.64964 6.45038 1.29697 10.029 3.2642 12.5604C4.89982 14.6651 9.84977 19.1041 11.4721 20.5408C11.6536 20.7016 11.7444 20.7819 11.8502 20.8135C11.9426 20.8411 12.0437 20.8411 12.1361 20.8135C12.2419 20.7819 12.3327 20.7016 12.5142 20.5408C14.1365 19.1041 19.0865 14.6651 20.7221 12.5604C22.6893 10.029 22.3797 6.42787 19.8316 4.31001C17.2835 2.19216 13.9925 2.7984 11.9932 5.13581Z" stroke="#030712" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        </svg>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="text-center py-4">
+                    <p>No related products found in the same category.</p>
+                </div>
+            {% endif %}
         </div>
     </div>
     <!-- Related Products slider end -->
+
+    <!-- Add JavaScript for Slick Slider initialization -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Slick Slider
+            $('.product-cards-slider').slick({
+                dots: true,
+                infinite: true,
+                speed: 500,
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 3000,
+                arrows: true,
+                responsive: [
+                    {
+                        breakpoint: 992,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 1
+                        }
+                    },
+                    {
+                        breakpoint: 576,
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1
+                        }
+                    }
+                ]
+            });
+            
+            // Add hover effect to product images
+            const productImages = document.querySelectorAll('.product-img');
+            productImages.forEach(img => {
+                img.addEventListener('mouseover', function() {
+                    this.style.transform = 'scale(1.05)';
+                });
+                img.addEventListener('mouseout', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
 
     <!-- More Products By Seller slider start -->
         <!-- More Products By Seller slider end -->

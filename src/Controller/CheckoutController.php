@@ -16,6 +16,7 @@ use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use App\Entity\Product;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/checkout')]
 class CheckoutController extends AbstractController
@@ -113,6 +114,25 @@ class CheckoutController extends AbstractController
             // Update order status
             $command->setEtat('confirmed');
             
+            // Add products from cart to command
+            if (!empty($cartWithProducts)) {
+                // First remove any existing products
+                foreach ($command->getProducts() as $existingProduct) {
+                    $command->getProducts()->removeElement($existingProduct);
+                }
+                
+                // Add products from cart with correct quantities
+                foreach ($cartWithProducts as $item) {
+                    $product = $item['product'];
+                    $quantity = $item['quantity'];
+                    
+                    // Add product to command the required number of times
+                    for ($i = 0; $i < $quantity; $i++) {
+                        $command->getProducts()->add($product);
+                    }
+                }
+            }
+            
             // Persist changes
             $entityManager->persist($command);
             $entityManager->flush();
@@ -125,7 +145,7 @@ class CheckoutController extends AbstractController
             
             // Redirect to appropriate page based on payment method
             if ($paymentMethod === 'stripe') {
-                return $this->redirectToRoute('stripe_checkout', ['id' => $command->getId()]);
+                return $this->redirectToRoute('checkout_stripe_payment', ['id' => $command->getId()]);
             } else {
                 // For cash on delivery, redirect to confirmation page
                 return $this->redirectToRoute('checkout_confirmation', ['id' => $command->getId()]);
@@ -155,21 +175,47 @@ class CheckoutController extends AbstractController
         // Set up Stripe
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
         
-        $lineItems = [];
+        // Debug: Check if products exist
+        if ($command->getProducts()->isEmpty()) {
+            throw new \Exception('No products found in the command');
+        }
+        
+        $productQuantities = [];
+        // Group products by ID and count quantities
         foreach ($command->getProducts() as $product) {
+            $productId = $product->getId();
+            if (!isset($productQuantities[$productId])) {
+                $productQuantities[$productId] = [
+                    'product' => $product,
+                    'quantity' => 1,
+                    'price' => $product->getPrixDeVente()
+                ];
+            } else {
+                $productQuantities[$productId]['quantity']++;
+            }
+        }
+
+        // Debug: Print product quantities
+        dump($productQuantities);
+        
+        $lineItems = [];
+        foreach ($productQuantities as $item) {
+            // Ensure price is converted to cents and is an integer
+            $unitAmount = (int)round($item['price'] * 100);
+            
             $lineItems[] = [
                 'price_data' => [
                     'currency' => 'eur',
                     'product_data' => [
-                        'name' => $product->getObjetAVendre(),
+                        'name' => $item['product']->getObjetAVendre(),
                     ],
-                    'unit_amount' => $product->getPrixDeVente() * 100, // in cents
+                    'unit_amount' => $unitAmount,
                 ],
-                'quantity' => 1,
+                'quantity' => $item['quantity'],
             ];
         }
         
-        // Add delivery cost
+        // Add delivery cost if present
         if (!$command->getLivraisons()->isEmpty()) {
             $livraison = $command->getLivraisons()->first();
             $lineItems[] = [
@@ -178,25 +224,37 @@ class CheckoutController extends AbstractController
                     'product_data' => [
                         'name' => 'Livraison - ' . $livraison->getNom(),
                     ],
-                    'unit_amount' => $livraison->getTarif() * 100, // in cents
+                    'unit_amount' => (int)round($livraison->getTarif() * 100),
                 ],
                 'quantity' => 1,
             ];
         }
         
-        $session = StripeSession::create([
-            'payment_method_types' => ['card'],
-            'line_items' => $lineItems,
-            'mode' => 'payment',
-            'success_url' => $this->generateUrl('checkout_stripe_success', [], 0),
-            'cancel_url' => $this->generateUrl('checkout_stripe_cancel', [], 0),
-        ]);
+        // Debug: Check final line items
+        if (empty($lineItems)) {
+            throw new \Exception('No line items generated for Stripe');
+        }
+        dump($lineItems);
         
-        // Save Stripe session ID to command
-        $command->setStripeSessionId($session->id);
-        $this->entityManager->flush();
-        
-        return $this->redirect($session->url);
+        try {
+            $session = StripeSession::create([
+                'payment_method_types' => ['card'],
+                'line_items' => $lineItems,
+                'mode' => 'payment',
+                'success_url' => $this->generateUrl('checkout_stripe_success', [], UrlGeneratorInterface::ABSOLUTE_URL),
+                'cancel_url' => $this->generateUrl('checkout_stripe_cancel', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            ]);
+            
+            // Save Stripe session ID to command
+            $command->setStripeSessionId($session->id);
+            $this->entityManager->flush();
+            
+            return $this->redirect($session->url);
+        } catch (\Exception $e) {
+            // Log the error and show a user-friendly message
+            $this->addFlash('error', 'Une erreur est survenue lors de la création de la session de paiement.');
+            return $this->redirectToRoute('checkout');
+        }
     }
     
     #[Route('/stripe-success', name: 'checkout_stripe_success')]

@@ -438,9 +438,16 @@ public function showFavorites(EntityManagerInterface $entityManager): Response
             throw $this->createNotFoundException('Produit non trouvé');
         }
         
+        // Fetch related products from the same category (genre)
+        $relatedProducts = $productRepository->findBy(
+            ['genre' => $product->getGenre()],
+            ['id' => 'DESC'],
+            6 // Limit to 6 related products
+        );
+        
         return $this->render('detail_produit_controler/detailproduit.html.twig', [
             'product' => $product,
-            
+            'relatedProducts' => $relatedProducts
         ]);
     }
     
