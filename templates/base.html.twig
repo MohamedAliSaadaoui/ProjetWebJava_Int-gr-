@@ -1,7 +1,265 @@
 <!DOCTYPE html>
 <html>
     <head>
+
         <meta charset="UTF-8">
+        <meta name="csrf-token" content="{{ csrf_token('vote') }}">
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+        <style>
+            /* Styles de base */
+            body {
+                font-family: 'Poppins', sans-serif;
+                background-color: #f8f9fa;
+                color: #333;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            /* Cartes de questions */
+            .card {
+                border: none;
+                border-radius: 12px;
+                background: #fff;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                overflow: hidden;
+            }
+
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            }
+
+            .card-body {
+                padding: 20px;
+            }
+
+            .card-title {
+                font-size: 1.5rem;
+                font-weight: 600;
+                margin-bottom: 10px;
+            }
+
+            .card-title a {
+                color: #333;
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+
+            .card-title a:hover {
+                color: #007bff;
+            }
+
+            .card-text {
+                font-size: 0.9rem;
+                color: #666;
+            }
+
+            /* Icônes */
+            .far, .fas {
+                margin-right: 8px;
+                color: #007bff;
+            }
+
+            /* Boutons */
+            .btn {
+                font-size: 0.9rem;
+                font-weight: 500;
+                padding: 8px 16px;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+            }
+
+            .btn-outline-primary {
+                border-color: #007bff;
+                color: #007bff;
+            }
+
+            .btn-outline-primary:hover {
+                background-color: #007bff;
+                color: #fff;
+            }
+
+            .btn-outline-secondary {
+                border-color: #6c757d;
+                color: #6c757d;
+            }
+
+            .btn-outline-secondary:hover {
+                background-color: #6c757d;
+                color: #fff;
+            }
+
+            /* Cartes de réponses (feedbacks) */
+            .answer-card {
+                margin-top: 15px;
+                border-left: 4px solid #007bff;
+                border-radius: 8px;
+                background-color: #f9f9f9;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                transition: all 0.3s ease;
+            }
+
+            .answer-card:hover {
+                transform: translateX(5px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            }
+
+            .answer-card .card-body {
+                padding: 15px;
+            }
+
+            .answer-card .card-text {
+                font-size: 0.9rem;
+                color: #555;
+            }
+
+            .answer-card .card-text small {
+                color: #777;
+            }
+
+            /* Couleurs en fonction de la valeur de `approved` */
+            .answer-card.approved-high {
+                border-left-color: #28a745;
+                background-color: #d4edda;
+            }
+
+            .answer-card.approved-medium {
+                border-left-color: #ffc107;
+                background-color: #fff3cd;
+            }
+
+            .answer-card.approved-low {
+                border-left-color: #dc3545;
+                background-color: #f8d7da;
+            }
+
+            /* Boutons pour upvote/downvote */
+            .btn-vote {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+                border-radius: 6px;
+                margin: 3px;
+                transition: all 0.3s ease;
+                border: none;
+            }
+
+            .btn-vote.upvote {
+                background-color: #28a745;
+                color: white;
+            }
+
+            .btn-vote.downvote {
+                background-color: #dc3545;
+                color: white;
+            }
+
+            .btn-vote:hover {
+                opacity: 0.8;
+            }
+
+            /* Formulaire d'ajout de réponse */
+            .form-reponse {
+                margin-top: 10px;
+            }
+
+            .form-reponse .form-group {
+                margin-bottom: 15px;
+            }
+
+            .form-reponse .form-control {
+                border-radius: 8px;
+                border: 1px solid #e2e8f0;
+                padding: 10px 15px;
+                transition: all 0.3s ease;
+            }
+
+            .form-reponse .form-control:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+            }
+
+            .form-reponse button[type="submit"] {
+                background-color: #007bff;
+                border: none;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 8px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+            }
+
+            .form-reponse button[type="submit"]:hover {
+                background-color: #0056b3;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            }
+
+            /* Notification */
+            .notification-card {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background-color: #28a745;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                animation: slideIn 0.5s ease-out;
+            }
+
+            .notification-content {
+                display: flex;
+                align-items: center;
+            }
+
+            .notification-message {
+                margin-right: 10px;
+            }
+
+            .notification-close-btn {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.2rem;
+                cursor: pointer;
+            }
+
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                }
+                to {
+                    transform: translateX(0);
+                }
+            }
+
+            /* Responsive Design */
+            @media (max-width: 768px) {
+                .card-title {
+                    font-size: 1.2rem;
+                }
+
+                .btn {
+                    font-size: 0.8rem;
+                    padding: 6px 12px;
+                }
+            }
+
+
+
+
+        </style>
+
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {% block stylesheets %}
@@ -16,6 +274,11 @@
             <link rel="stylesheet" href="{{ asset('assets/front/css/datatables.min.css') }}">
             <link rel="stylesheet" href="{{ asset('assets/front/css/style.css') }}">
             <link rel="stylesheet" href="{{ asset('assets/front/css/custom.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+
+{#            ANIMATIOOOONNNNNNNNNNNN #}
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
             
             {# Favicon #}
             <link rel="icon" href="{{ asset('assets/images/17333080691572146352faviconpng.png') }}">
@@ -44,6 +307,167 @@
         {% endblock %}
 
         {% block javascripts %}
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    // Gestionnaire pour afficher/masquer les réponses
+                    const toggleButtons = document.querySelectorAll('.toggle-feedbacks');
+
+                    toggleButtons.forEach(button => {
+                        button.addEventListener('click', function () {
+                            const questionId = this.getAttribute('data-question-id');
+                            const feedbacksSection = document.getElementById(`feedbacks-${questionId}`);
+
+                            if (feedbacksSection.style.display === 'none' || !feedbacksSection.style.display) {
+                                feedbacksSection.style.display = 'block';
+                                this.innerHTML = '<i class="fas fa-comments"></i> Masquer les réponses';
+                            } else {
+                                feedbacksSection.style.display = 'none';
+                                this.innerHTML = '<i class="fas fa-comments"></i> Afficher les réponses';
+                            }
+                        });
+                    });
+
+
+                    document.addEventListener('DOMContentLoaded', function () {
+                        console.log('Document loaded, initializing vote buttons...');
+
+                        // Récupérer le token CSRF
+                        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                        console.log('CSRF Token:', csrfToken);
+
+                        // Gestionnaire pour les votes (like/dislike)
+                        document.querySelectorAll('.btn-vote').forEach(button => {
+                            button.addEventListener('click', function () {
+                                console.log('Vote button clicked');
+
+                                const feedbackId = this.getAttribute('data-feedback-id');
+                                const action = this.getAttribute('data-action'); // 'up' ou 'down'
+                                const url = `/feedback/${feedbackId}/${action}`; // URL de l'API
+
+                                console.log('Feedback ID:', feedbackId);
+                                console.log('Action:', action);
+                                console.log('URL:', url);
+
+                                // Désactiver le bouton pour éviter les votes multiples
+                                this.disabled = true;
+
+                                // Envoyer la requête AJAX
+                                fetch(url, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-Requested-With': 'XMLHttpRequest',
+                                        'X-CSRF-TOKEN': csrfToken
+                                    }
+                                })
+                                    .then(response => {
+                                        console.log('Response received:', response);
+                                        if (!response.ok) {
+                                            throw new Error('Network response was not ok');
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(data => {
+                                        console.log('Data received:', data);
+                                        if (data.success) {
+                                            // Mettre à jour le compteur de votes
+                                            const approveCount = this.querySelector('.approve-count');
+                                            if (approveCount) {
+                                                approveCount.textContent = data.approved;
+                                            }
+
+                                            // Afficher un message de succès
+                                            alert(data.message);
+                                        } else {
+                                            // Afficher un message d'erreur
+                                            alert(data.message);
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                        alert('Une erreur s\'est produite lors du vote.');
+                                    })
+                                    .finally(() => {
+                                        // Réactiver le bouton en cas d'erreur
+                                        this.disabled = false;
+                                    });
+                            });
+                        });
+                    });
+                    // Gestionnaire pour afficher/masquer le formulaire de réponse
+                    const repondreButtons = document.querySelectorAll('.btn-repondre');
+
+                    repondreButtons.forEach(button => {
+                        button.addEventListener('click', function () {
+                            const questionId = this.getAttribute('data-question-id');
+                            const reponseCard = document.getElementById(`reponse-card-${questionId}`);
+
+                            if (reponseCard.style.display === 'none' || !reponseCard.style.display) {
+                                reponseCard.style.display = 'block';
+                            } else {
+                                reponseCard.style.display = 'none';
+                            }
+                        });
+                    });
+
+                    // Gestionnaire pour soumettre le formulaire de réponse via AJAX
+                    const forms = document.querySelectorAll('.form-reponse');
+
+                    forms.forEach(form => {
+                        form.addEventListener('submit', function (e) {
+                            e.preventDefault();
+
+                            const formData = new FormData(form);
+                            const questionId = form.dataset.questionId;
+
+                            fetch(form.action, {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest'
+                                }
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        // Afficher la notification
+                                        const notificationCard = document.getElementById('notification-card');
+                                        const notificationMessage = document.querySelector('.notification-message');
+                                        notificationMessage.textContent = data.message;
+                                        notificationCard.style.display = 'block';
+
+                                        // Masquer la notification après 5 secondes
+                                        setTimeout(() => {
+                                            notificationCard.style.display = 'none';
+                                        }, 5000);
+
+                                        // Rafraîchir la page pour afficher la nouvelle réponse
+                                        location.reload();
+                                    } else {
+                                        alert(data.message);
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                });
+                        });
+                    });
+
+                    // Fermer la notification
+                    const closeBtn = document.querySelector('.notification-close-btn');
+                    if (closeBtn) {
+                        closeBtn.addEventListener('click', function () {
+                            const notificationCard = document.getElementById('notification-card');
+                            notificationCard.style.display = 'none';
+                        });
+                    }
+                });
+            </script>
+
+
+
+
             {#front logic #}
             <script src="{{ asset('assets/front/js/jquery.min.js') }}"></script>
             <script src="{{ asset('assets/front/js/slick.js') }}"></script>

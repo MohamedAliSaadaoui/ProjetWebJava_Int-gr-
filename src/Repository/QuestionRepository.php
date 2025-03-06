@@ -24,6 +24,19 @@ class QuestionRepository extends ServiceEntityRepository
     }
 
 
+    public function findBySearch(string $search)
+    {
+        return $this->createQueryBuilder('q')
+            ->where('q.question_text LIKE :search')
+            ->orWhere('q.name LIKE :search')
+            ->orWhere('q.email LIKE :search')
+            ->setParameter('search', '%'.$search.'%')
+            ->orderBy('q.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
 
 //    /**
 //     * @return Question[] Returns an array of Question objects

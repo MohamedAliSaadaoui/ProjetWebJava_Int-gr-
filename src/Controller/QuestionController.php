@@ -11,14 +11,25 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+
+
 #[Route('/question')]
 class QuestionController extends AbstractController
 {
     #[Route('/', name: 'app_question_index', methods: ['GET'])]
-    public function index(QuestionRepository $questionRepository): Response
+    public function index(QuestionRepository $questionRepository, Request $request): Response
     {
+        $search = $request->query->get('search');
+
+        if ($search) {
+            // Vous devez créer cette méthode dans votre repository
+            $questions = $questionRepository->findBySearch($search);
+        } else {
+            $questions = $questionRepository->findAll();
+        }
+
         return $this->render('question/index.html.twig', [
-            'questions' => $questionRepository->findAll(),
+            'questions' => $questions,
         ]);
     }
 
@@ -26,7 +37,6 @@ class QuestionController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $question = new Question();
-        $question->setCreatedAtValue(new \DateTime());
         $form = $this->createForm(QuestionType::class, $question);
         $form->handleRequest($request);
 
@@ -37,12 +47,10 @@ class QuestionController extends AbstractController
             return $this->redirectToRoute('app_question_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('question/new.html.twig', [
-            'question' => $question,
-            'form' => $form,
+        return $this->render('question/new.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
-
     #[Route('/{idQ}', name: 'app_question_show', methods: ['GET'])]
     public function show(QuestionRepository $questionRepository, int $idQ): Response
     {

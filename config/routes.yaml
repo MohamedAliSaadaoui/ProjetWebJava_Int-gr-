@@ -3,6 +3,8 @@ controllers:
     type: attribute
 
 question_show:
-    path: /question/{idQ}
+    path: /question/{id}.{_format}
     controller: App\Controller\QuestionController::show
+    defaults:
+        _format: html
     methods: GET
