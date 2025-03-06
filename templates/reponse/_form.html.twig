@@ -1,5 +1,16 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn btn-info">{{ button_label|default('Save') }}</button>
-    <a href="{{ path('app_reponse_index') }}" class="back-btn">Back to List</a>
+{{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+
+<div class="mb-3">
+    {{ form_widget(form, {'attr': {'class': 'form-control'}}) }}
+</div>
+
+<div class="d-flex justify-content-between mt-3">
+    <a href="{{ path('app_reponse_index') }}" class="btn btn-secondary">
+        ⬅ Back to List
+    </a>
+    <button type="submit" class="btn btn-primary">
+        💾 {{ button_label|default('Save') }}
+    </button>
+</div>
+
 {{ form_end(form) }}

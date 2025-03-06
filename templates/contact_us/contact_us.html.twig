@@ -1928,14 +1928,14 @@
                         {# User Name - Readonly #}
                         <div class="col-md-6">
                             <div class="form-group">
-                                {{ form_label(form.user_name, 'Your Username') }}
+                                {{ form_label(form.user_name, 'Your Name') }}
                                 {{ form_widget(form.user_name, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}
                             </div>
                         </div>
                         {# Subject (Objet de la Réclamation) #}
                         <div class="col-md-12">
                             <div class="form-group">
-                                {{ form_label(form.objet, "The subject of the complaint") }}
+                                {{ form_label(form.objet, "L'objet de la réclamation") }}
                                 {{ form_widget(form.objet, {'attr': {'class': 'form-control'}}) }}
                                 <div class="text-danger">{{ form_errors(form.objet) }}</div>
                             </div>

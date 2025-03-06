@@ -138,7 +138,7 @@ final class ReclamationController extends AbstractController
     {
 
         $form = $this->createForm(ReclamationType::class, $reclamation, [
-            'user_name'=>$reclamation->getUser()->getName(),
+            'user_name'=>$reclamation->getUser()->getUsername(),
         ]);
         $form->handleRequest($request);
 

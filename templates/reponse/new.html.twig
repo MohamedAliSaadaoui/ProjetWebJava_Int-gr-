@@ -3,12 +3,15 @@
 {% block title %}New Response{% endblock %}
 
 {% block body %}
-    <div class="form-container">
-        <h1 class="form-title">Create New Response</h1>
+    <div class="container mt-5">
+        <div class="card shadow-lg p-4">
+            <h1 class="text-center text-primary mb-4">Create New Response</h1>
 
-        {{ include('reponse/_form.html.twig') }}
-        <script>
-            console.log("ID Réclamation : {{ id_reclamation }}");
-        </script>
+            {{ include('reponse/_form.html.twig') }}
+
+            <script>
+                console.log("ID Réclamation : {{ id_reclamation }}");
+            </script>
+        </div>
     </div>
 {% endblock %}
