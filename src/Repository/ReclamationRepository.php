@@ -120,14 +120,14 @@ class ReclamationRepository extends ServiceEntityRepository
     {
         $result = $this->createQueryBuilder('r')
             ->leftJoin('r.user', 'u')
-            ->select('u.name, COUNT(r.id_reclam) as count')
-            ->groupBy('u.name')
+            ->select('u.username, COUNT(r.id_reclam) as count')
+            ->groupBy('u.username')
             ->orderBy('count', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
 
-        return $result ? $result['name'] : null;
+        return $result ? $result['username'] : null;
     }
 
 
@@ -153,7 +153,7 @@ class ReclamationRepository extends ServiceEntityRepository
 
         // 🔎 Filtrer par username
         if ($search) {
-            $qb->andWhere('u.name LIKE :search')
+            $qb->andWhere('u.username LIKE :search')
                 ->setParameter('search', '%' . $search . '%');
         }
 
@@ -172,7 +172,7 @@ class ReclamationRepository extends ServiceEntityRepository
                 $qb->orderBy('r.status', 'ASC');
                 break;
             case 'username':
-                $qb->orderBy('u.name', 'ASC');
+                $qb->orderBy('u.username', 'ASC');
                 break;
             default:
                 $qb->orderBy('r.dateReclamation', 'DESC'); // Trier par date par défaut
@@ -189,7 +189,7 @@ class ReclamationRepository extends ServiceEntityRepository
 
         // 🔍 Filtrer par Username
         if ($search) {
-            $qb->andWhere('u.name LIKE :search')
+            $qb->andWhere('u.username LIKE :search')
                 ->setParameter('search', "%$search%");
         }
 
@@ -211,7 +211,7 @@ class ReclamationRepository extends ServiceEntityRepository
         } elseif ($sort === 'status') {
             $qb->orderBy('r.status', 'ASC');
         } elseif ($sort === 'username') {
-            $qb->orderBy('u.name', 'ASC');
+            $qb->orderBy('u.username', 'ASC');
         }
 
         return $qb->getQuery()->getResult();

@@ -1,35 +1,130 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}User index{% endblock %}
-
 {% block body %}
-    <h1>User index</h1>
+<style>
+    /* Style principal pour l'encadré */
+    .example-wrapper {
+        margin: 2em auto;
+        max-width: 900px;
+        width: 95%;
+        font: 18px/1.5 sans-serif;
+        background-color: #f7f7f7; /* Couleur de fond grège clair */
+        padding: 2em;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Titre de la page */
+    .example-wrapper h1 {
+        color: #4CAF50; /* Vert kaki pour le titre */
+        font-size: 1.5em;
+        margin-bottom: 20px;
+    }
+
+    /* Bouton principal - Ajouter un utilisateur */
+    .btn-primary {
+        background-color: #4CAF50; /* Vert kaki */
+        border-color: #4CAF50;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #45a049;
+        border-color: #45a049;
+    }
+
+    /* Style des boutons de suppression */
+    .btn-danger {
+        background-color: #ff4747; /* Rouge pour la suppression */
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background-color: #ff2d2d;
+    }
+
+    /* Tableau d'utilisateurs */
+    table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    /* En-têtes de colonne */
+    th {
+        background-color: #4CAF50; /* Vert kaki */
+        color: white;
+        padding: 12px 15px;
+        text-align: left;
+    }
+
+    /* Lignes du tableau */
+    td {
+        background-color: #f9f9f9; /* Gris clair pour les lignes du tableau */
+        padding: 10px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    /* Lignes de tableau survolées */
+    tr:hover {
+        background-color: #f1f1f1; /* Gris très clair au survol */
+    }
+
+    /* Style pour la confirmation de suppression */
+    .confirm-btn {
+        background-color: #f7b731; /* Jaune doux pour l'attention */
+        color: white;
+    }
+
+    .confirm-btn:hover {
+        background-color: #e6892e;
+    }
+
+    /* Style pour les liens de modification */
+    .btn-warning {
+        background-color: #f39c12; /* Jaune orangé pour modification */
+        color: white;
+    }
+
+    .btn-warning:hover {
+        background-color: #e67e22;
+    }
+</style>
+
+<div class="example-wrapper">
+    <h1>Liste des utilisateurs</h1>
+
+    <a href="{{ path('app_user_new') }}" class="btn btn-primary">Ajouter un utilisateur</a>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>User</th>
-                <th>actions</th>
+                <th>ID</th>
+                <th>Nom d'utilisateur</th>
+                <th>E-mail</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for user in users %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.User }}</td>
-                <td>
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <a href="{{ path('app_user_new') }}" class="btn btn-warning">Modifier</a>
+
+                        <!-- Formulaire de suppression -->
+                        <form action="{{ path('app_user_delete', {'id': user.id}) }}" method="post" style="display:inline;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">Supprimer</button>
+                        </form>
+
+                    </td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('app_user_new') }}">Create new</a>
+</div>
 {% endblock %}

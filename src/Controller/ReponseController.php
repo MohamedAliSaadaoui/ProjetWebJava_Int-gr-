@@ -76,10 +76,10 @@ final class ReponseController extends AbstractController
 
 
 
-            $mailService->sendEmail('shyhebboudaya@gmail.com','Réclamation résolue!',"<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;'>
+            $mailService->sendEmail($reclamation->getUser()->getEmail(),'Réclamation résolue!',"<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;'>
                 <div style='text-align: center; padding-bottom: 20px;'>
                     <h2 style='color: #28a745;'>Votre réclamation a été résolue ! 🎉</h2>
-                    <p style='color: #555;'>Bonjour <strong>{$reclamation->getUser()->getName()}</strong>,</p>
+                    <p style='color: #555;'>Bonjour <strong>{$reclamation->getUser()->getUsername()}</strong>,</p>
                 </div>
 
                 <div style='background: white; padding: 15px; border-radius: 5px;'>

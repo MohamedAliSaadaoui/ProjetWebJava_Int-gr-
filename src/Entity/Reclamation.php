@@ -32,7 +32,7 @@ class Reclamation
     private ?\DateTimeInterface $dateReclamation = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reclamations')]
-    #[ORM\JoinColumn(name: "id_user", referencedColumnName: "id_user", nullable: false)]
+    #[ORM\JoinColumn(name: "id_user", referencedColumnName: "id", nullable: false)]
     private ?User $user = null;
 
 

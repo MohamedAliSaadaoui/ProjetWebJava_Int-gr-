@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmation de commande{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h1 class="card-title mb-4">Merci pour votre commande !</h1>
+                    <p class="card-text">
+                        Votre commande #{{ command.id }} a été confirmée.
+                        {% if command.methodePaiement == 'cash_on_delivery' %}
+                            Vous paierez à la livraison.
+                        {% else %}
+                            Votre paiement a été traité avec succès.
+                        {% endif %}
+                    </p>
+                    
+                    <p class="card-text">
+                        Un email de confirmation a été envoyé à {{ command.user.email }}.
+                    </p>
+                    
+                    <div class="mt-4">
+                        <a href="{{ path('checkout_invoice', {'id': command.id}) }}" class="btn btn-primary">
+                            <i class="fas fa-file-pdf"></i> Télécharger la facture
+                        </a>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <a href="{{ path('home') }}" class="btn btn-outline-secondary">Retour à l'accueil</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,33 @@
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>Live Order Tracking</h2>
+    <div id="map" style="height: 500px;"></div>
+
+    <script>
+        var map = L.map('map').setView([36.8065, 10.1815], 10); // Default: Tunis
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        var marker = L.marker([36.8065, 10.1815]).addTo(map); // Default position
+
+        function updateMap(trackingNumber) {
+            fetch(`/track/map/${trackingNumber}`)
+                .then(response => response.json())
+                .then(data => {
+                    var lat = data.lat;
+                    var lng = data.lng;
+                    
+                    marker.setLatLng([lat, lng]); // Move marker
+                    map.setView([lat, lng], 12);  // Center map
+                });
+        }
+
+        setInterval(() => {
+            updateMap('{{ trackingNumber }}'); // Dynamic tracking number
+        }, 5000); // Refresh every 5 sec
+    </script>
+{% endblock %}

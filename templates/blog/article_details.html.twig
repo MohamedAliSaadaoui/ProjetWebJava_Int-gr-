@@ -1,0 +1,187 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<header class="header-section position-relative z-2 header-sticky">
+    <div class="container custom-containerr">
+        <div class="header-top">
+            <div class="create-navbar d-flex">
+                <div class="nav-left">
+                    <button type="button" class="header-toggle mobile-menu-toggle d-flex d-xl-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M3 12H21M3 6H21M3 18H15" stroke="#1F0300" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                    <a class="header-logo-wrapper" href="https://cleandemo.geniusocean.net/geniuscart3">
+                        <img class="logo" src="https://cleandemo.geniusocean.net/geniuscart3/assets/images/1730281140Blackpng.png" alt="logo">
+                    </a>
+                </div>
+
+                {# Navigation Menu #}
+                <div class="nav-center">
+                    <ul class="d-flex align-items-center nav-menus">
+                        <li><a href="https://cleandemo.geniusocean.net/geniuscart3" class="nav-link">Home</a></li>
+                        
+                        {# Products Megamenu #}
+                        <li class="has-megamenu">
+                            <a href="https://cleandemo.geniusocean.net/geniuscart3/category">Products</a>
+                            <span class="has-submenu-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18.7098 8.20986C18.6169 8.11613 18.5063 8.04174 18.3844 7.99097C18.2625 7.9402 18.1318 7.91406 17.9998 7.91406C17.8678 7.91406 17.7371 7.9402 17.6152 7.99097C17.4934 8.04174 17.3828 8.11613 17.2898 8.20986L12.7098 12.7899C12.6169 12.8836 12.5063 12.958 12.3844 13.0088C12.2625 13.0595 12.1318 13.0857 11.9998 13.0857C11.8678 13.0857 11.7371 13.0595 11.6152 13.0088C11.4934 12.958 11.3828 12.8836 11.2898 12.7899L6.70982 8.20986C6.61685 8.11613 6.50625 8.04174 6.38439 7.99097C6.26253 7.9402 6.13183 7.91406 5.99982 7.91406C5.8678 7.91406 5.7371 7.9402 5.61524 7.99097C5.49338 8.04174 5.38278 8.11613 5.28982 8.20986C5.10356 8.39722 4.99902 8.65067 4.99902 8.91486C4.99902 9.17905 5.10356 9.4325 5.28982 9.61986L9.87982 14.2099C10.4423 14.7717 11.2048 15.0872 11.9998 15.0872C12.7948 15.0872 13.5573 14.7717 14.1198 14.2099L18.7098 9.61986C18.8961 9.4325 19.0006 9.17905 19.0006 8.91486C19.0006 8.65067 18.8961 8.39722 18.7098 8.20986Z" fill="#180207" />
+                                </svg>
+                            </span>
+                            <div class="megamenu cat-megamenu">
+                                <div class="row w-100">
+                                    {# Add your category columns here - removing for brevity #}
+                                </div>
+                            </div>
+                        </li>
+
+                        {# Pages Dropdown #}
+                        <li class="has-submenu">
+                            <a href="javascript:void(0)">Pages</a>
+                            <span class="has-submenu-icon">
+                                {# Same SVG as above #}
+                            </span>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item dropdown__item" href="https://cleandemo.geniusocean.net/geniuscart3/about">About Us</a></li>
+                                <li><a class="dropdown-item dropdown__item" href="https://cleandemo.geniusocean.net/geniuscart3/privacy">Privacy & Policy</a></li>
+                                <li><a class="dropdown-item dropdown__item" href="https://cleandemo.geniusocean.net/geniuscart3/terms">Terms & Condition</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a href="https://cleandemo.geniusocean.net/geniuscart3/blog" class="nav-link">Blog</a></li>
+                        <li><a href="https://cleandemo.geniusocean.net/geniuscart3/faq" class="nav-link">Faq</a></li>
+                        <li><a href="https://cleandemo.geniusocean.net/geniuscart3/contact" class="nav-link">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                {# Navigation Right Icons #}
+                <div class="nav-right">
+                    <div class="icon-circle">
+                        <button id="searchIcon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M21 21L17.5001 17.5M20 11.5C20 16.1944 16.1944 20 11.5 20C6.80558 20 3 16.1944 3 11.5C3 6.80558 6.80558 3 11.5 3C16.1944 3 20 6.80558 20 11.5Z" stroke="#1F0300" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                    </div>
+                    {# Add other nav-right icons here - removing for brevity #}
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="gs-breadcrumb-section bg-class" data-background="https://cleandemo.geniusocean.net/geniuscart3/assets/images/1724480495Imagexxxxxpng.png">
+    <div class="container">
+        <div class="row justify-content-center content-wrapper">
+            <div class="col-12">
+                <h2 class="breadcrumb-title">Blog Details</h2>
+                <ul class="bread-menu">
+                    <li><a href="https://cleandemo.geniusocean.net/geniuscart3">Home</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="gs-blog-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-8 gs-main-blog-wrapper wow-replaced" data-wow-delay=".1s">
+                <div class="gs-blog-details-wrapper">
+                    <div class="gs-blog-card">
+                        {# Blog Image #}
+                       
+
+                        {# Meta Information #}
+                        <div class="meta-info-wrapper">
+                            <div class="single-meta">
+                                <span class="meta-title">
+                                    {% if article is defined and article is not null %}
+                                        {{ article.date ? article.date|date('M d - Y') : 'Date unknown' }}
+                                    {% else %}
+                                        Date unknown
+                                    {% endif %}
+                                </span>
+                                {% if article is defined and article is not null %}
+                                    <a href="{{ path('article_edit', { 'id': article.id }) }}" class="btn btn-primary">Edit</a>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {# Blog Content #}
+                        {% if article is defined and article is not null %}
+                            <h4 class="fea-title mb-24">{{ article.title }}</h4>
+                            <p class="article-content">{{ article.content|raw }}</p>
+                        {% else %}
+                            <h4 class="fea-title mb-24">Article Not Found</h4>
+                            <p class="article-content">This article is unavailable.</p>
+                        {% endif %}
+
+                        {# Comments Section #}
+                        <div class="gs-comment-section">
+                            <section class="commentaires-section">
+                                <h3 class="text-secondary">💬 Commentaires</h3>
+                                <div class="commentaires list-group">
+                                    {% if article is defined and article is not null and article.commentaires is defined %}
+                                        {% for commentaire in article.commentaires %}
+                                            <div class="list-group-item bg-light border-0 shadow-sm rounded mb-2">
+                                                <p class="mb-1">{{ commentaire.contenuComm }}</p>
+                                                <p class="text-muted small">🕒 Publié le {{ commentaire.dateComm|date('d-m-Y H:i') }}</p>
+                                                <form action="{{ path('comment_delete', {'id': commentaire.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?');" style="display: inline;">
+                                                    <button type="submit" class="btn btn-danger btn-sm">
+                                                        <i class="fas fa-trash-alt"></i> Supprimer
+                                                    </button>
+                                                </form>
+                                                <a href="{{ path('commentaire_edit', {'id': commentaire.id}) }}" class="btn btn-warning btn-sm">
+                                                    <i class="fas fa-edit"></i> Modifier
+                                                </a>
+                                            </div>
+                                        {% else %}
+                                            <p>Aucun commentaire disponible</p>
+                                        {% endfor %}
+                                    {% else %}
+                                        <p>No article available.</p>
+                                    {% endif %}
+                                </div>
+                            </section>
+
+                            {# Comment Form #}
+                            <section class="mt-4 p-3 bg-light rounded">
+                                <h3 class="text-secondary">📝 Ajouter un commentaire</h3>
+                                {{ form_start(commentaireForm, {'attr': {'class': 'form-group', 'novalidate': 'novalidate'}}) }}
+                                    {{ form_errors(commentaireForm) }}
+                                    <div class="mb-3">
+                                        {{ form_label(commentaireForm.contenuComm, 'Votre commentaire', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                        {{ form_widget(commentaireForm.contenuComm, {'attr': {'class': 'form-control border-primary shadow-sm', 'placeholder': 'Écrivez votre commentaire ici...', 'rows': '2', 'style': 'resize: none;'}}) }}
+                                        {{ form_errors(commentaireForm.contenuComm) }}
+                                    </div>
+                                    <div class="text-end">
+                                        <button type="submit" class="btn btn-primary px-4 py-2 rounded-pill shadow-sm">
+                                            <i class="fas fa-paper-plane"></i> Publier
+                                        </button>
+                                    </div>
+                                {{ form_end(commentaireForm) }}
+                            </section>
+
+                            <div class="text-center mt-4">
+                                <a href="{{ path('app_blog') }}" class="btn btn-outline-secondary">
+                                    ⬅ Retour à la liste des articles
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="gs-footer-section">
+    <div class="gs-footer-bottom">
+        <div class="container">
+            <p class="text-center">© {{ 'now' | date('Y') }} Rewear. All Rights Reserved.</p>
+        </div>
+    </div>
+</footer>
+{% endblock %}

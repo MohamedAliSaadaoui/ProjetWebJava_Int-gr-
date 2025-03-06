@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\Security\Core\Security;
 
 
 #[Route('/reclamation')]
@@ -35,11 +35,12 @@ final class ReclamationController extends AbstractController
      * @throws TransportExceptionInterface
      */
     #[Route('/new', name: 'app_reclamation_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository,MailService $mailService): Response
+    public function new(Security $security,Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository,MailService $mailService): Response
     {
+
         $reclamation = new Reclamation();
 
-        $user = $userRepository->findById(1);  // Use the findById method from UserRepository
+        $user = $security->getUser();  // Use the findById method from UserRepository
         if ($user) {
             $reclamation->setUser($user); // Set the user for the reclamation
         } else {
@@ -51,7 +52,7 @@ final class ReclamationController extends AbstractController
         $reclamation->setDateReclamation(new \DateTime());
 
         $form = $this->createForm(ReclamationType::class, $reclamation, [
-            'user_name' => $user ? $user->getName() : 'Guest',
+            'user_name' => $user ? $user->getUsername() : 'Guest',
         ]);
 
         $form->handleRequest($request);
@@ -65,7 +66,7 @@ final class ReclamationController extends AbstractController
                 foreach ($attachments as $attachment) {
                     $newFilename = uniqid().'.'.$attachment->guessExtension();
                     $attachment->move(
-                        $this->getParameter('photo_directory'),
+                        $this->getParameter('reclamation_uploads_directory'),
                         $newFilename
                     );
                     $attachmentUrls[] = '/uploads/photos/'.$newFilename;
@@ -80,10 +81,10 @@ final class ReclamationController extends AbstractController
             $entityManager->flush();
 
 
-            $mailService->sendEmail('shyhebboudaya@gmail.com','Réclamation enregistrée!',"<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;'>
+            $mailService->sendEmail($reclamation->getUser()->getEmail(),'Réclamation enregistrée!',"<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;'>
             <div style='text-align: center; padding-bottom: 20px;'>
                 <h2 style='color: #007bff;'>Votre réclamation a été enregistrée !</h2>
-                <p style='color: #555;'>Bonjour <strong>{$reclamation->getUser()->getName()}</strong>,</p>
+                <p style='color: #555;'>Bonjour <strong>{$reclamation->getUser()->getUsername()}</strong>,</p>
             </div>
 
             <div style='background: white; padding: 15px; border-radius: 5px;'>

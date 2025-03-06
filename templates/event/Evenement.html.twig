@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Event Management{% endblock %}
+
+{% block body %}
+<div class="container mx-auto p-6 bg-white rounded-lg shadow-md">
+    <h1 class="text-3xl font-bold mb-6 text-gray-700 flex items-center">
+        <svg class="w-8 h-8 text-indigo-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-9a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        Event Management Dashboard
+    </h1>
+
+    <div class="flex justify-end mb-6">
+        <button class="bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 text-white font-bold py-2 px-4 rounded shadow-lg flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            Add New Event
+        </button>
+    </div>
+
+    <div class="bg-gray-100 p-4 rounded-md shadow-inner mb-8">
+        <h2 class="text-xl font-semibold text-gray-600 mb-4">Past Events</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="bg-white p-4 rounded-lg shadow-md">
+                <img src="/images/event1.jpg" alt="Summer Sale Event" class="rounded-md mb-4">
+                <h3 class="text-lg font-bold text-gray-700">Summer Sale Event</h3>
+                <p class="text-sm text-gray-500">August 15, 2024 - New York</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-md">
+                <img src="/images/event2.jpg" alt="Winter Clearance" class="rounded-md mb-4">
+                <h3 class="text-lg font-bold text-gray-700">Winter Clearance</h3>
+                <p class="text-sm text-gray-500">December 10, 2024 - Los Angeles</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-gray-100 p-4 rounded-md shadow-inner">
+        <h2 class="text-xl font-semibold text-gray-600 mb-4">Upcoming Events</h2>
+        <div class="flex flex-col md:flex-row gap-4">
+            <div class="bg-white p-4 rounded-lg shadow-md flex items-center">
+                <img src="/images/event3.jpg" alt="Spring Market" class="w-24 h-24 rounded-md mr-4">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-700">Spring Market</h3>
+                    <p class="text-sm text-gray-500">April 5, 2025 - Chicago</p>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-md flex items-center">
+                <img src="/images/event4.jpg" alt="Back-to-School Fair" class="w-24 h-24 rounded-md mr-4">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-700">Back-to-School Fair</h3>
+                    <p class="text-sm text-gray-500">September 1, 2025 - Boston</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

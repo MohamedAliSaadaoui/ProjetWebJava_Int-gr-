@@ -1,0 +1,1142 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="mobile-menu">
+    <div class="mobile-menu-top">
+        <img src="/assets/images/1730281140Blackpng.png" alt="">
+        <svg class="close" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+            fill="none">
+            <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+        </svg>
+    </div>
+        <ul class="gs-dashboard-user-sidebar-wrapper">
+            <li class="active">
+                <a href="/vendor/dashboard">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M19.6483 21.5H13.6017C12.581 21.5 11.75 20.669 11.75 19.6483V12.1017C11.75 11.081 12.581 10.25 13.6017 10.25H19.6483C20.669 10.25 21.5 11.081 21.5 12.1017V19.6483C21.5 20.669 20.669 21.5 19.6483 21.5ZM13.6017 11.75C13.4075 11.75 13.25 11.9075 13.25 12.1017V19.6483C13.25 19.8425 13.4075 20 13.6017 20H19.6483C19.8425 20 20 19.8425 20 19.6483V12.1017C20 11.9075 19.8425 11.75 19.6483 11.75H13.6017Z"
+                            fill="#1F0300" />
+                        <path
+                            d="M19.6483 8.75H13.6017C12.581 8.75 11.75 7.919 11.75 6.89825V2.35175C11.75 1.331 12.581 0.5 13.6017 0.5H19.6483C20.669 0.5 21.5 1.331 21.5 2.35175V6.89825C21.5 7.919 20.669 8.75 19.6483 8.75ZM13.6017 2C13.4075 2 13.25 2.1575 13.25 2.35175V6.89825C13.25 7.0925 13.4075 7.25 13.6017 7.25H19.6483C19.8425 7.25 20 7.0925 20 6.89825V2.35175C20 2.1575 19.8425 2 19.6483 2H13.6017Z"
+                            fill="#1F0300" />
+                        <path
+                            d="M8.39825 11.75H2.35175C1.331 11.75 0.5 10.919 0.5 9.89825V2.35175C0.5 1.331 1.331 0.5 2.35175 0.5H8.39825C9.419 0.5 10.25 1.331 10.25 2.35175V9.89825C10.25 10.919 9.419 11.75 8.39825 11.75ZM2.35175 2C2.1575 2 2 2.1575 2 2.35175V9.89825C2 10.0925 2.1575 10.25 2.35175 10.25H8.39825C8.5925 10.25 8.75 10.0925 8.75 9.89825V2.35175C8.75 2.1575 8.5925 2 8.39825 2H2.35175Z"
+                            fill="#1F0300" />
+                        <path
+                            d="M8.39825 21.5H2.35175C1.331 21.5 0.5 20.669 0.5 19.6483V15.1017C0.5 14.081 1.331 13.25 2.35175 13.25H8.39825C9.419 13.25 10.25 14.081 10.25 15.1017V19.6483C10.25 20.669 9.419 21.5 8.39825 21.5ZM2.35175 14.75C2.1575 14.75 2 14.9075 2 15.1017V19.6483C2 19.8425 2.1575 20 2.35175 20H8.39825C8.5925 20 8.75 19.8425 8.75 19.6483V15.1017C8.75 14.9075 8.5925 14.75 8.39825 14.75H2.35175Z"
+                            fill="#1F0300" />
+                    </svg>
+                    <span class="label">Dashboard</span>
+                </a>
+            </li>
+        
+        
+        
+            <li
+                class="has-sub-menu ">
+        
+        
+                <a href="#vendor-collapse-product"
+                    class="collapsed"
+                    data-bs-toggle="collapse" aria-expanded="false" aria-controls="vendor-collapse-product">
+        
+        
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path
+                            d="M20.5 7.27734L12 11.9996M12 11.9996L3.49997 7.27734M12 11.9996L12 21.4996M21 16.0582V7.94104C21 7.5984 21 7.42708 20.9495 7.27428C20.9049 7.1391 20.8318 7.01502 20.7354 6.91033C20.6263 6.79199 20.4766 6.70879 20.177 6.54239L12.777 2.43128C12.4934 2.27372 12.3516 2.19494 12.2015 2.16406C12.0685 2.13672 11.9315 2.13672 11.7986 2.16406C11.6484 2.19494 11.5066 2.27372 11.223 2.43128L3.82297 6.54239C3.52345 6.70879 3.37369 6.792 3.26463 6.91033C3.16816 7.01502 3.09515 7.1391 3.05048 7.27428C3 7.42708 3 7.5984 3 7.94104V16.0582C3 16.4008 3 16.5721 3.05048 16.7249C3.09515 16.8601 3.16816 16.9842 3.26463 17.0889C3.37369 17.2072 3.52345 17.2904 3.82297 17.4568L11.223 21.5679C11.5066 21.7255 11.6484 21.8042 11.7986 21.8351C11.9315 21.8625 12.0685 21.8625 12.2015 21.8351C12.3516 21.8042 12.4934 21.7255 12.777 21.5679L20.177 17.4568C20.4766 17.2904 20.6263 17.2072 20.7354 17.0889C20.8318 16.9842 20.9049 16.8601 20.9495 16.7249C21 16.5721 21 16.4008 21 16.0582Z"
+                            stroke="#1F0300" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M16.5 9.5L7.5 4.5" stroke="#1F0300" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    <span class="label">Products</span>
+                    <i class="ms-auto fa-solid fa-angle-down angle-down"></i>
+                </a>
+                <ul class="sidebar-sub-menu collapse "
+                    id="vendor-collapse-product">
+        
+        
+                    <li><a class="sidebar-sub-menu-item "
+                            href="/seller/dashbord/produit">Add New Product</a>
+                    </li>
+                    <li><a class="sidebar-sub-menu-item "
+<a href="{{ path('app_allproduct_seller') }}">All Product</a>
+                    <li><a class="sidebar-sub-menu-item "
+                            href="/vendor/products/catalogs">Product Catalogs</a></li>
+                </ul>
+            </li>
+        
+        
+        
+        
+        
+        
+
+        
+
+        
+        
+
+        
+        
+        
+
+        
+        
+
+        </ul>
+   
+</div>
+
+<!-- search bar -->
+<div class="search-bar" id="searchBar">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <form class="search-form">
+                    <div class="input-group input__group">
+                        <input type="text" class="form-control form__control"
+                            placeholder="Search Any Product Here">
+                        <div class="input-group-append">
+                            <span class="search-separator"></span>
+                            <button class="dropdown-toggle btn btn-secondary search-category-dropdown"
+                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                All Categories                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item dropdown__item" href="#">Electronic</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item dropdown__item" href="#">Fashion & Beauty</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item dropdown__item" href="#">Camera & Photo</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item dropdown__item" href="#">Smart Phone</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item dropdown__item" href="#">Sports & Outdoor</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item dropdown__item" href="#">Books & Office</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="input-group-append">
+                            <button class="btn btn-primary search-icn" type="button">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none">
+                                    <path
+                                        d="M21 21L17.5001 17.5M20 11.5C20 16.1944 16.1944 20 11.5 20C6.80558 20 3 16.1944 3 11.5C3 6.80558 6.80558 3 11.5 3C16.1944 3 20 6.80558 20 11.5Z"
+                                        stroke="white" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- overlay -->
+    <div class="overlay"></div>
+
+    <!-- user dashboard wrapper start -->
+    <div class="gs-user-panel-review">
+        <div class="d-flex">
+            <!-- sidebar -->
+            <div class="gs-vendor-sidebar-wrapper d-none d-xl-block">
+    <div class="gs-vendor-sidebar-logo-wrapper">
+        <a href="">
+            <img src="/assets/images/1730281140Blackpng.png" alt="logo">
+        </a>
+    </div>
+    <ul class="gs-dashboard-user-sidebar-wrapper">
+        <li class="active">
+            <a href="/vendor/dashboard">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M19.6483 21.5H13.6017C12.581 21.5 11.75 20.669 11.75 19.6483V12.1017C11.75 11.081 12.581 10.25 13.6017 10.25H19.6483C20.669 10.25 21.5 11.081 21.5 12.1017V19.6483C21.5 20.669 20.669 21.5 19.6483 21.5ZM13.6017 11.75C13.4075 11.75 13.25 11.9075 13.25 12.1017V19.6483C13.25 19.8425 13.4075 20 13.6017 20H19.6483C19.8425 20 20 19.8425 20 19.6483V12.1017C20 11.9075 19.8425 11.75 19.6483 11.75H13.6017Z"
+                        fill="#1F0300" />
+                    <path
+                        d="M19.6483 8.75H13.6017C12.581 8.75 11.75 7.919 11.75 6.89825V2.35175C11.75 1.331 12.581 0.5 13.6017 0.5H19.6483C20.669 0.5 21.5 1.331 21.5 2.35175V6.89825C21.5 7.919 20.669 8.75 19.6483 8.75ZM13.6017 2C13.4075 2 13.25 2.1575 13.25 2.35175V6.89825C13.25 7.0925 13.4075 7.25 13.6017 7.25H19.6483C19.8425 7.25 20 7.0925 20 6.89825V2.35175C20 2.1575 19.8425 2 19.6483 2H13.6017Z"
+                        fill="#1F0300" />
+                    <path
+                        d="M8.39825 11.75H2.35175C1.331 11.75 0.5 10.919 0.5 9.89825V2.35175C0.5 1.331 1.331 0.5 2.35175 0.5H8.39825C9.419 0.5 10.25 1.331 10.25 2.35175V9.89825C10.25 10.919 9.419 11.75 8.39825 11.75ZM2.35175 2C2.1575 2 2 2.1575 2 2.35175V9.89825C2 10.0925 2.1575 10.25 2.35175 10.25H8.39825C8.5925 10.25 8.75 10.0925 8.75 9.89825V2.35175C8.75 2.1575 8.5925 2 8.39825 2H2.35175Z"
+                        fill="#1F0300" />
+                    <path
+                        d="M8.39825 21.5H2.35175C1.331 21.5 0.5 20.669 0.5 19.6483V15.1017C0.5 14.081 1.331 13.25 2.35175 13.25H8.39825C9.419 13.25 10.25 14.081 10.25 15.1017V19.6483C10.25 20.669 9.419 21.5 8.39825 21.5ZM2.35175 14.75C2.1575 14.75 2 14.9075 2 15.1017V19.6483C2 19.8425 2.1575 20 2.35175 20H8.39825C8.5925 20 8.75 19.8425 8.75 19.6483V15.1017C8.75 14.9075 8.5925 14.75 8.39825 14.75H2.35175Z"
+                        fill="#1F0300" />
+                </svg>
+                <span class="label">Dashboard</span>
+            </a>
+        </li>
+
+
+
+
+
+        <li
+            class="has-sub-menu ">
+
+
+            <a href="#vendor-collapse-product"
+                class="collapsed"
+                data-bs-toggle="collapse" aria-expanded="false" aria-controls="vendor-collapse-product">
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                    fill="none">
+                    <path
+                        d="M20.5 7.27734L12 11.9996M12 11.9996L3.49997 7.27734M12 11.9996L12 21.4996M21 16.0582V7.94104C21 7.5984 21 7.42708 20.9495 7.27428C20.9049 7.1391 20.8318 7.01502 20.7354 6.91033C20.6263 6.79199 20.4766 6.70879 20.177 6.54239L12.777 2.43128C12.4934 2.27372 12.3516 2.19494 12.2015 2.16406C12.0685 2.13672 11.9315 2.13672 11.7986 2.16406C11.6484 2.19494 11.5066 2.27372 11.223 2.43128L3.82297 6.54239C3.52345 6.70879 3.37369 6.792 3.26463 6.91033C3.16816 7.01502 3.09515 7.1391 3.05048 7.27428C3 7.42708 3 7.5984 3 7.94104V16.0582C3 16.4008 3 16.5721 3.05048 16.7249C3.09515 16.8601 3.16816 16.9842 3.26463 17.0889C3.37369 17.2072 3.52345 17.2904 3.82297 17.4568L11.223 21.5679C11.5066 21.7255 11.6484 21.8042 11.7986 21.8351C11.9315 21.8625 12.0685 21.8625 12.2015 21.8351C12.3516 21.8042 12.4934 21.7255 12.777 21.5679L20.177 17.4568C20.4766 17.2904 20.6263 17.2072 20.7354 17.0889C20.8318 16.9842 20.9049 16.8601 20.9495 16.7249C21 16.5721 21 16.4008 21 16.0582Z"
+                        stroke="#1F0300" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M16.5 9.5L7.5 4.5" stroke="#1F0300" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                <span class="label">Products</span>
+                <i class="ms-auto fa-solid fa-angle-down angle-down"></i>
+            </a>
+            <ul class="sidebar-sub-menu collapse "
+                id="vendor-collapse-product">
+
+
+                <li><a class="sidebar-sub-menu-item" href="{{ path('app_add_product') }}">Add New Product</a></li>
+
+                <li><a class="sidebar-sub-menu-item" href="{{ path('app_allproduct_seller') }}">All Product</a></li>
+                
+            </ul>
+        </li>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </ul>
+</div>
+
+            <!-- main content (header and outlet) -->
+            <div class="gs-vendor-header-outlet-wrapper">
+                <!-- header start  -->
+                <div class="positon-relative">
+
+    <div class="gs-vendor-header gap-2 gap-md-3">
+        <!-- this button will be visible on screen with the resulation of 1200px or more -->
+        <button class="gs-vendor-toggle-btn header-togglee mobile-menu-toggle d-none d-xl-inline-block" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <path d="M6 24H42M6 12H42M6 36H30" stroke="#1F0300" stroke-width="4" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+        </button>
+        <!-- this button will be visible under the 1200px resulation -->
+
+
+        <div class="d-flex align-items-center gap-4">
+            <a href=""><img class="vendor-res-header-logo d-xl-none" src="/assets/images/1730281140Blackpng.png" alt="logo"></a>
+
+            <button class="gs-vendor-toggle-btn header-toggle mobile-menu-toggle d-xl-none " type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <path d="M6 24H42M6 12H42M6 36H30" stroke="#1F0300" stroke-width="4" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </button>
+        </div>
+
+
+        <!-- hearch input  -->
+
+        <!-- icon button and user dropdown wrapper  -->
+        <div class="d-flex align-items-center gap-2 gap-md-3">
+            <button id="toggle-vendor-noti" class="icon-btn icon-btn-lg p-0" type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="62" height="60" viewBox="0 0 62 60"
+                    fill="none">
+                    <rect width="62" height="60" rx="10" fill="#F8F7F8" />
+                    <path
+                        d="M31.6749 45.0833C33.3796 45.0833 34.7604 43.7026 34.7604 41.9979H28.5894C28.5894 43.7026 29.9702 45.0833 31.6749 45.0833ZM40.9313 35.8269V28.1132C40.9313 23.3693 38.4089 19.4122 33.989 18.3632V17.3141C33.989 16.0336 32.9554 15 31.6749 15C30.3944 15 29.3608 16.0336 29.3608 17.3141V18.3632C24.9409 19.4122 22.4185 23.3693 22.4185 28.1132V35.8269L19.333 38.9124V40.4551H44.0168V38.9124L40.9313 35.8269Z"
+                        fill="#030712" />
+                    <circle cx="39.333" cy="21.667" r="5" fill="white" />
+                    <circle cx="39.3333" cy="21.6663" r="3.33333" fill="#FF3D3D" />
+                </svg>
+            </button>
+            <div class="user-dropdown-wrapper dropdown">
+                <div role="button" class="user-dropdown dropdown-toggle" id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="avatar overflow-hidden">
+
+                                                    <img class="w-100 h-100"
+                                src="/assets/images/users/172449863143827598439863282516468658404389111216783442njpg.jpg"
+                                alt="">
+                        
+
+                    </span>
+                    <div class="d-none d-md-flex flex-column gap-1">
+                        <span class="user-name">Vendor</span>
+                        <span class="user-designation">Vendor</span>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
+                        fill="none" class="d-none d-md-inline-block">
+                        <path
+                            d="M14.7636 4H7.64397H1.23282C0.135733 4 -0.412812 5.32565 0.364293 6.10277L6.28404 12.0225C7.23256 12.971 8.77534 12.971 9.72387 12.0225L11.9752 9.77116L15.6436 6.10277C16.4093 5.32565 15.8607 4 14.7636 4Z"
+                            fill="#1B212D" />
+                    </svg>
+                </div>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li>
+                        <a class="dropdown-item"
+                            href="/Test-Stores">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <path
+                                    d="M2.42012 12.7132C2.28394 12.4975 2.21584 12.3897 2.17772 12.2234C2.14909 12.0985 2.14909 11.9015 2.17772 11.7766C2.21584 11.6103 2.28394 11.5025 2.42012 11.2868C3.54553 9.50484 6.8954 5 12.0004 5C17.1054 5 20.4553 9.50484 21.5807 11.2868C21.7169 11.5025 21.785 11.6103 21.8231 11.7766C21.8517 11.9015 21.8517 12.0985 21.8231 12.2234C21.785 12.3897 21.7169 12.4975 21.5807 12.7132C20.4553 14.4952 17.1054 19 12.0004 19C6.8954 19 3.54553 14.4952 2.42012 12.7132Z"
+                                    stroke="#1F0300" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                <path
+                                    d="M12.0004 15C13.6573 15 15.0004 13.6569 15.0004 12C15.0004 10.3431 13.6573 9 12.0004 9C10.3435 9 9.0004 10.3431 9.0004 12C9.0004 13.6569 10.3435 15 12.0004 15Z"
+                                    stroke="#1F0300" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <span>Visit Store</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="/user/dashboard">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"
+                                fill="none">
+                                <path
+                                    d="M19.6483 21.5H13.6017C12.581 21.5 11.75 20.669 11.75 19.6483V12.1017C11.75 11.081 12.581 10.25 13.6017 10.25H19.6483C20.669 10.25 21.5 11.081 21.5 12.1017V19.6483C21.5 20.669 20.669 21.5 19.6483 21.5ZM13.6017 11.75C13.4075 11.75 13.25 11.9075 13.25 12.1017V19.6483C13.25 19.8425 13.4075 20 13.6017 20H19.6483C19.8425 20 20 19.8425 20 19.6483V12.1017C20 11.9075 19.8425 11.75 19.6483 11.75H13.6017Z"
+                                    fill="#1F0300" />
+                                <path
+                                    d="M19.6483 8.75H13.6017C12.581 8.75 11.75 7.919 11.75 6.89825V2.35175C11.75 1.331 12.581 0.5 13.6017 0.5H19.6483C20.669 0.5 21.5 1.331 21.5 2.35175V6.89825C21.5 7.919 20.669 8.75 19.6483 8.75ZM13.6017 2C13.4075 2 13.25 2.1575 13.25 2.35175V6.89825C13.25 7.0925 13.4075 7.25 13.6017 7.25H19.6483C19.8425 7.25 20 7.0925 20 6.89825V2.35175C20 2.1575 19.8425 2 19.6483 2H13.6017Z"
+                                    fill="#1F0300" />
+                                <path
+                                    d="M8.39825 11.75H2.35175C1.331 11.75 0.5 10.919 0.5 9.89825V2.35175C0.5 1.331 1.331 0.5 2.35175 0.5H8.39825C9.419 0.5 10.25 1.331 10.25 2.35175V9.89825C10.25 10.919 9.419 11.75 8.39825 11.75ZM2.35175 2C2.1575 2 2 2.1575 2 2.35175V9.89825C2 10.0925 2.1575 10.25 2.35175 10.25H8.39825C8.5925 10.25 8.75 10.0925 8.75 9.89825V2.35175C8.75 2.1575 8.5925 2 8.39825 2H2.35175Z"
+                                    fill="#1F0300" />
+                                <path
+                                    d="M8.39825 21.5H2.35175C1.331 21.5 0.5 20.669 0.5 19.6483V15.1017C0.5 14.081 1.331 13.25 2.35175 13.25H8.39825C9.419 13.25 10.25 14.081 10.25 15.1017V19.6483C10.25 20.669 9.419 21.5 8.39825 21.5ZM2.35175 14.75C2.1575 14.75 2 14.9075 2 15.1017V19.6483C2 19.8425 2.1575 20 2.35175 20H8.39825C8.5925 20 8.75 19.8425 8.75 19.6483V15.1017C8.75 14.9075 8.5925 14.75 8.39825 14.75H2.35175Z"
+                                    fill="#1F0300" />
+                            </svg>
+                            <span>User Panel</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="/vendor/profile">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <path
+                                    d="M20 21C20 19.6044 20 18.9067 19.8278 18.3389C19.44 17.0605 18.4395 16.06 17.1611 15.6722C16.5933 15.5 15.8956 15.5 14.5 15.5H9.5C8.10444 15.5 7.40665 15.5 6.83886 15.6722C5.56045 16.06 4.56004 17.0605 4.17224 18.3389C4 18.9067 4 19.6044 4 21M16.5 7.5C16.5 9.98528 14.4853 12 12 12C9.51472 12 7.5 9.98528 7.5 7.5C7.5 5.01472 9.51472 3 12 3C14.4853 3 16.5 5.01472 16.5 7.5Z"
+                                    stroke="#1F0300" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                            <span>Edit Profile </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="/user/logout">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <path
+                                    d="M18 8L22 12M22 12L18 16M22 12H9M15 4.20404C13.7252 3.43827 12.2452 3 10.6667 3C5.8802 3 2 7.02944 2 12C2 16.9706 5.8802 21 10.6667 21C12.2452 21 13.7252 20.5617 15 19.796"
+                                    stroke="#1F0300" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                            <span>Logout </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- vendor notification -->
+    <div class="gs-vendor-header-noti">
+        <div class="d-flex align-items-center justify-content-between gap-4">
+            <span class="title">Your Notification</span>
+            <a class="clear-btn" href="/vendor/order/notf/clear/13">Clear All</a>
+        </div>
+        <ul>
+                                        <li>
+                    No New Notifications.
+                </li>
+
+            
+        </ul>
+    </div>
+</div>
+                <!-- header end  -->
+
+                <!-- outlet start  -->
+                    <div class="gs-vendor-outlet">
+        <!-- breadcrumb start  -->
+        <div class="gs-vendor-breadcrumb has-mb">
+            <h4 class="text-capitalize">Dashboard Overview</h4>
+        </div>
+        <!-- breadcrumb end -->
+
+        <!-- Info cards area start -->
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-3 row-cols-xxl-4 gy-4">
+            <div class="col">
+                <div class="vendor-panel-info-card order-pending">
+                    <img src="/assets/front/icons/vendor-dashboard-icon_8.svg" alt="">
+                    <div class="title-and-value-wrapper">
+                        <p class="title">Order Pending</p>
+                        <h3 class="value">
+                            <span class="counter">19</span>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="vendor-panel-info-card order-processing">
+                    <img src="/assets/front/icons/vendor-dashboard-icon_7.svg" alt="">
+                    <div class="title-and-value-wrapper">
+                        <p class="title">Order Processing</p>
+                        <h3 class="value">
+                            <span class="counter">0</span>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="vendor-panel-info-card order-delivered">
+                    <img src="/assets/front/icons/vendor-dashboard-icon_6.svg" alt="">
+                    <div class="title-and-value-wrapper">
+                        <p class="title">Orders Completed!</p>
+                        <h3 class="value">
+                            <span class="counter">0</span>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="vendor-panel-info-card total-order">
+                    <img src="/assets/front/icons/vendor-dashboard-icon_5.svg" alt="">
+                    <div class="title-and-value-wrapper">
+                        <p class="title">Total Products!</p>
+                        <h3 class="value">
+                            <span class="counter">8</span>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="vendor-panel-info-card total-item-sold">
+                    <img src="/assets/front/icons/vendor-dashboard-icon_1.svg" alt="">
+                    <div class="title-and-value-wrapper">
+                        <p class="title">Total Item Sold!</p>
+                        <h3 class="value">
+                            <span
+                                class="counter">0</span>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="vendor-panel-info-card current-balance">
+                    <img src="/assets/front/icons/vendor-dashboard-icon_2.svg" alt="">
+                    <div class="title-and-value-wrapper">
+                        <p class="title">Current Balance</p>
+                        <h3 class="value">$<span class="counter">
+                                803.25</span></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="vendor-panel-info-card total-earning">
+                    <img src="/assets/front/icons/vendor-dashboard-icon_3.svg" alt="">
+                    <div class="title-and-value-wrapper">
+                        <p class="title">Total Earning</p>
+                                                <h3 class="value">$<span
+                                class="counter">6,926.50</span></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="vendor-panel-info-card pending-commision">
+                    <img src="/assets/front/icons/vendor-dashboard-icon_4.svg" alt="">
+                    <div class="title-and-value-wrapper">
+                        <p class="title">Pending Commision</p>
+                                                <h3 class="value">$<span
+                                class="counter">0</span>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Info cards area end -->
+
+        <!-- Table area start  -->
+        <div class="row gy-4 table-area">
+            <!-- Recent Product(s) Table -->
+            <div class="col-xxl-8">
+                <div class="vendor-table-wrapper recent-products-table-wrapper">
+                    <h4 class="table-title">Recent Product(s)</h4>
+                    <div class="user-table table-responsive">
+                        <table id="recent-product-table" class="gs-data-table w-100">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        <span class="header-title text-center">Image</span>
+                                    </th>
+                                    <th>
+                                        <span class="header-title">Product Name</span>
+                                    </th>
+                                    <th><span class="header-title">Category</span></th>
+                                    <th><span class="header-title">Type</span></th>
+                                    <th><span class="header-title">price</span></th>
+                                    <th class="text-center">
+                                        <span class="header-title">Details</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                                                    <!-- table data row 1 start  -->
+                                    <tr>
+                                        <td>
+                                            <img class="table-img"
+                                                src="/assets/images/products/1739703763BH1p7zDB.png"
+                                                alt="">
+                                        </td>
+                                        <td class="text-start">
+                                            <div class="product-name">
+                                                <span class="content">
+                                                    bjbjbjhbn
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="text-start">
+                                            <div class="category">
+                                                <span class="content">
+                                                    Women&#039;s Clothing
+                                                                                                            <br>
+                                                        Tops
+                                                                                                                                                                <br>
+                                                        Blouses
+                                                                                                    </span>
+                                            </div>
+                                        </td>
+                                        <td><span class="content">Physical</span></td>
+                                        <td><span class="content">1,265$</span></td>
+                                        <td>
+                                            <div class="table-icon-btns-wrapper">
+                                                <a href="/vendor/products/edit/500" class="view-btn">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <g clip-path="url(#clip0_548_165892)">
+                                                            <path
+                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
+                                                                fill="white" />
+                                                        </g>
+                                                        <defs>
+                                                            <clipPath id="clip0_548_165892">
+                                                                <rect width="24" height="24" fill="white" />
+                                                            </clipPath>
+                                                        </defs>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- table data row 1 end  -->
+                                                                    <!-- table data row 1 start  -->
+                                    <tr>
+                                        <td>
+                                            <img class="table-img"
+                                                src="/assets/images/products/1739376672jtNb8rlN.png"
+                                                alt="">
+                                        </td>
+                                        <td class="text-start">
+                                            <div class="product-name">
+                                                <span class="content">
+                                                    SASV
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="text-start">
+                                            <div class="category">
+                                                <span class="content">
+                                                    Men&#039;s Clothing
+                                                                                                            <br>
+                                                        Tops
+                                                                                                                                                                <br>
+                                                        T-Shirts
+                                                                                                    </span>
+                                            </div>
+                                        </td>
+                                        <td><span class="content">Physical</span></td>
+                                        <td><span class="content">1,265$</span></td>
+                                        <td>
+                                            <div class="table-icon-btns-wrapper">
+                                                <a href="/vendor/products/edit/499" class="view-btn">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <g clip-path="url(#clip0_548_165892)">
+                                                            <path
+                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
+                                                                fill="white" />
+                                                        </g>
+                                                        <defs>
+                                                            <clipPath id="clip0_548_165892">
+                                                                <rect width="24" height="24" fill="white" />
+                                                            </clipPath>
+                                                        </defs>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- table data row 1 end  -->
+                                                                    <!-- table data row 1 start  -->
+                                    <tr>
+                                        <td>
+                                            <img class="table-img"
+                                                src="/assets/images/products/1733286614zJxOszbG.png"
+                                                alt="">
+                                        </td>
+                                        <td class="text-start">
+                                            <div class="product-name">
+                                                <span class="content">
+                                                    Fashion Physical product title will be here
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="text-start">
+                                            <div class="category">
+                                                <span class="content">
+                                                    Women&#039;s Clothing
+                                                                                                            <br>
+                                                        Tops
+                                                                                                                                                                <br>
+                                                        Tank Tops
+                                                                                                    </span>
+                                            </div>
+                                        </td>
+                                        <td><span class="content">Physical</span></td>
+                                        <td><span class="content">225$</span></td>
+                                        <td>
+                                            <div class="table-icon-btns-wrapper">
+                                                <a href="/vendor/products/edit/494" class="view-btn">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <g clip-path="url(#clip0_548_165892)">
+                                                            <path
+                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
+                                                                fill="white" />
+                                                        </g>
+                                                        <defs>
+                                                            <clipPath id="clip0_548_165892">
+                                                                <rect width="24" height="24" fill="white" />
+                                                            </clipPath>
+                                                        </defs>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- table data row 1 end  -->
+                                                                    <!-- table data row 1 start  -->
+                                    <tr>
+                                        <td>
+                                            <img class="table-img"
+                                                src="/assets/images/products/1733288399E1W8lVZ4.png"
+                                                alt="">
+                                        </td>
+                                        <td class="text-start">
+                                            <div class="product-name">
+                                                <span class="content">
+                                                    Fashion Physical product title will be here
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="text-start">
+                                            <div class="category">
+                                                <span class="content">
+                                                    Unisex Clothing
+                                                                                                            <br>
+                                                        Hoodies
+                                                                                                                                                                <br>
+                                                        
+                                                                                                    </span>
+                                            </div>
+                                        </td>
+                                        <td><span class="content">Physical</span></td>
+                                        <td><span class="content">272.25$</span></td>
+                                        <td>
+                                            <div class="table-icon-btns-wrapper">
+                                                <a href="/vendor/products/edit/490" class="view-btn">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <g clip-path="url(#clip0_548_165892)">
+                                                            <path
+                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
+                                                                fill="white" />
+                                                        </g>
+                                                        <defs>
+                                                            <clipPath id="clip0_548_165892">
+                                                                <rect width="24" height="24" fill="white" />
+                                                            </clipPath>
+                                                        </defs>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- table data row 1 end  -->
+                                                                    <!-- table data row 1 start  -->
+                                    <tr>
+                                        <td>
+                                            <img class="table-img"
+                                                src="/assets/images/products/1733288620C1mIVljA.png"
+                                                alt="">
+                                        </td>
+                                        <td class="text-start">
+                                            <div class="product-name">
+                                                <span class="content">
+                                                    Fashion Physical product title will be here
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="text-start">
+                                            <div class="category">
+                                                <span class="content">
+                                                    Men&#039;s Clothing
+                                                                                                            <br>
+                                                        Tops
+                                                                                                                                                                <br>
+                                                        T-Shirts
+                                                                                                    </span>
+                                            </div>
+                                        </td>
+                                        <td><span class="content">Physical</span></td>
+                                        <td><span class="content">256.50$</span></td>
+                                        <td>
+                                            <div class="table-icon-btns-wrapper">
+                                                <a href="/vendor/products/edit/486" class="view-btn">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <g clip-path="url(#clip0_548_165892)">
+                                                            <path
+                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
+                                                                fill="white" />
+                                                        </g>
+                                                        <defs>
+                                                            <clipPath id="clip0_548_165892">
+                                                                <rect width="24" height="24" fill="white" />
+                                                            </clipPath>
+                                                        </defs>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- table data row 1 end  -->
+                                                                    <!-- table data row 1 start  -->
+                                    <tr>
+                                        <td>
+                                            <img class="table-img"
+                                                src="/assets/images/products/1733290619poTvl9yp.png"
+                                                alt="">
+                                        </td>
+                                        <td class="text-start">
+                                            <div class="product-name">
+                                                <span class="content">
+                                                    Fashion Physical product title will be here
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="text-start">
+                                            <div class="category">
+                                                <span class="content">
+                                                    Women&#039;s Shoes
+                                                                                                            <br>
+                                                        Flats
+                                                                                                                                                                <br>
+                                                        
+                                                                                                    </span>
+                                            </div>
+                                        </td>
+                                        <td><span class="content">Physical</span></td>
+                                        <td><span class="content">88.50$</span></td>
+                                        <td>
+                                            <div class="table-icon-btns-wrapper">
+                                                <a href="/vendor/products/edit/482" class="view-btn">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <g clip-path="url(#clip0_548_165892)">
+                                                            <path
+                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
+                                                                fill="white" />
+                                                        </g>
+                                                        <defs>
+                                                            <clipPath id="clip0_548_165892">
+                                                                <rect width="24" height="24" fill="white" />
+                                                            </clipPath>
+                                                        </defs>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- table data row 1 end  -->
+                                                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Recent Order(s) Table  -->
+            <div class="col-xxl-4">
+                <div class="vendor-table-wrapper recent-orders-table-wrapper">
+                    <h4 class="table-title">Recent Order(s)</h4>
+                    <div class="user-table table-responsive">
+                        <table id="recent-order-table" class="gs-data-table w-100">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <span class="header-title">Order Number</span>
+                                    </th>
+                                    <th><span class="header-title">Order Date</span></th>
+                                    <th class="text-center">
+                                        <span class="header-title">Details</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                                                    <!-- table data row 1 start  -->
+                                    <tr>
+                                        <td><span class="content">ynlR1738308653</span></td>
+                                        <td><span class="content">2025-01-31</span>
+                                        </td>
+                                        <td>
+                                            <div class="table-icon-btns-wrapper">
+                                                <a href="/vendor/order/ynlR1738308653/show"
+                                                    class="view-btn">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <g clip-path="url(#clip0_548_165897)">
+                                                            <path
+                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
+                                                                fill="white" />
+                                                        </g>
+                                                        <defs>
+                                                            <clipPath id="clip0_548_165897">
+                                                                <rect width="24" height="24" fill="white" />
+                                                            </clipPath>
+                                                        </defs>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- table data row 1 end  -->
+                                                                    <!-- table data row 1 start  -->
+                                    <tr>
+                                        <td><span class="content">ynlR1738308653</span></td>
+                                        <td><span class="content">2025-01-31</span>
+                                        </td>
+                                        <td>
+                                            <div class="table-icon-btns-wrapper">
+                                                <a href="/vendor/order/ynlR1738308653/show"
+                                                    class="view-btn">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <g clip-path="url(#clip0_548_165897)">
+                                                            <path
+                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
+                                                                fill="white" />
+                                                        </g>
+                                                        <defs>
+                                                            <clipPath id="clip0_548_165897">
+                                                                <rect width="24" height="24" fill="white" />
+                                                            </clipPath>
+                                                        </defs>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- table data row 1 end  -->
+                                                                    <!-- table data row 1 start  -->
+                                    <tr>
+                                        <td><span class="content">aaAM1738298586</span></td>
+                                        <td><span class="content">2025-01-30</span>
+                                        </td>
+                                        <td>
+                                            <div class="table-icon-btns-wrapper">
+                                                <a href="/vendor/order/aaAM1738298586/show"
+                                                    class="view-btn">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <g clip-path="url(#clip0_548_165897)">
+                                                            <path
+                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
+                                                                fill="white" />
+                                                        </g>
+                                                        <defs>
+                                                            <clipPath id="clip0_548_165897">
+                                                                <rect width="24" height="24" fill="white" />
+                                                            </clipPath>
+                                                        </defs>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- table data row 1 end  -->
+                                                                    <!-- table data row 1 start  -->
+                                    <tr>
+                                        <td><span class="content">gVNv1732763745</span></td>
+                                        <td><span class="content">2024-11-27</span>
+                                        </td>
+                                        <td>
+                                            <div class="table-icon-btns-wrapper">
+                                                <a href="/vendor/order/gVNv1732763745/show"
+                                                    class="view-btn">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <g clip-path="url(#clip0_548_165897)">
+                                                            <path
+                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
+                                                                fill="white" />
+                                                        </g>
+                                                        <defs>
+                                                            <clipPath id="clip0_548_165897">
+                                                                <rect width="24" height="24" fill="white" />
+                                                            </clipPath>
+                                                        </defs>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- table data row 1 end  -->
+                                                                    <!-- table data row 1 start  -->
+                                    <tr>
+                                        <td><span class="content">OliA1732590932</span></td>
+                                        <td><span class="content">2024-11-25</span>
+                                        </td>
+                                        <td>
+                                            <div class="table-icon-btns-wrapper">
+                                                <a href="/vendor/order/OliA1732590932/show"
+                                                    class="view-btn">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <g clip-path="url(#clip0_548_165897)">
+                                                            <path
+                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
+                                                                fill="white" />
+                                                        </g>
+                                                        <defs>
+                                                            <clipPath id="clip0_548_165897">
+                                                                <rect width="24" height="24" fill="white" />
+                                                            </clipPath>
+                                                        </defs>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- table data row 1 end  -->
+                                                                    <!-- table data row 1 start  -->
+                                    <tr>
+                                        <td><span class="content">lnfu1732207805</span></td>
+                                        <td><span class="content">2024-11-21</span>
+                                        </td>
+                                        <td>
+                                            <div class="table-icon-btns-wrapper">
+                                                <a href="/vendor/order/lnfu1732207805/show"
+                                                    class="view-btn">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <g clip-path="url(#clip0_548_165897)">
+                                                            <path
+                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
+                                                                fill="white" />
+                                                        </g>
+                                                        <defs>
+                                                            <clipPath id="clip0_548_165897">
+                                                                <rect width="24" height="24" fill="white" />
+                                                            </clipPath>
+                                                        </defs>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- table data row 1 end  -->
+                                                                    <!-- table data row 1 start  -->
+                                    <tr>
+                                        <td><span class="content">krJe1732176919</span></td>
+                                        <td><span class="content">2024-11-21</span>
+                                        </td>
+                                        <td>
+                                            <div class="table-icon-btns-wrapper">
+                                                <a href="/vendor/order/krJe1732176919/show"
+                                                    class="view-btn">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <g clip-path="url(#clip0_548_165897)">
+                                                            <path
+                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
+                                                                fill="white" />
+                                                        </g>
+                                                        <defs>
+                                                            <clipPath id="clip0_548_165897">
+                                                                <rect width="24" height="24" fill="white" />
+                                                            </clipPath>
+                                                        </defs>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- table data row 1 end  -->
+                                                                    <!-- table data row 1 start  -->
+                                    <tr>
+                                        <td><span class="content">mUzY1732169080</span></td>
+                                        <td><span class="content">2024-11-20</span>
+                                        </td>
+                                        <td>
+                                            <div class="table-icon-btns-wrapper">
+                                                <a href="/vendor/order/mUzY1732169080/show"
+                                                    class="view-btn">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <g clip-path="url(#clip0_548_165897)">
+                                                            <path
+                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
+                                                                fill="white" />
+                                                        </g>
+                                                        <defs>
+                                                            <clipPath id="clip0_548_165897">
+                                                                <rect width="24" height="24" fill="white" />
+                                                            </clipPath>
+                                                        </defs>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- table data row 1 end  -->
+                                                                    <!-- table data row 1 start  -->
+                                    <tr>
+                                        <td><span class="content">iyfS1731493781</span></td>
+                                        <td><span class="content">2024-11-13</span>
+                                        </td>
+                                        <td>
+                                            <div class="table-icon-btns-wrapper">
+                                                <a href="/vendor/order/iyfS1731493781/show"
+                                                    class="view-btn">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <g clip-path="url(#clip0_548_165897)">
+                                                            <path
+                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
+                                                                fill="white" />
+                                                        </g>
+                                                        <defs>
+                                                            <clipPath id="clip0_548_165897">
+                                                                <rect width="24" height="24" fill="white" />
+                                                            </clipPath>
+                                                        </defs>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- table data row 1 end  -->
+                                                                    <!-- table data row 1 start  -->
+                                    <tr>
+                                        <td><span class="content">vlCl1731473607</span></td>
+                                        <td><span class="content">2024-11-12</span>
+                                        </td>
+                                        <td>
+                                            <div class="table-icon-btns-wrapper">
+                                                <a href="/vendor/order/vlCl1731473607/show"
+                                                    class="view-btn">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <g clip-path="url(#clip0_548_165897)">
+                                                            <path
+                                                                d="M12 4.84668C7.41454 4.84668 3.25621 7.35543 0.187788 11.4303C-0.0625959 11.7641 -0.0625959 12.2305 0.187788 12.5644C3.25621 16.6442 7.41454 19.1529 12 19.1529C16.5855 19.1529 20.7438 16.6442 23.8122 12.5693C24.0626 12.2354 24.0626 11.769 23.8122 11.4352C20.7438 7.35543 16.5855 4.84668 12 4.84668ZM12.3289 17.0369C9.28506 17.2284 6.7714 14.7196 6.96287 11.6709C7.11998 9.1572 9.15741 7.11977 11.6711 6.96267C14.7149 6.7712 17.2286 9.27994 17.0371 12.3287C16.8751 14.8375 14.8377 16.8749 12.3289 17.0369ZM12.1767 14.7098C10.537 14.8129 9.18196 13.4628 9.28997 11.8231C9.37343 10.468 10.4732 9.37322 11.8282 9.28485C13.4679 9.18175 14.823 10.5319 14.7149 12.1716C14.6266 13.5316 13.5268 14.6264 12.1767 14.7098Z"
+                                                                fill="white" />
+                                                        </g>
+                                                        <defs>
+                                                            <clipPath id="clip0_548_165897">
+                                                                <rect width="24" height="24" fill="white" />
+                                                            </clipPath>
+                                                        </defs>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- table data row 1 end  -->
+                                                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Table area end  -->
+
+        <!-- Chart area start -->
+        <div class="gs-chart-wrapper vendor-monthly-sales-chart d-none d-md-block">
+            <div class="chart-title-dropdown-wrapper">
+                <h4 class="chart-title">Monthly Sales Overview</h4>
+            </div>
+            <div id="chart">
+            </div>
+        </div>
+        <!-- Chart area end -->
+    </div>
+                <!-- outlet end  -->
+            </div>
+        </div>
+    </div>
+    <!-- user dashboard wrapper end -->
+
+
+    <div class="modal gs-modal fade" id="confirm-detete-modal" tabindex="-1" aria-hidden="true">
+        <form id="delete_url" class="modal-dialog confirm-delete-modal-dialog modal-dialog-centered" method="POST">
+            <div class="modal-content confirm-delete-modal-content form-group">
+                <div class="modal-header delete-modal-header w-100">
+                    <div class="title-des-wrapper">
+                        <h4 class="title">Confirm Delete ?</h4>
+                        <h5 class="sub-title">
+                        Are you sure you want to delete this item?                        </h5>
+                    </div>
+                </div>
+                <!-- modal body start  -->
+
+                <!-- Buttons  -->
+                <div class="row row-cols-2 w-100">
+                    <input type="hidden" name="_token" value="impNs1YibXfpuDVpxLVE7Vk8p3Jl5jixKZBCetoq" autocomplete="off">                    <input type="hidden" name="_method" value="DELETE">                    <div class="col">
+                        <button type="submit" class="template-btn black-btn w-100" id="">Delete</button>
+                    </div>
+                    <div class="col">
+                        <button class="template-btn w-100" data-bs-dismiss="modal" type="button">Cancel</button>
+                    </div>
+                </div>
+                <!-- modal body end  -->
+            </div>
+        </form>
+    </div>
+{% endblock %}

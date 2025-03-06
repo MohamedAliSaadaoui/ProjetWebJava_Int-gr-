@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de Bord{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h2 class="text-center">Tableau de Bord des Réclamations</h2>
+
+        <!-- ✅ Statistiques sous forme de Row -->
+        <div class="row text-center mt-4">
+            <div class="col-md-2">
+                <div class="card bg-primary text-white p-3">
+                    <h5>Catégorie la plus signalée</h5>
+                    <p>{{ mostReportedCategory ?: 'N/A' }}</p>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card bg-success text-white p-3">
+                    <h5>Réclamations Résolues</h5>
+                    <p>{{ resolvedCount }}</p>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card bg-warning text-dark p-3">
+                    <h5>Réclamations en Cours</h5>
+                    <p>{{ inProgressCount }}</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white p-3">
+                    <h5>Utilisateur le plus actif</h5>
+                    <p>{{ topUser ?: 'Aucun utilisateur' }}</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-danger text-white p-3">
+                    <h5>Pic de Réclamations</h5>
+                    <p>{{ peakDate ? peakDate|date('Y-m-d'): 'N/A' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Graphiques (si besoin) -->
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <canvas id="categoryChart"></canvas>
+            </div>
+            <div class="col-md-6">
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

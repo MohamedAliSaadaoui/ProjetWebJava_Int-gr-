@@ -1,0 +1,52 @@
+{# templates/user/events.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Événements{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Mes Événements</h1>
+    
+    <h2 class="mt-4">Événements que j'ai créés</h2>
+    {% if createdEvents is empty %}
+        <p>Vous n'avez pas encore créé d'événement.</p>
+    {% else %}
+        <div class="row">
+            {% for event in createdEvents %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ event.titre }}</h5>
+                            <p class="card-text">{{ event.dateDebut|date('d/m/Y H:i') }}</p>
+                            p class="card-text">{{ event.dateFin|date('d/m/Y H:i') }}</p>
+                            <p class="card-text">{{ event.categorie|slice(0, 100) }}</p>
+                            <a href="{{ path('event_list', {'id': event.id}) }}" class="btn btn-primary">Voir détails</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <h2 class="mt-4">Événements auxquels je participe</h2>
+    {% if participatingEvents is empty %}
+        <p>Vous ne participez à aucun événement pour le moment.</p>
+    {% else %}
+        <div class="row">
+            {% for event in participatingEvents %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ event.titre }}</h5>
+                            <p class="card-text">{{ event.dateDebut|date('d/m/Y H:i') }}</p>
+                            p class="card-text">{{ event.dateFin|date('d/m/Y H:i') }}</p>
+                            <p class="card-text">{{ event.categorie|slice(0, 100) }}</p>
+                            <a href="{{ path('participation_list', {'id': event.id}) }}" class="btn btn-primary">Voir détails</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

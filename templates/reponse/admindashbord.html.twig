@@ -762,7 +762,7 @@
                             {% for reclamation in reclamations %}
                                 <tr>
                                     <td>{{ compteur }}</td>
-                                    <td>{{ reclamation.user.name }}</td>  {# Display User Name #}
+                                    <td>{{ reclamation.user.username }}</td>  {# Display User Name #}
                                     <td>{{ reclamation.dateReclamation|date('d M Y') }}</td>
                                     <td>{{ reclamation.objet }}</td>
                                     <td>{{ reclamation.category }}</td>
