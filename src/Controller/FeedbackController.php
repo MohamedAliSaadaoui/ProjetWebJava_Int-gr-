@@ -6,12 +6,18 @@ use App\Entity\Feedback;
 use App\Entity\Question;
 use App\Form\FeedbackType;
 use App\Repository\FeedbackRepository;
+use App\Service\BadWordsService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+
 
 #[Route('/feedback')]
 class FeedbackController extends AbstractController
@@ -25,50 +31,65 @@ class FeedbackController extends AbstractController
     }
 
     #[Route('/new/{idQ}', name: 'app_feedback_new', methods: ['POST'])]
-    public function new(Request $request, Question $question, EntityManagerInterface $entityManager): Response
-    {
-        // Lire le fichier de mots interdits
-        $badWordsFilePath = $this->getParameter('kernel.project_dir') . '/public/bad-words/fr.txt';
-        $badWords = file($badWordsFilePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    public function new(
+        Request $request,
+        Question $question,
+        EntityManagerInterface $entityManager,
+        BadWordsService $badWordsService,
+        MailerInterface $mailer
 
+    ): Response {
         // Récupérer les données du formulaire
-        $feedbackText = $request->request->get('feedback_text');
-        $userName = $request->request->get('user_name');
+        $feedback_text = $request->request->get('feedback_text');
+        $user_name = $request->request->get('user_name');
 
-        // Vérifier si la réponse contient des mots interdits
-        foreach ($badWords as $badWord) {
-            if (stripos($feedbackText, $badWord) !== false) {
-                // Si c'est une requête AJAX, renvoyer une erreur
-                if ($request->isXmlHttpRequest()) {
-                    return $this->json([
-                        'success' => false,
-                        'message' => 'Votre réponse contient des mots irrespectueux. Veuillez reformuler votre message.',
-                    ]);
-                }
+        // Vérifier la présence de mots inappropriés
+        $badWordsCheck = $badWordsService->containsBadWords($feedback_text);
 
-                // Si ce n'est pas AJAX, rediriger avec un message flash
-                $this->addFlash('error', 'Votre réponse contient des mots irrespectueux. Veuillez reformuler votre message.');
-                return $this->redirectToRoute('app_question_show', ['idQ' => $question->getIdQ()]);
+        if ($badWordsCheck['containsBadWords']) {
+            // Si des mots inappropriés sont détectés, renvoyer une erreur
+            if ($request->isXmlHttpRequest()) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Votre réponse contient un langage inapproprié. Veuillez reformuler votre message de manière respectueuse.',
+                    'badWordsCount' => count($badWordsCheck['badWords'])
+                ]);
             }
+
+            // Si ce n'est pas AJAX, rediriger avec un message flash
+            $this->addFlash('error', 'Votre réponse contient un langage inapproprié. Veuillez reformuler votre message de manière respectueuse.');
+            return $this->redirectToRoute('app_question_index');
         }
 
         // Créer un nouveau feedback
         $feedback = new Feedback();
         $feedback->setQuestion($question);
         $feedback->setAnsweredAt(new \DateTime());
-        $feedback->setFeedbackText($feedbackText);
-        $feedback->setUserName($userName);
+        $feedback->setFeedbackText($feedback_text);
+        $feedback->setUserName($user_name);
         $feedback->setApproved(0);
 
         // Enregistrer le feedback
         $entityManager->persist($feedback);
         $entityManager->flush();
 
+        try {
+            $email = (new Email())
+                ->from('noreply@demomailtrap.co')
+                ->to('nebilylynda@gmail.com') // Vérifiez que cette méthode existe
+                ->subject('Nouvelle réponse à votre question')
+                ->html($this->getEmailContent($feedback, $question));
+
+            $mailer->send($email);
+        } catch (TransportExceptionInterface $e) {
+            $this->addFlash('error', 'Erreur lors de l\'envoi de l\'email: ' . $e->getMessage());
+        }
+
         // Si c'est une requête AJAX, renvoyer une réponse JSON
         if ($request->isXmlHttpRequest()) {
             return $this->json([
                 'success' => true,
-                'message' => 'Votre réponse a été ajoutée avec succès.',
+                'message' => 'Votre réponse a été ajoutée avec succès',
                 'feedback' => [
                     'id' => $feedback->getIdF(),
                     'text' => $feedback->getFeedbackText(),
@@ -80,9 +101,95 @@ class FeedbackController extends AbstractController
         }
 
         // Si ce n'est pas AJAX, rediriger avec un message flash
-        $this->addFlash('success', 'Votre réponse a été ajoutée avec succès.');
+        $this->addFlash('success', 'Votre réponse a été ajoutée avec succès');
         return $this->redirectToRoute('app_question_index');
+
+
     }
+
+    private function getEmailContent(Feedback $feedback, Question $question): string
+    {
+        // Vous pouvez personnaliser ce template pour inclure les détails du feedback
+        return '
+        <!DOCTYPE html>
+        <html lang="fr">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Nouvelle réponse à votre question</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f4;
+                    margin: 0;
+                    padding: 0;
+                }
+                .email-container {
+                    max-width: 600px;
+                    margin: 20px auto;
+                    background-color: #ffffff;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    overflow: hidden;
+                }
+                .email-header {
+                    background-color: #007bff;
+                    color: #ffffff;
+                    padding: 20px;
+                    text-align: center;
+                }
+                .email-header h1 {
+                    margin: 0;
+                    font-size: 24px;
+                }
+                .email-body {
+                    padding: 20px;
+                    color: #333333;
+                }
+                .email-body p {
+                    line-height: 1.6;
+                }
+                .email-footer {
+                    background-color: #f4f4f4;
+                    padding: 10px;
+                    text-align: center;
+                    font-size: 12px;
+                    color: #666666;
+                }
+                .button {
+                    display: inline-block;
+                    padding: 10px 20px;
+                    margin-top: 20px;
+                    background-color: #007bff;
+                    color: #ffffff;
+                    text-decoration: none;
+                    border-radius: 5px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="email-container">
+                <div class="email-header">
+                    <h1>Nouvelle réponse à votre question</h1>
+                </div>
+                <div class="email-body">
+                    <p>Bonjour,</p>
+                    <p>Vous avez reçu une nouvelle réponse à votre question: "' . htmlspecialchars($question->getQuestionText() ?? 'Votre question') . '"</p>
+                    <p>La réponse de ' . htmlspecialchars($feedback->getUserName()) . ':</p>
+                    <p style="background-color: #f9f9f9; padding: 10px; border-left: 3px solid #007bff;">
+                    ' . nl2br(htmlspecialchars($feedback->getFeedbackText())) . '
+                    </p>
+                    <a href="http://votre-site.com/questions/' . $question->getIdQ() . '" class="button">Voir tous les détails</a>
+                </div>
+                <div class="email-footer">
+                    <p>Cet e-mail a été envoyé automatiquement. Merci de ne pas y répondre.</p>
+                </div>
+            </div>
+        </body>
+        </html>
+    ';
+    }
+
 
     #[Route('/{idF}', name: 'app_feedback_show', methods: ['GET'])]
     public function show(Feedback $feedback): Response

@@ -22,3 +22,10 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+
+   #   donne acces au dossier data ou existe le dataset des bad words
+
+    App\Service\BadWordsService:
+        arguments:
+            $projectDir: '%kernel.project_dir%'

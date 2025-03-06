@@ -7,6 +7,11 @@
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
         <style>
+
+
+
+
+
             /* Styles de base */
             body {
                 font-family: 'Poppins', sans-serif;
@@ -420,6 +425,12 @@
 
                             const formData = new FormData(form);
                             const questionId = form.dataset.questionId;
+                            const submitButton = form.querySelector('button[type="submit"]');
+                            const originalButtonText = submitButton.innerHTML;
+
+                            // Désactiver le bouton pendant la soumission
+                            submitButton.disabled = true;
+                            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
 
                             fetch(form.action, {
                                 method: 'POST',
@@ -431,36 +442,103 @@
                                 .then(response => response.json())
                                 .then(data => {
                                     if (data.success) {
-                                        // Afficher la notification
-                                        const notificationCard = document.getElementById('notification-card');
-                                        const notificationMessage = document.querySelector('.notification-message');
-                                        notificationMessage.textContent = data.message;
-                                        notificationCard.style.display = 'block';
+                                        // Afficher la notification de succès
+                                        showNotification(data.message, 'success');
 
-                                        // Masquer la notification après 5 secondes
-                                        setTimeout(() => {
-                                            notificationCard.style.display = 'none';
-                                        }, 5000);
+                                        // Réinitialiser le formulaire
+                                        form.reset();
 
-                                        // Rafraîchir la page pour afficher la nouvelle réponse
-                                        location.reload();
+                                        // Masquer le formulaire de réponse
+                                        const reponseCard = document.getElementById(`reponse-card-${questionId}`);
+                                        reponseCard.style.display = 'none';
+
+                                        refreshFeedbacks(questionId);
                                     } else {
-                                        alert(data.message);
+                                        // Afficher la notification d'erreur
+                                        showNotification(data.message, 'error');
                                     }
                                 })
                                 .catch(error => {
                                     console.error('Error:', error);
+                                    showNotification('Une erreur s\'est produite lors de l\'envoi de votre réponse.', 'error');
+                                })
+                                .finally(() => {
+                                    // Réactiver le bouton
+                                    submitButton.disabled = false;
+                                    submitButton.innerHTML = originalButtonText;
                                 });
                         });
                     });
 
-                    // Fermer la notification
-                    const closeBtn = document.querySelector('.notification-close-btn');
-                    if (closeBtn) {
-                        closeBtn.addEventListener('click', function () {
-                            const notificationCard = document.getElementById('notification-card');
+                    // Fonction pour afficher une notification
+                    function showNotification(message, type = 'success') {
+                        // Créer la notification si elle n'existe pas
+                        let notificationCard = document.getElementById('notification-card');
+
+                        if (!notificationCard) {
+                            notificationCard = document.createElement('div');
+                            notificationCard.id = 'notification-card';
+                            notificationCard.className = 'notification-card';
+
+                            const notificationContent = document.createElement('div');
+                            notificationContent.className = 'notification-content';
+
+                            const notificationMessage = document.createElement('div');
+                            notificationMessage.className = 'notification-message';
+
+                            const closeButton = document.createElement('button');
+                            closeButton.className = 'notification-close-btn';
+                            closeButton.innerHTML = '&times;';
+
+                            notificationContent.appendChild(notificationMessage);
+                            notificationCard.appendChild(notificationContent);
+                            notificationCard.appendChild(closeButton);
+
+                            document.body.appendChild(notificationCard);
+
+                            // Gestionnaire pour fermer la notification
+                            closeButton.addEventListener('click', function() {
+                                notificationCard.style.display = 'none';
+                            });
+                        }
+
+                        // Mettre à jour le style selon le type
+                        if (type === 'error') {
+                            notificationCard.style.backgroundColor = '#dc3545';
+                        } else {
+                            notificationCard.style.backgroundColor = '#28a745';
+                        }
+
+                        // Mettre à jour le message
+                        const notificationMessage = notificationCard.querySelector('.notification-message');
+                        notificationMessage.textContent = message;
+
+                        // Afficher la notification
+                        notificationCard.style.display = 'flex';
+
+                        // Masquer la notification après 5 secondes
+                        setTimeout(() => {
                             notificationCard.style.display = 'none';
-                        });
+                        }, 5000);
+                    }
+
+                    // Fonction pour rafraîchir la section des réponses
+                    // Cette fonction nécessiterait un endpoint supplémentaire pour récupérer les réponses
+                    function refreshFeedbacks(questionId) {
+                        const feedbacksSection = document.getElementById(`feedbacks-${questionId}`);
+
+                        // Si vous souhaitez implémenter cette fonctionnalité, vous devrez créer un endpoint
+                        // qui renvoie les réponses pour une question donnée et mettre à jour le DOM
+
+                        // Exemple:
+                        // fetch(`/question/${questionId}/feedbacks`)
+                        //    .then(response => response.json())
+                        //    .then(data => {
+                        //        // Mettre à jour le DOM avec les nouvelles réponses
+                        //    });
+
+                        // Pour l'instant, nous nous contentons de recharger la page
+                        location.reload();
                     }
                 });
             </script>
