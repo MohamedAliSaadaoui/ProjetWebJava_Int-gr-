@@ -20,6 +20,13 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+     # explicitly configure the toxicity detector service
+    App\Service\ToxicityDetector:
+        arguments:
+            $client: '@http_client'
+            $apiKey: '%env(OPENAI_API_KEY)%'
+            $logger: '@logger'
+            $model: 'gpt-4o-mini'
 
     # Define RoleEnum as a service explicitly
     App\Enum\RoleEnum: ~

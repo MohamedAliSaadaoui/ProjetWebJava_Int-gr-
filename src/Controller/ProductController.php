@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
+use App\Service\ToxicityDetector;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +20,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Psr\Log\LoggerInterface;
 
 
 class ProductController extends AbstractController
@@ -26,15 +28,21 @@ class ProductController extends AbstractController
     private $entityManager;
     private $requestStack;
     private $validator;
+    private $toxicityDetector;
+    private $logger;
     
     public function __construct(
         EntityManagerInterface $entityManager, 
         RequestStack $requestStack,
-        ValidatorInterface $validator
+        ValidatorInterface $validator,
+        ToxicityDetector $toxicityDetector,
+        LoggerInterface $logger
     ) {
         $this->entityManager = $entityManager;
         $this->requestStack = $requestStack;
         $this->validator = $validator;
+        $this->toxicityDetector = $toxicityDetector;
+        $this->logger = $logger;
     }
     
     
@@ -103,43 +111,97 @@ public function showFavorites(EntityManagerInterface $entityManager): Response
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
-            // Set the user for the product
-            $user = $security->getUser();
+            // Get content to check
+            $name = $form->get('objetAVendre')->getData();
+            $description = $form->get('description')->getData();
             
-            // If no user is logged in, use a default user
-            if (!$user instanceof User) {
-                $user = $this->getOrCreateDefaultUser($entityManager);
+            // Log what we're checking
+            if ($this->logger) {
+                $this->logger->info('Checking new product: ' . $name);
             }
             
+            // LOCAL TOXICITY CHECK - don't rely on API
+            $profanityList = [
+                'fuck', 'shit', 'ass', 'bitch', 'porn', 'dick', 'pussy', 'cunt', 'bastard',
+                'asshole', 'whore', 'slut', 'nigger', 'faggot', 'retard', 'cock', 'tits',
+                'boobs', 'penis', 'vagina', 'anal', 'escort', 'piss', 'prick', 'twat', 'jizz',
+                'sexy', 'hot', 'nude', 'naked', 'sex', 'erotic', 'seductive'
+            ];
+            
+            $textToCheck = strtolower($name . ' ' . $description);
+            $foundWords = [];
+            
+            foreach ($profanityList as $word) {
+                if (preg_match('/\b' . preg_quote($word, '/') . '\b/i', $textToCheck)) {
+                    $foundWords[] = $word;
+                }
+            }
+            
+            $hasToxicContent = !empty($foundWords);
+            
+            // Only try API if local check passes AND API is available
+            if (!$hasToxicContent) {
+                try {
+                    // Try the API (but don't rely on it)
+                    $toxicityResult = $this->toxicityDetector->analyzeToxicity($name . ' ' . $description);
+                    
+                    if ($this->logger) {
+                        $this->logger->info('API toxicity check result: ' . json_encode($toxicityResult));
+                    }
+                    
+                    // If API worked and found toxicity, block it
+                    if (isset($toxicityResult['isToxic']) && $toxicityResult['isToxic'] === true) {
+                        $hasToxicContent = true;
+                        
+                        if (!empty($toxicityResult['toxicWords'])) {
+                            $foundWords = array_merge($foundWords, $toxicityResult['toxicWords']);
+                        }
+                    }
+                } catch (\Exception $e) {
+                    // Log but continue - we already did local check
+                    if ($this->logger) {
+                        $this->logger->error('API toxicity check failed: ' . $e->getMessage());
+                    }
+                    // Don't set $hasToxicContent based on API failure
+                }
+            }
+            
+            // Block if toxic content found
+            if ($hasToxicContent) {
+                $this->addFlash('danger', 'Your product contains inappropriate content and cannot be added.');
+                
+                if (!empty($foundWords)) {
+                    $this->addFlash('warning', 'Issue: The following inappropriate terms were detected: ' . implode(', ', $foundWords));
+                }
+                
+                $this->addFlash('info', 'Please edit your product details and try again.');
+                
+                return $this->render('seller_dashbord/addproduit.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
+            
+            // Content is clean, continue with product creation
+            $user = $security->getUser();
             $product->setUser($user);
             
-            // Handle file upload
+            // Handle file upload if needed
             $photoFile = $form->get('photoFile')->getData();
-            
             if ($photoFile) {
-                $originalFilename = pathinfo($photoFile->getClientOriginalName(), PATHINFO_FILENAME);
-                // Generate a safe filename
-                $safeFilename = preg_replace('/[^A-Za-z0-9]/', '_', $originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$photoFile->guessExtension();
-                
-                // Move the file to the directory where product photos are stored
+                $newFilename = uniqid().'.'.$photoFile->guessExtension();
                 try {
                     $photoFile->move(
                         $this->getParameter('product_photos_directory'),
                         $newFilename
                     );
-                    
-                    // Update the 'photo' property to store the file name
                     $product->setPhoto($newFilename);
                 } catch (FileException $e) {
-                    // Handle exception if something happens during file upload
-                    $this->addFlash('error', 'Failed to upload product photo: ' . $e->getMessage());
+                    $this->addFlash('error', 'There was an error uploading your photo.');
                 }
             }
             
-            // Save the product
             $entityManager->persist($product);
             $entityManager->flush();
             
@@ -778,6 +840,251 @@ public function showFavorites(EntityManagerInterface $entityManager): Response
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'limit' => $limit
+        ]);
+    }
+
+    // Add new product method - the route might vary in your application
+    #[Route('/seller/dashbord/produit', name: 'app_seller_product_new')]
+    public function newProduct(Request $request): Response
+    {
+        $product = new Product();
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Get description directly from the form data
+            $description = $form->get('description')->getData();
+            
+            // Log the description we're checking
+            if ($this->logger) {
+                $this->logger->info('About to check toxicity for product: ' . $product->getObjetAVendre());
+                $this->logger->info('Description: ' . $description);
+            }
+            
+            // Check for inappropriate content
+            $hasToxicContent = false;
+            $toxicMessage = '';
+            
+            // Simple profanity check first
+            $profanityList = ['fuck', 'shit', 'ass', 'bitch', 'porn', 'dick', 'pussy', 'cunt', 'bastard', 'nude', 'sex'];
+            $foundWords = [];
+            
+            foreach ($profanityList as $word) {
+                if (stripos($description, $word) !== false) {
+                    $foundWords[] = $word;
+                }
+            }
+            
+            if (!empty($foundWords)) {
+                $hasToxicContent = true;
+                $toxicMessage = 'Direct profanity check found: ' . implode(', ', $foundWords);
+                
+                if ($this->logger) {
+                    $this->logger->warning($toxicMessage);
+                }
+            }
+            
+            // If basic check passed, try the API check
+            if (!$hasToxicContent) {
+                try {
+                    $toxicityAnalysis = $this->toxicityDetector->analyzeToxicity($description);
+                    
+                    if ($this->logger) {
+                        $this->logger->info('Toxicity check result: ' . json_encode($toxicityAnalysis));
+                    }
+                    
+                    if ($toxicityAnalysis['isToxic']) {
+                        $hasToxicContent = true;
+                        
+                        if (!empty($toxicityAnalysis['toxicWords'])) {
+                            $toxicMessage = 'API detected: ' . implode(', ', $toxicityAnalysis['toxicWords']);
+                        } elseif (isset($toxicityAnalysis['reason'])) {
+                            $toxicMessage = $toxicityAnalysis['reason'];
+                        } else {
+                            $toxicMessage = 'Content moderation system detected inappropriate content';
+                        }
+                    }
+                } catch (\Exception $e) {
+                    if ($this->logger) {
+                        $this->logger->error('Error in toxicity check: ' . $e->getMessage());
+                    }
+                    // Don't block the product if API check fails
+                }
+            }
+            
+            // If toxic content was found, show error and do not save the product
+            if ($hasToxicContent) {
+                $this->addFlash('danger', 'Your product could not be added because the description contains inappropriate content.');
+                $this->addFlash('warning', 'Issue: ' . $toxicMessage);
+                $this->addFlash('info', 'Please edit your description and try again.');
+                
+                return $this->render('seller_dashbord/addproduit.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
+            
+            // NO TOXIC CONTENT FOUND - PROCEED WITH PRODUCT CREATION
+            
+            // Set the current user as the product owner
+            $user = $this->getUser();
+            $product->setUser($user);
+            
+            // Handle file upload
+            $photoFile = $form->get('photoFile')->getData();
+            
+            if ($photoFile) {
+                $originalFilename = pathinfo($photoFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = preg_replace('/[^A-Za-z0-9]/', '_', $originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$photoFile->guessExtension();
+                
+                try {
+                    $photoFile->move(
+                        $this->getParameter('product_photos_directory'),
+                        $newFilename
+                    );
+                    
+                    $product->setPhoto($newFilename);
+                } catch (FileException $e) {
+                    $this->addFlash('danger', 'Failed to upload product photo: ' . $e->getMessage());
+                }
+            }
+            
+            // Save the product
+            $this->entityManager->persist($product);
+            $this->entityManager->flush();
+            
+            $this->addFlash('success', 'Product added successfully!');
+            return $this->redirectToRoute('app_seller_dashbord');
+        }
+        
+        return $this->render('seller_dashbord/addproduit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+    
+    // Edit product method
+    #[Route('/seller/dashbord/produit/{id}/edit', name: 'app_seller_product_edit')]
+    public function editProduct(Request $request, Product $product): Response
+    {
+        // Check if current user is the owner of the product
+        if ($product->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('You cannot edit this product.');
+        }
+        
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Get description directly from the form data
+            $description = $form->get('description')->getData();
+            
+            // Log the description we're checking
+            if ($this->logger) {
+                $this->logger->info('About to check toxicity for edited product: ' . $product->getObjetAVendre());
+                $this->logger->info('Description: ' . $description);
+            }
+            
+            // First, try a simple profanity check before using the API
+            $hasToxicContent = false;
+            $toxicMessage = '';
+            
+            $profanityList = ['fuck', 'shit', 'ass', 'bitch', 'porn', 'dick', 'pussy', 'cunt', 'bastard', 'nude', 'sex'];
+            $foundWords = [];
+            
+            foreach ($profanityList as $word) {
+                if (stripos($description, $word) !== false) {
+                    $foundWords[] = $word;
+                }
+            }
+            
+            if (!empty($foundWords)) {
+                $hasToxicContent = true;
+                $toxicMessage = 'Direct profanity check found: ' . implode(', ', $foundWords);
+                
+                if ($this->logger) {
+                    $this->logger->warning($toxicMessage);
+                }
+            }
+            
+            // If basic check passed, try the API check
+            if (!$hasToxicContent) {
+                try {
+                    $toxicityAnalysis = $this->toxicityDetector->analyzeToxicity($description);
+                    
+                    if ($this->logger) {
+                        $this->logger->info('Toxicity check result: ' . json_encode($toxicityAnalysis));
+                    }
+                    
+                    if ($toxicityAnalysis['isToxic']) {
+                        $hasToxicContent = true;
+                        
+                        if (!empty($toxicityAnalysis['toxicWords'])) {
+                            $toxicMessage = 'API detected: ' . implode(', ', $toxicityAnalysis['toxicWords']);
+                        } elseif (isset($toxicityAnalysis['reason'])) {
+                            $toxicMessage = $toxicityAnalysis['reason'];
+                        } else {
+                            $toxicMessage = 'Content moderation system detected inappropriate content';
+                        }
+                    }
+                } catch (\Exception $e) {
+                    if ($this->logger) {
+                        $this->logger->error('Error in toxicity check: ' . $e->getMessage());
+                    }
+                    // Don't block the product if API check fails
+                }
+            }
+            
+            // If toxic content was found, show error and do not save the product
+            if ($hasToxicContent) {
+                $this->addFlash('danger', 'Your product could not be updated because the description contains inappropriate content.');
+                $this->addFlash('warning', 'Issue: ' . $toxicMessage);
+                $this->addFlash('info', 'Please edit your description and try again.');
+                
+                return $this->render('seller_dashbord/editproduit.html.twig', [
+                    'form' => $form->createView(),
+                    'product' => $product
+                ]);
+            }
+            
+            // Handle file upload if there's a new photo
+            $photoFile = $form->get('photoFile')->getData();
+            
+            if ($photoFile) {
+                $originalFilename = pathinfo($photoFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = preg_replace('/[^A-Za-z0-9]/', '_', $originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$photoFile->guessExtension();
+                
+                try {
+                    $photoFile->move(
+                        $this->getParameter('product_photos_directory'),
+                        $newFilename
+                    );
+                    
+                    // Delete the old photo file if exists
+                    $oldPhoto = $product->getPhoto();
+                    if ($oldPhoto) {
+                        $oldPhotoPath = $this->getParameter('product_photos_directory').'/'.$oldPhoto;
+                        if (file_exists($oldPhotoPath)) {
+                            unlink($oldPhotoPath);
+                        }
+                    }
+                    
+                    $product->setPhoto($newFilename);
+                } catch (FileException $e) {
+                    $this->addFlash('danger', 'Failed to upload product photo: ' . $e->getMessage());
+                }
+            }
+            
+            // Save the updated product
+            $this->entityManager->flush();
+            
+            $this->addFlash('success', 'Product updated successfully!');
+            return $this->redirectToRoute('app_seller_dashbord');
+        }
+        
+        return $this->render('seller_dashbord/editproduit.html.twig', [
+            'form' => $form->createView(),
+            'product' => $product
         ]);
     }
 }
