@@ -37,7 +37,7 @@ final class ReponseController extends AbstractController
         $peakDate = $reclamationRepository->getPeakComplaintDate();
 
 
-        return $this->render('admin_dash_board/admindashbord.html.twig', [
+        return $this->render('reponse/admindashbord.html.twig', [
             'responses' => $reponseRepository->findAll(),
             'reclamations' => $reclamation,
             'mostReportedCategory' => $mostReportedCategory,
