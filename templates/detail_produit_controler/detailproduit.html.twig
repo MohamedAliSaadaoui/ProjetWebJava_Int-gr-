@@ -1416,12 +1416,10 @@
                         <script async src="https://static.addtoany.com/menu/page.js"></script>
                         <!-- store & seller -->
                         <div class="store-seller-wrapper">
-                            <span> <b>Sold By :</b>
-                                <span id="sellerName">Seller</span>
+                            <span> <b>Sold By: {{ product.user.username ?? product.email }}</b>
+                                <span id="sellerName"></span>
                             </span>
-                            <span> <b>Total Items :</b>
-                                <!-- You can add item count here if available -->
-                            </span>
+
 
                             <div class="action-btns-wrapper">
                                 <button id="showSellerContact" class="template-btn dark-outline" type="button">
