@@ -8,8 +8,11 @@ doctrine:
         use_savepoints: true
 
         # 👉 Ajout du mapping enum vers string
-        mapping_types:
-            enum: string
+        
+
+        # ✅ Enregistrement du type personnalisé pour RoleEnum
+        types:
+            role_enum: App\Doctrine\Type\RoleEnumType
 
     orm:
         auto_generate_proxy_classes: true

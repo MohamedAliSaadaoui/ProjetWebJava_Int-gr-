@@ -88,8 +88,8 @@ public function newUser(
                 }
 
                 // Définir un rôle par défaut si aucun n’est défini
-                if (!$user->getRole()) {
-                    $user->setRole(RoleEnum::USER);
+                if (!$user->getRoles()) {
+                    $user->setRoles(RoleEnum::ROLE_USER);
                 }
 
                 // Persister l'utilisateur

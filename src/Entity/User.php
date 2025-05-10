@@ -47,14 +47,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $adresse = null;
 
-    #[ORM\Column(type: Types::INTEGER)]
-    private int $nb_article_achetes = 0;
 
-    #[ORM\Column(type: Types::INTEGER)]
-    private int $nb_article_vendus = 0;
-
-    #[ORM\Column(enumType: RoleEnum::class)]
-    private RoleEnum $roles;
+    #[ORM\Column(type: 'role_enum')]
+    private RoleEnum $roles = RoleEnum::ROLE_USER;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
@@ -68,9 +63,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $googleId = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $statut = null;
+
     public function __construct()
     {
-        $this->roles = RoleEnum::USER;
+        $this->roles = RoleEnum::ROLE_USER;
     }
 
     public function getId(): ?int
@@ -173,42 +171,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getNbArticleAchetes(): int
-    {
-        return $this->nb_article_achetes;
-    }
-
-    public function setNbArticleAchetes(int $nb_article_achetes): static
-    {
-        $this->nb_article_achetes = $nb_article_achetes;
-        return $this;
-    }
-
-    public function getNbArticleVendus(): int
-    {
-        return $this->nb_article_vendus;
-    }
-
-    public function setNbArticleVendus(int $nb_article_vendus): static
-    {
-        $this->nb_article_vendus = $nb_article_vendus;
-        return $this;
-    }
 
     public function getRoles(): array
     {
-        return [$this->roles->toSymfonyRole()];
+        return [$this->roles->value];
     }
-
-    public function setRole(RoleEnum $role): static
+    
+    public function setRoles(RoleEnum $roles): self
     {
-        $this->roles = $role;
+        $this->roles = $roles;
+        
         return $this;
-    }
-
-    public function getRole(): RoleEnum
-    {
-        return $this->roles;
     }
 
     public function getUpdatedAt(): ?\DateTimeInterface
@@ -262,5 +235,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials(): void
     {
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(string $statut): static
+    {
+        $this->statut = $statut;
+
+        return $this;
     }
 }

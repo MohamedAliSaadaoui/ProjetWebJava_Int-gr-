@@ -14,8 +14,12 @@ services:
 
     App\Enum\RoleEnum: ~
 
-    HWI\Bundle\OAuthBundle\OAuth\OAuthUtils: '@hwi_oauth.oauth_utils'
+    # Enregistrement du type ENUM personnalisé pour Doctrine
 
+    # Service pour login success handler
     App\Security\CustomLoginSuccessHandler:
         arguments:
             $router: '@router'
+
+    # OAuth service (existant)
+    HWI\Bundle\OAuthBundle\OAuth\OAuthUtils: '@hwi_oauth.oauth_utils'

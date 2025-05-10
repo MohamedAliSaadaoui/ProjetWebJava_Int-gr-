@@ -2,7 +2,10 @@
 
 {% block body %}
 <div class="admin-container">
-    <h2>Gestion des utilisateurs</h2>
+    <div class="header-bar">
+        <h2>Gestion des utilisateurs</h2>
+        <a href="{{ path('app_logout') }}" class="btn btn-logout">Déconnexion</a>
+    </div>
 
     <form method="get" action="{{ path('admin_users') }}" class="search-form">
         <input type="text" name="search" value="{{ search }}" placeholder="Rechercher par nom ou email" />
@@ -53,10 +56,15 @@
         font-family: Arial, sans-serif;
     }
 
-    h2 {
-        text-align: center;
-        color: #333;
+    .header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         margin-bottom: 20px;
+    }
+
+    h2 {
+        color: #333;
     }
 
     .search-form {
@@ -74,7 +82,8 @@
     }
 
     .search-form button,
-    .reset-link {
+    .reset-link,
+    .btn-logout {
         padding: 8px 15px;
         background-color: #4CAF50;
         color: white;
@@ -86,6 +95,14 @@
 
     .reset-link {
         background-color: #888;
+    }
+
+    .btn-logout {
+        background-color: #555;
+    }
+
+    .btn-logout:hover {
+        background-color: #333;
     }
 
     .user-table {
