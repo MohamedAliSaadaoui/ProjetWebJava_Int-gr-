@@ -11,7 +11,6 @@
                     <p><strong>Email :</strong> {{ user.email }}</p>
                     <p><strong>Rôle :</strong> {{ user.roles|join(', ') }}</p>
 
-                    <!-- Vérification si l'utilisateur a une photo de profil -->
                     {% if user.photo is not empty %}
                         <p><strong>Photo de profil :</strong></p>
                         <img src="{{ asset('uploads/photos/' ~ user.photo) }}" alt="Photo de profil" class="profile-photo" />
@@ -24,10 +23,13 @@
 
                 <div class="profile-actions">
                     <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-edit">Modifier mon profil</a>
-<a href="{{ path('app_logout') }}" class="btn btn-delete">Log out</a>
 
-                    <!-- Bouton de déconnexion -->
+                    <a href="{{ path('app_logout') }}" class="btn btn-logout">Log out</a>
 
+                    <form method="post" action="{{ path('app_user_delete', {'id': user.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                        <button type="submit" class="btn btn-delete">Supprimer mon compte</button>
+                    </form>
                 </div>
             </div>
         {% else %}

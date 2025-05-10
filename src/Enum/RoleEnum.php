@@ -2,18 +2,18 @@
 
 namespace App\Enum;
 
-class RoleEnum
+enum RoleEnum: string
 {
-    const ADMIN = 'ROLE_ADMIN';
-    const VISITEUR = 'ROLE_VISITEUR';
-    const LIVREUR = 'ROLE_LIVREUR';
+    case ADMIN = 'admin';
+    case USER = 'user';
+    case MODERATOR = 'moderator';
 
-    public static function getRoles(): array
+    public function toSymfonyRole(): string
     {
-        return [
-            self::ADMIN,
-            self::VISITEUR,
-            self::LIVREUR,
-        ];
+        return match ($this) {
+            self::ADMIN => 'ROLE_ADMIN',
+            self::USER => 'ROLE_USER',
+            self::MODERATOR => 'ROLE_MODERATOR',
+        };
     }
 }

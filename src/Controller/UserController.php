@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Enum\RoleEnum;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,6 +23,10 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use App\Form\NewPasswordType;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
+
 
 class UserController extends AbstractController
 {
@@ -51,57 +56,71 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/register', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function newUser(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
-    {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
+  #[Route('/register', name: 'app_user_new', methods: ['GET', 'POST'])]
+public function newUser(
+    Request $request,
+    UserPasswordHasherInterface $passwordHasher,
+    EntityManagerInterface $entityManager,
+    MailerInterface $mailer
+): Response {
+    $user = new User();
+    $form = $this->createForm(UserType::class, $user);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
-                try {
-                    // Récupérer le mot de passe en clair
-                    $plainPassword = $form->get('password')->getData();
+    if ($form->isSubmitted()) {
+        if ($form->isValid()) {
+            try {
+                // Récupérer et vérifier le mot de passe
+                $plainPassword = $form->get('password')->getData();
 
-                    // Hacher le mot de passe
-                    if ($plainPassword) {
-                        $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
-                    }
-
-                    // Ajouter un rôle par défaut si aucun rôle n'est spécifié
-                    if (empty($user->getRoles())) {
-                        $user->setRoles(['ROLE_USER']);
-                    }
-
-                    // Sauvegarder l'utilisateur
-                    $entityManager->persist($user);
-                    $entityManager->flush();
-
-                    // Envoi d'un email de bienvenue
-                    $emailMessage = (new Email())
-                        ->from('noreply@yourdomain.com')
-                        ->to($user->getEmail())
-                        ->subject('Bienvenue sur notre plateforme')
-                        ->html('<p>Bonjour ' . $user->getUsername() . ',<br>Bienvenue sur notre plateforme !</p>');
-                    
-                    $mailer->send($emailMessage);
-
-                    $this->addFlash('success', 'Votre compte a été créé avec succès.');
-                    return $this->redirectToRoute('app_login');
-                } catch (\Exception $e) {
-                    $this->addFlash('error', 'Une erreur est survenue lors de la création du compte.');
+                if (!$plainPassword) {
+                    $this->addFlash('error', 'Le mot de passe est requis.');
+                    return $this->redirectToRoute('app_user_new');
                 }
-            } else {
-                $this->addFlash('error', 'Veuillez corriger les erreurs avant de valider.');
-            }
-        }
 
-        return $this->render('user/form.html.twig', [
-            'form' => $form->createView(),
-            'user' => $user,
-        ]);
+                // Hacher le mot de passe
+                $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
+
+                // Gérer la photo de profil (VichUploader)
+                $photoFile = $form->get('photoFile')->getData();
+                if ($photoFile) {
+                    $user->setPhotoFile($photoFile);
+                }
+
+                // Définir un rôle par défaut si aucun n’est défini
+                if (!$user->getRole()) {
+                    $user->setRole(RoleEnum::USER);
+                }
+
+                // Persister l'utilisateur
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                // Envoyer l'email de bienvenue
+                $emailMessage = (new Email())
+                    ->from('noreply@yourdomain.com')
+                    ->to($user->getEmail())
+                    ->subject('Bienvenue sur notre plateforme')
+                    ->html('<p>Bonjour ' . $user->getUsername() . ',<br>Bienvenue sur notre plateforme !</p>');
+
+                $mailer->send($emailMessage);
+
+                $this->addFlash('success', 'Votre compte a été créé avec succès.');
+                return $this->redirectToRoute('app_login');
+            } catch (\Exception $e) {
+                // Afficher l'erreur exacte (utile en dev)
+                $this->addFlash('error', 'Erreur lors de la création du compte : ' . $e->getMessage());
+            }
+        } else {
+            $this->addFlash('error', 'Veuillez corriger les erreurs avant de valider.');
+        }
     }
+
+    return $this->render('user/form.html.twig', [
+        'form' => $form->createView(),
+        'user' => $user,
+    ]);
+}
 
     #[Route('/user/{id}/edit', name: 'app_user_edit')]
     public function edit(User $user, Request $request, EntityManagerInterface $entityManager): Response
@@ -122,25 +141,43 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/{id}/delete', name: 'app_user_delete', methods: ['POST'])]
-    public function delete(int $id, EntityManagerInterface $entityManager, Request $request): Response
-    {
-        $user = $entityManager->getRepository(User::class)->find($id);
-    
-        if (!$user) {
-            $this->addFlash('error', 'Utilisateur introuvable.');
-            return $this->redirectToRoute('app_user');
-        }
+public function delete(
+    int $id,
+    EntityManagerInterface $entityManager,
+    Request $request,
+    TokenStorageInterface $tokenStorage,
+    SessionInterface $session
+): Response {
+    $user = $entityManager->getRepository(User::class)->find($id);
 
-        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($user);
-            $entityManager->flush();
-            $this->addFlash('success', 'Utilisateur supprimé avec succès.');
-        } else {
-            $this->addFlash('error', 'Token CSRF invalide.');
-        }
-
-        return $this->redirectToRoute('app_user');
+    if (!$user) {
+        $this->addFlash('error', 'Utilisateur introuvable.');
+        return $this->redirectToRoute('app_profile');
     }
+
+    if ($this->getUser() !== $user) {
+        $this->addFlash('error', 'Action non autorisée.');
+        return $this->redirectToRoute('app_profile');
+    }
+
+    if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
+
+        // 🔐 Déconnexion propre AVANT suppression
+        $tokenStorage->setToken(null);
+        $session->invalidate();
+
+        // 🗑 Suppression de l’utilisateur
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Votre compte a été supprimé avec succès.');
+        return $this->redirectToRoute('app_login');
+    }
+
+    $this->addFlash('error', 'Token CSRF invalide.');
+    return $this->redirectToRoute('app_profile');
+}
+
 
     
     #[Route('/reset-password', name: 'app_reset_password')]

@@ -2,15 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
 use App\Enum\RoleEnum;
+use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
-
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[Vich\Uploadable]
@@ -54,35 +53,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::INTEGER)]
     private int $nb_article_vendus = 0;
 
-    #[ORM\Column(type: 'json')]
-    private array $roles = [];
+    #[ORM\Column(enumType: RoleEnum::class)]
+    private RoleEnum $roles;
 
-    #[ORM\Column(type: "datetime", nullable: true)]
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
-    // Ajout de la propriété pour le token de réinitialisation
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $resetPasswordToken = null;
 
-    // Constructeur pour initialiser les rôles
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $resetPasswordTokenExpiresAt = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $googleId = null;
+
     public function __construct()
     {
-        $this->roles = ['ROLE_USER'];
+        $this->roles = RoleEnum::USER;
     }
-
-    // Méthodes de récupération et d'attribution du token de réinitialisation
-    public function getResetPasswordToken(): ?string
-    {
-        return $this->resetPasswordToken;
-    }
-
-    public function setResetPasswordToken(?string $resetPasswordToken): self
-    {
-        $this->resetPasswordToken = $resetPasswordToken;
-        return $this;
-    }
-
-    // Autres méthodes de la classe User
 
     public function getId(): ?int
     {
@@ -91,7 +80,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUserIdentifier(): string
     {
-        return $this->email;
+        return $this->email ?? '';
     }
 
     public function getUsername(): ?string
@@ -208,22 +197,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        if (!in_array('ROLE_USER', $roles)) {
-            $roles[] = 'ROLE_USER'; // Ajouter ROLE_USER si ce n'est pas déjà présent
-        }
-        return array_unique($roles);
+        return [$this->roles->toSymfonyRole()];
     }
 
-    public function setRoles(array $roles): static
+    public function setRole(RoleEnum $role): static
     {
-        foreach ($roles as $role) {
-            if (!in_array($role, RoleEnum::getRoles())) {
-                throw new \InvalidArgumentException("Rôle invalide : $role");
-            }
-        }
-        $this->roles = $roles;
+        $this->roles = $role;
         return $this;
+    }
+
+    public function getRole(): RoleEnum
+    {
+        return $this->roles;
     }
 
     public function getUpdatedAt(): ?\DateTimeInterface
@@ -237,6 +222,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getResetPasswordToken(): ?string
+    {
+        return $this->resetPasswordToken;
+    }
+
+    public function setResetPasswordToken(?string $resetPasswordToken): self
+    {
+        $this->resetPasswordToken = $resetPasswordToken;
+        return $this;
+    }
+
+    public function getResetPasswordTokenExpiresAt(): ?\DateTimeInterface
+    {
+        return $this->resetPasswordTokenExpiresAt;
+    }
+
+    public function setResetPasswordTokenExpiresAt(?\DateTimeInterface $expiresAt): self
+    {
+        $this->resetPasswordTokenExpiresAt = $expiresAt;
+        return $this;
+    }
+
+    public function getGoogleId(): ?string
+    {
+        return $this->googleId;
+    }
+
+    public function setGoogleId(?string $googleId): self
+    {
+        $this->googleId = $googleId;
+        return $this;
+    }
+
     public function getSalt(): ?string
     {
         return null;
@@ -245,35 +263,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
     }
-
-    // Ajouter la colonne pour l'expiration du token
-#[ORM\Column(type: 'datetime', nullable: true)]
-private ?\DateTimeInterface $resetPasswordTokenExpiresAt = null;
-
-// Getter et setter pour resetPasswordTokenExpiresAt
-public function getResetPasswordTokenExpiresAt(): ?\DateTimeInterface
-{
-    return $this->resetPasswordTokenExpiresAt;
-}
-
-public function setResetPasswordTokenExpiresAt(?\DateTimeInterface $resetPasswordTokenExpiresAt): self
-{
-    $this->resetPasswordTokenExpiresAt = $resetPasswordTokenExpiresAt;
-    return $this;
-}
-
-#[ORM\Column(type: 'string', length: 255, nullable: true)]
-private ?string $googleId = null;
-
-public function getGoogleId(): ?string
-{
-    return $this->googleId;
-}
-
-public function setGoogleId(?string $googleId): self
-{
-    $this->googleId = $googleId;
-    return $this;
-}
-
 }
