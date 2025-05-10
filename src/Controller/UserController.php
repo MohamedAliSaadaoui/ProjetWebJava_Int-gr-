@@ -122,23 +122,29 @@ public function newUser(
     ]);
 }
 
-    #[Route('/user/{id}/edit', name: 'app_user_edit')]
-    public function edit(User $user, Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
+   #[Route('/user/{id}/edit', name: 'app_user_edit')]
+public function edit(User $user, Request $request, EntityManagerInterface $entityManager): Response
+{
+    $form = $this->createForm(UserType::class, $user);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-            $this->addFlash('success', 'Utilisateur mis à jour avec succès.');
-            return $this->redirectToRoute('app_profile');
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->flush();
+        $this->addFlash('success', 'Utilisateur mis à jour avec succès.');
+
+        // Redirection selon le rôle
+        if (in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('admin_users');
         }
 
-        return $this->render('user/form.html.twig', [
-            'form' => $form->createView(),
-            'user' => $user,
-        ]);
+        return $this->redirectToRoute('app_profile');
     }
+
+    return $this->render('user/form.html.twig', [
+        'form' => $form->createView(),
+        'user' => $user,
+    ]);
+}
 
     #[Route('/user/{id}/delete', name: 'app_user_delete', methods: ['POST'])]
 public function delete(
@@ -152,31 +158,34 @@ public function delete(
 
     if (!$user) {
         $this->addFlash('error', 'Utilisateur introuvable.');
-        return $this->redirectToRoute('app_profile');
+        return $this->redirectToRoute('app_login'); // <- vers login si erreur
     }
 
-    if ($this->getUser() !== $user) {
+    if ($this->getUser() !== $user && !$this->isGranted('ROLE_ADMIN')) {
         $this->addFlash('error', 'Action non autorisée.');
-        return $this->redirectToRoute('app_profile');
+        return $this->redirectToRoute('app_login'); // <- vers login si pas autorisé
     }
 
     if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
-
-        // 🔐 Déconnexion propre AVANT suppression
         $tokenStorage->setToken(null);
         $session->invalidate();
 
-        // 🗑 Suppression de l’utilisateur
         $entityManager->remove($user);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Votre compte a été supprimé avec succès.');
-        return $this->redirectToRoute('app_login');
+        $this->addFlash('success', 'Utilisateur supprimé avec succès.');
+
+        // ✅ Redirige différemment selon le rôle
+        return $this->isGranted('ROLE_ADMIN')
+            ? $this->redirectToRoute('admin_users') // <- vers l'admin dashboard
+            : $this->redirectToRoute('app_login');  // <- vers login pour l'utilisateur supprimé
     }
 
     $this->addFlash('error', 'Token CSRF invalide.');
-    return $this->redirectToRoute('app_profile');
+    return $this->redirectToRoute('app_login');
 }
+
+
 
 
     
