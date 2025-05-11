@@ -3,48 +3,52 @@
 {% block body %}
 <div class="admin-container">
     <div class="header-bar">
-        <h2>Gestion des utilisateurs</h2>
+        <h2 class="title">👤 Gestion des utilisateurs</h2>
         <a href="{{ path('app_logout') }}" class="btn btn-logout">Déconnexion</a>
     </div>
 
     <form method="get" action="{{ path('admin_users') }}" class="search-form">
-        <input type="text" name="search" value="{{ search }}" placeholder="Rechercher par nom ou email" />
-        <button type="submit">Rechercher</button>
-        <a href="{{ path('admin_users') }}" class="reset-link">Réinitialiser</a>
+        <input type="text" name="search" value="{{ search }}" placeholder="🔍 Rechercher par nom ou email..." />
+        <button type="submit" class="btn btn-search">Rechercher</button>
+        <a href="{{ path('admin_users') }}" class="btn btn-reset">Réinitialiser</a>
     </form>
 
-    <table class="user-table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nom d'utilisateur</th>
-                <th>Email</th>
-                <th>Téléphone</th>
-                <th>Adresse</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in users %}
+    <div class="table-wrapper">
+        <table class="user-table">
+            <thead>
                 <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.numTel }}</td>
-                    <td>{{ user.adresse }}</td>
-                    <td>
-                        <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-edit">Modifier</a>
-                        <form method="post" action="{{ path('app_user_delete', {'id': user.id}) }}" style="display:inline;" onsubmit="return confirm('Supprimer cet utilisateur ?');">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-                            <button type="submit" class="btn btn-delete">Supprimer</button>
-                        </form>
-                    </td>
+                    <th>ID</th>
+                    <th>Nom d'utilisateur</th>
+                    <th>Email</th>
+                    <th>Téléphone</th>
+                    <th>Adresse</th>
+                    <th>Actions</th>
                 </tr>
-            {% else %}
-                <tr><td colspan="6">Aucun utilisateur trouvé.</td></tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.numTel }}</td>
+                        <td>{{ user.adresse }}</td>
+                        <td>
+                            <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-edit">✏️ Modifier</a>
+                            <form method="post" action="{{ path('app_user_delete', {'id': user.id}) }}" style="display:inline;" onsubmit="return confirm('Supprimer cet utilisateur ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                                <button type="submit" class="btn btn-delete">🗑️ Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">Aucun utilisateur trouvé.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}
 
@@ -53,82 +57,90 @@
     .admin-container {
         width: 90%;
         margin: 40px auto;
-        font-family: Arial, sans-serif;
+        font-family: 'Segoe UI', sans-serif;
     }
 
     .header-bar {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 10px;
     }
 
-    h2 {
-        color: #333;
+    .title {
+        color: #2f4f4f;
+        font-weight: bold;
     }
 
     .search-form {
-        margin-bottom: 20px;
         display: flex;
         gap: 10px;
-        align-items: center;
+        margin-bottom: 25px;
     }
 
     .search-form input[type="text"] {
         flex: 1;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
+        padding: 10px;
+        border: 1px solid #bbb;
+        border-radius: 6px;
     }
 
-    .search-form button,
-    .reset-link,
-    .btn-logout {
-        padding: 8px 15px;
+    .btn {
+        padding: 8px 14px;
+        border: none;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.2s ease;
+    }
+
+    .btn-search {
         background-color: #4CAF50;
         color: white;
-        border: none;
-        border-radius: 4px;
-        text-decoration: none;
-        cursor: pointer;
     }
 
-    .reset-link {
+    .btn-reset {
         background-color: #888;
+        color: white;
     }
 
     .btn-logout {
-        background-color: #555;
+        background-color: #333;
+        color: white;
     }
 
     .btn-logout:hover {
-        background-color: #333;
+        background-color: #111;
+    }
+
+    .table-wrapper {
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        overflow: hidden;
     }
 
     .user-table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 10px;
     }
 
     .user-table th,
     .user-table td {
-        padding: 12px;
+        padding: 14px;
         text-align: left;
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid #e1e1e1;
+    }
+
+    .user-table th {
+        background-color: #f4f7f6;
+        color: #333;
     }
 
     .user-table tr:hover {
-        background-color: #f1f1f1;
-    }
-
-    .btn {
-        padding: 6px 12px;
-        border: none;
-        border-radius: 4px;
-        font-size: 0.9rem;
-        cursor: pointer;
-        text-decoration: none;
+        background-color: #f1f9f2;
     }
 
     .btn-edit {
@@ -148,6 +160,10 @@
 
     .btn-delete:hover {
         background-color: #c0392b;
+    }
+
+    .text-muted {
+        color: #888 !important;
     }
 </style>
 {% endblock %}
