@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Proxies\__CG__\App\Entity\User as EntityUser;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -19,7 +18,7 @@ class UserRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, EntityUser::class);
+        parent::__construct($registry, User::class);
     }
 
 //    /**

@@ -1,128 +1,80 @@
 <!DOCTYPE html>
 <html>
     <head>
-    {% block header %}
-        {% include 'partials/_header.html.twig' %}
-        {% endblock %}
-
         <meta charset="UTF-8">
-        <title>{% block title %}Rewear{% endblock %}</title>
-<link rel="icon" type="image/png" href="{{ asset('pixelcut-export.jpg') }}">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('assets/front/css/bootstrap.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/front/css/all.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/front/css/slick.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/front/css/nice-select.css') }}">  <!-- NiceSelect CSS -->
-        <link rel="stylesheet" href="{{ asset('assets/front/css/jquery-ui.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/front/css/animate.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/front/css/toastr.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/front/css/datatables.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/front/css/style.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/front/css/custom.css') }}">
-        <link rel="icon" href="{{ asset('assets/images/17333080691572146352faviconpng.png') }}">
-        <meta property="og:title" content="Genius-Shop" />
-        <meta property="og:image" content="{{ asset('assets/images/1730281140Blackpng.png') }}" />
-        <link href="https://fonts.googleapis.com/css?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" rel="stylesheet">
-        <style>
-        /* Loading Spinner Style */
-        #loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            visibility: hidden;
-        }
+        {# Local assets using Symfony's asset function #}
+            <link rel="stylesheet" href="{{ asset('assets/front/css/bootstrap.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/front/css/all.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/front/css/slick.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/front/css/nice-select.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/front/css/jquery-ui.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/front/css/animate.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/front/css/toastr.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/front/css/datatables.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/front/css/style.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/front/css/custom.css') }}">
+            
+            {# Favicon #}
+            <link rel="icon" href="{{ asset('assets/images/17333080691572146352faviconpng.png') }}">
+            
+            {# Open Graph tags #}
+            <meta property="og:title" content="Genius-Shop" />
+            <meta property="og:image" content="{{ asset('assets/images/1730281140Blackpng.png') }}" />
+            
+            {# External resources #}
+            <link href="https://fonts.googleapis.com/css?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" rel="stylesheet">
+            
+            {#admin dashboard style#}
+            <link href="{{ asset('assets/BackAssets/admin/css/bootstrap.min.css') }}" rel="stylesheet" />
+<link rel="stylesheet" href="{{ asset('assets/BackAssets/admin/css/fontawesome.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/BackAssets/admin/css/icofont.min.css') }}">
+<link href="{{ asset('assets/BackAssets/admin/plugins/fullside-menu/css/dark-side-style.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/BackAssets/admin/plugins/fullside-menu/waves.min.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/BackAssets/admin/css/plugin.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/BackAssets/admin/css/jquery.tagit.css') }}" rel="stylesheet" />
+<link rel="stylesheet" href="{{ asset('assets/BackAssets/admin/css/bootstrap-coloroicker.css') }}">
+<link href="{{ asset('assets/BackAssets/admin/css/style.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/BackAssets/admin/css/custom.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/BackAssets/admin/css/responsive.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/BackAssets/admin/css/common.css') }}" rel="stylesheet" />
 
-        .spinner {
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #3498db;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 2s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
         {% endblock %}
 
-{% block javascripts %}
-    <script src="{{ asset('assets/front/js/jquery.min.js') }}"></script>  <!-- jQuery -->
-    <script src="{{ asset('assets/front/js/nice-select.js') }}"></script>  <!-- NiceSelect JS -->
-    <script src="{{ asset('assets/front/js/slick.js') }}"></script>
-    <script src="{{ asset('assets/front/js/jquery-ui.js') }}"></script>
-    <script src="{{ asset('assets/front/js/wow.js') }}"></script>
-    <script src="{{ asset('assets/front/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/front/js/toastr.min.js') }}"></script>
-    <script src="{{ asset('assets/front/js/script.js') }}"></script>
-    <script src="{{ asset('assets/front/js/myscript.js') }}"></script>
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        {% block javascripts %}
+            {#front logic #}
+            <script src="{{ asset('assets/front/js/jquery.min.js') }}"></script>
+            <script src="{{ asset('assets/front/js/slick.js') }}"></script>
+            <script src="{{ asset('assets/front/js/jquery-ui.js') }}"></script>
+            <script src="{{ asset('assets/front/js/nice-select.js') }}"></script>
+            <script src="{{ asset('assets/front/js/wow.js') }}"></script>
+            <script src="{{ asset('assets/front/js/bootstrap.bundle.min.js') }}"></script>
+            <script src="{{ asset('assets/front/js/toastr.min.js') }}"></script>
+            <script src="{{ asset('assets/front/js/script.js') }}"></script>
+            <script src="{{ asset('assets/front/js/myscript.js') }}"></script>
 
-
-    <script>
-        $(document).ready(function() {
-            $('select').niceSelect();  // Initialize NiceSelect
-
-            // Handle add to cart clicks
-            $('.add_cart_click').on('click', function(e) {
-                e.preventDefault();
-                var url = $(this).attr('href');
-                
-                $.get(url, function(response) {
-                    // Update cart count
-                    $('#cart-count').text(response.cartTotalQuantity);
-                    
-                    // Show success message
-                    toastr.success('Produit ajouté au panier');
-                })
-                .fail(function() {
-                    toastr.error('Erreur lors de l\'ajout au panier');
-                });
-            });
-        });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Update favorites count in header
-            function updateFavoritesCount() {
-                fetch('/product/favorite/count')
-                    .then(response => response.json())
-                    .then(data => {
-                        const wishlistCount = document.getElementById('wishlist-count');
-                        if (wishlistCount) {
-                            wishlistCount.textContent = data.count;
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching favorites count:', error);
-                    });
-            }
-            
-            // Update count on page load
-            updateFavoritesCount();
-        });
-    </script>
-{% endblock %}
-
+            {#admin dashboard logic#}
+            <script src="{{ asset('assets/BackAssets/admin/js/vendors/jquery-1.12.4.min.js') }}"></script>
+            <script src="{{ asset('assets/BackAssets/admin/js/vendors/vue.js') }}"></script>
+            <script src="{{ asset('assets/BackAssets/admin/js/vendors/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('assets/BackAssets/admin/js/jqueryui.min.js') }}"></script>
+            <script src="{{ asset('assets/BackAssets/admin/plugins/fullside-menu/jquery.slimscroll.min.js') }}"></script>
+            <script src="{{ asset('assets/BackAssets/admin/plugins/fullside-menu/waves.min.js') }}"></script>
+            <script src="{{ asset('assets/BackAssets/admin/js/plugin.js') }}"></script>
+            <script src="{{ asset('assets/BackAssets/admin/js/Chart.min.js') }}"></script>
+            <script src="{{ asset('assets/BackAssets/admin/js/tag-it.js') }}"></script>
+            <script src="{{ asset('assets/BackAssets/admin/js/nicEdit.js') }}"></script>
+            <script src="{{ asset('assets/BackAssets/admin/js/bootstrap-colorpicker.min.js') }}"></script>
+            <script src="{{ asset('assets/BackAssets/admin/js/notify.js') }}"></script>
+            <script src="{{ asset('assets/BackAssets/admin/js/jquery.canvasjs.min.js') }}"></script>
+            <script src="{{ asset('assets/BackAssets/admin/js/load.js') }}"></script>
+            <script src="{{ asset('assets/BackAssets/admin/js/custom.js') }}"></script>
+            <script src="{{ asset('assets/BackAssets/admin/js/myscript.js') }}"></script>
+        {% endblock %}
     </head>
     <body>
         {% block body %}{% endblock %}
-        {% block footer %}
-        {% include 'partials/frontfooter.html.twig' %}
-        {% endblock %}
-
-
     </body>
-
 </html>

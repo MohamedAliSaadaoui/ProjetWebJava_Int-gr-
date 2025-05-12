@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Enum\RoleEnum;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,6 +22,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use App\Form\NewPasswordType;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
+use Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
+
 
 class UserController extends AbstractController
 {
@@ -50,164 +56,207 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/register', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function newUser(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
-    {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
+  #[Route('/register', name: 'app_user_new', methods: ['GET', 'POST'])]
+public function newUser(
+    Request $request,
+    UserPasswordHasherInterface $passwordHasher,
+    EntityManagerInterface $entityManager,
+    MailerInterface $mailer
+): Response {
+    $user = new User();
+    $form = $this->createForm(UserType::class, $user);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
-                try {
-                    // Récupérer le mot de passe en clair
-                    $plainPassword = $form->get('password')->getData();
+    if ($form->isSubmitted()) {
+        if ($form->isValid()) {
+            try {
+                // Récupérer et vérifier le mot de passe
+                $plainPassword = $form->get('password')->getData();
 
-                    // Hacher le mot de passe
-                    if ($plainPassword) {
-                        $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
-                    }
-
-                    // Ajouter un rôle par défaut si aucun rôle n'est spécifié
-                    if (empty($user->getRoles())) {
-                        $user->setRoles(['ROLE_USER']);
-                    }
-
-                    // Sauvegarder l'utilisateur
-                    $entityManager->persist($user);
-                    $entityManager->flush();
-
-                    // Envoi d'un email de bienvenue
-                    $emailMessage = (new Email())
-                        ->from('noreply@yourdomain.com')
-                        ->to($user->getEmail())
-                        ->subject('Bienvenue sur notre plateforme')
-                        ->html('<p>Bonjour ' . $user->getUsername() . ',<br>Bienvenue sur notre plateforme !</p>');
-                    
-                    $mailer->send($emailMessage);
-
-                    $this->addFlash('success', 'Votre compte a été créé avec succès.');
-                    return $this->redirectToRoute('app_login');
-                } catch (\Exception $e) {
-                    $this->addFlash('error', 'Une erreur est survenue lors de la création du compte.');
+                if (!$plainPassword) {
+                    $this->addFlash('error', 'Le mot de passe est requis.');
+                    return $this->redirectToRoute('app_user_new');
                 }
-            } else {
-                $this->addFlash('error', 'Veuillez corriger les erreurs avant de valider.');
+
+                // Hacher le mot de passe
+                $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
+
+                // Gérer la photo de profil (VichUploader)
+                $photoFile = $form->get('photoFile')->getData();
+                if ($photoFile) {
+                    $user->setPhotoFile($photoFile);
+                }
+
+                // Définir un rôle par défaut si aucun n’est défini
+                if (!$user->getRoles()) {
+                    $user->setRoles(RoleEnum::ROLE_USER);
+                }
+
+                // Persister l'utilisateur
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                // Envoyer l'email de bienvenue
+                $emailMessage = (new Email())
+                    ->from('noreply@yourdomain.com')
+                    ->to($user->getEmail())
+                    ->subject('Bienvenue sur notre plateforme')
+                    ->html('<p>Bonjour ' . $user->getUsername() . ',<br>Bienvenue sur notre plateforme !</p>');
+
+                $mailer->send($emailMessage);
+
+                $this->addFlash('success', 'Votre compte a été créé avec succès.');
+                return $this->redirectToRoute('app_login');
+            } catch (\Exception $e) {
+                // Afficher l'erreur exacte (utile en dev)
+                $this->addFlash('error', 'Erreur lors de la création du compte : ' . $e->getMessage());
             }
+        } else {
+            $this->addFlash('error', 'Veuillez corriger les erreurs avant de valider.');
         }
-
-        return $this->render('user/form.html.twig', [
-            'form' => $form->createView(),
-            'user' => $user,
-        ]);
     }
 
-    #[Route('/user/{id}/edit', name: 'app_user_edit')]
-    public function edit(User $user, Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
+    return $this->render('user/form.html.twig', [
+        'form' => $form->createView(),
+        'user' => $user,
+    ]);
+}
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-            $this->addFlash('success', 'Utilisateur mis à jour avec succès.');
-            return $this->redirectToRoute('app_profile');
+   #[Route('/user/{id}/edit', name: 'app_user_edit')]
+public function edit(User $user, Request $request, EntityManagerInterface $entityManager): Response
+{
+    $form = $this->createForm(UserType::class, $user);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->flush();
+        $this->addFlash('success', 'Utilisateur mis à jour avec succès.');
+
+        // Redirection selon le rôle
+        if (in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('admin_users');
         }
 
-        return $this->render('user/form.html.twig', [
-            'form' => $form->createView(),
-            'user' => $user,
-        ]);
+        return $this->redirectToRoute('app_profile');
     }
+
+    return $this->render('user/form.html.twig', [
+        'form' => $form->createView(),
+        'user' => $user,
+    ]);
+}
 
     #[Route('/user/{id}/delete', name: 'app_user_delete', methods: ['POST'])]
-    public function delete(int $id, EntityManagerInterface $entityManager, Request $request): Response
-    {
-        $user = $entityManager->getRepository(User::class)->find($id);
-    
-        if (!$user) {
-            $this->addFlash('error', 'Utilisateur introuvable.');
-            return $this->redirectToRoute('app_user');
-        }
+public function delete(
+    int $id,
+    EntityManagerInterface $entityManager,
+    Request $request,
+    TokenStorageInterface $tokenStorage,
+    SessionInterface $session
+): Response {
+    $user = $entityManager->getRepository(User::class)->find($id);
 
-        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($user);
-            $entityManager->flush();
-            $this->addFlash('success', 'Utilisateur supprimé avec succès.');
-        } else {
-            $this->addFlash('error', 'Token CSRF invalide.');
-        }
-
-        return $this->redirectToRoute('app_user');
+    if (!$user) {
+        $this->addFlash('error', 'Utilisateur introuvable.');
+        return $this->redirectToRoute('app_login'); // <- vers login si erreur
     }
+
+    if ($this->getUser() !== $user && !$this->isGranted('ROLE_ADMIN')) {
+        $this->addFlash('error', 'Action non autorisée.');
+        return $this->redirectToRoute('app_login'); // <- vers login si pas autorisé
+    }
+
+    if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
+        $tokenStorage->setToken(null);
+        $session->invalidate();
+
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Utilisateur supprimé avec succès.');
+
+        // ✅ Redirige différemment selon le rôle
+        return $this->isGranted('ROLE_ADMIN')
+            ? $this->redirectToRoute('admin_users') // <- vers l'admin dashboard
+            : $this->redirectToRoute('app_login');  // <- vers login pour l'utilisateur supprimé
+    }
+
+    $this->addFlash('error', 'Token CSRF invalide.');
+    return $this->redirectToRoute('app_login');
+}
+
+
+
 
     
     #[Route('/reset-password', name: 'app_reset_password')]
-public function requestResetPassword(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
-{
-    $form = $this->createForm(ResetPasswordType::class);
-    $form->handleRequest($request);
-    
-    if ($form->isSubmitted() && $form->isValid()) {
-        $email = $form->get('email')->getData();
-        $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+    public function requestResetPassword(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
+    {
+        $form = $this->createForm(ResetPasswordType::class);
+        $form->handleRequest($request);
         
-        if (!$user) {
-            $this->addFlash('error', 'Aucun utilisateur trouvé avec cet e-mail.');
-            return $this->redirectToRoute('app_reset_password');
-        }
-        
-        // Générer un token unique
-        $token = bin2hex(random_bytes(32));
-        $user->setResetPasswordToken($token);
-        $user->setResetPasswordTokenExpiresAt(new \DateTime('+1 hour'));
-        
-        $entityManager->flush();
-        
-        // Générer le lien (URL absolue)
-        $link = $this->generateUrl('app_new_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
-        
-        // MODE DE DÉBOGAGE - Affiche le lien directement au lieu d'envoyer un email
-        if ($_ENV['APP_ENV'] === 'dev') {
-            // Toujours envoyer l'email pour le flux normal (optionnel en dev)
-            try {
-                $emailMessage = (new Email())
-                    ->from('no-reply@tonsite.com')
-                    ->to($user->getEmail())
-                    ->subject('Réinitialisation du mot de passe')
-                    ->html('<p>Cliquez sur le lien pour réinitialiser votre mot de passe :</p>
-                            <p><a href="' . $link . '">Réinitialiser mon mot de passe</a></p>');
-                
-                $mailer->send($emailMessage);
-            } catch (\Exception $e) {
-                // Ignorer les erreurs d'envoi d'email en mode dev
+        if ($form->isSubmitted() && $form->isValid()) {
+            $email = $form->get('email')->getData();
+            $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+            
+            if (!$user) {
+                $this->addFlash('error', 'Aucun utilisateur trouvé avec cet e-mail.');
+                return $this->redirectToRoute('app_reset_password');
             }
             
-            // Afficher le lien de réinitialisation directement
-            return $this->render('user/reset_link_debug.html.twig', [
-                'link' => $link,
-                'email' => $user->getEmail()
-            ]);
+            // Générer un token unique avec TokenGenerator de Symfony
+            $tokenGenerator = new UriSafeTokenGenerator();
+            $token = $tokenGenerator->generateToken();
+            
+            $user->setResetPasswordToken($token);
+            $user->setResetPasswordTokenExpiresAt(new \DateTime('+1 hour'));
+            
+            $entityManager->flush();
+            
+            // Générer le lien (URL absolue)
+            $link = $this->generateUrl('app_new_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+            
+            // MODE DE DÉBOGAGE - Affiche le lien directement au lieu d'envoyer un email
+            if ($_ENV['APP_ENV'] === 'dev') {
+                // Toujours envoyer l'email pour le flux normal (optionnel en dev)
+                try {
+                    $emailMessage = (new Email())
+                        ->from('no-reply@tonsite.com')
+                        ->to($user->getEmail())
+                        ->subject('Réinitialisation du mot de passe')
+                        ->html('<p>Cliquez sur le lien pour réinitialiser votre mot de passe :</p>
+                                <p><a href="' . $link . '">Réinitialiser mon mot de passe</a></p>');
+                    
+                    $mailer->send($emailMessage);
+                } catch (\Exception $e) {
+                    // Ignorer les erreurs d'envoi d'email en mode dev
+                }
+                
+                // Afficher le lien de réinitialisation directement
+                return $this->render('user/reset_link_debug.html.twig', [
+                    'link' => $link,
+                    'email' => $user->getEmail()
+                ]);
+            }
+            
+            // MODE PRODUCTION - Comportement normal
+            $emailMessage = (new Email())
+                ->from('no-reply@tonsite.com')
+                ->to($user->getEmail())
+                ->subject('Réinitialisation du mot de passe')
+                ->html('<p>Cliquez sur le lien pour réinitialiser votre mot de passe :</p>
+                        <p><a href="' . $link . '">Réinitialiser mon mot de passe</a></p>');
+            
+            $mailer->send($emailMessage);
+            
+            $this->addFlash('success', 'Un email de réinitialisation a été envoyé.');
+            return $this->redirectToRoute('app_login');
         }
         
-        // MODE PRODUCTION - Comportement normal
-        $emailMessage = (new Email())
-            ->from('no-reply@tonsite.com')
-            ->to($user->getEmail())
-            ->subject('Réinitialisation du mot de passe')
-            ->html('<p>Cliquez sur le lien pour réinitialiser votre mot de passe :</p>
-                    <p><a href="' . $link . '">Réinitialiser mon mot de passe</a></p>');
-        
-        $mailer->send($emailMessage);
-        
-        $this->addFlash('success', 'Un email de réinitialisation a été envoyé.');
-        return $this->redirectToRoute('app_login');
+        return $this->render('user/reset_password.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
-    
-    return $this->render('user/reset_password.html.twig', [
-        'form' => $form->createView()
-    ]);
-}
 
 #[Route('/reset-password/{token}', name: 'app_new_password')]
 public function newPassword(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, string $token): Response

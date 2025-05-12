@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use App\Repository\UserRepository;
 use App\Enum\RoleEnum;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -50,41 +50,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $adresse = null;
 
-    #[ORM\Column(type: Types::INTEGER)]
-    private int $nb_article_achetes = 0;
 
-    #[ORM\Column(type: Types::INTEGER)]
-    private int $nb_article_vendus = 0;
+    #[ORM\Column(type: 'role_enum')]
+    private RoleEnum $roles = RoleEnum::ROLE_USER;
 
-    #[ORM\Column(type: 'json')]
-    private array $roles = [];
-
-    #[ORM\Column(type: "datetime", nullable: true)]
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
-    // Ajout de la propriété pour le token de réinitialisation
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $resetPasswordToken = null;
 
-    // Constructeur pour initialiser les rôles
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $resetPasswordTokenExpiresAt = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $googleId = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $statut = null;
+
     public function __construct()
     {
-        $this->roles = ['ROLE_USER'];
+        $this->roles = RoleEnum::ROLE_USER;
     }
-
-    // Méthodes de récupération et d'attribution du token de réinitialisation
-    public function getResetPasswordToken(): ?string
-    {
-        return $this->resetPasswordToken;
-    }
-
-    public function setResetPasswordToken(?string $resetPasswordToken): self
-    {
-        $this->resetPasswordToken = $resetPasswordToken;
-        return $this;
-    }
-
-    // Autres méthodes de la classe User
 
     public function getId(): ?int
     {
@@ -93,7 +81,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUserIdentifier(): string
     {
-        return $this->email;
+        return $this->email ?? '';
     }
 
     public function getUsername(): ?string
@@ -186,45 +174,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getNbArticleAchetes(): int
-    {
-        return $this->nb_article_achetes;
-    }
-
-    public function setNbArticleAchetes(int $nb_article_achetes): static
-    {
-        $this->nb_article_achetes = $nb_article_achetes;
-        return $this;
-    }
-
-    public function getNbArticleVendus(): int
-    {
-        return $this->nb_article_vendus;
-    }
-
-    public function setNbArticleVendus(int $nb_article_vendus): static
-    {
-        $this->nb_article_vendus = $nb_article_vendus;
-        return $this;
-    }
 
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        if (!in_array('ROLE_USER', $roles)) {
-            $roles[] = 'ROLE_USER'; // Ajouter ROLE_USER si ce n'est pas déjà présent
-        }
-        return array_unique($roles);
+        return [$this->roles->value];
     }
-
-    public function setRoles(array $roles): static
+    
+    public function setRoles(RoleEnum $roles): self
     {
-        foreach ($roles as $role) {
-            if (!in_array($role, RoleEnum::getRoles())) {
-                throw new \InvalidArgumentException("Rôle invalide : $role");
-            }
-        }
         $this->roles = $roles;
+        
         return $this;
     }
 
@@ -239,6 +198,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getResetPasswordToken(): ?string
+    {
+        return $this->resetPasswordToken;
+    }
+
+    public function setResetPasswordToken(?string $resetPasswordToken): self
+    {
+        $this->resetPasswordToken = $resetPasswordToken;
+        return $this;
+    }
+
+    public function getResetPasswordTokenExpiresAt(): ?\DateTimeInterface
+    {
+        return $this->resetPasswordTokenExpiresAt;
+    }
+
+    public function setResetPasswordTokenExpiresAt(?\DateTimeInterface $expiresAt): self
+    {
+        $this->resetPasswordTokenExpiresAt = $expiresAt;
+        return $this;
+    }
+
+    public function getGoogleId(): ?string
+    {
+        return $this->googleId;
+    }
+
+    public function setGoogleId(?string $googleId): self
+    {
+        $this->googleId = $googleId;
+        return $this;
+    }
+
     public function getSalt(): ?string
     {
         return null;
@@ -248,26 +240,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
     }
 
-    // Ajouter la colonne pour l'expiration du token
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?\DateTimeInterface $resetPasswordTokenExpiresAt = null;
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(string $statut): static
+    {
+        $this->statut = $statut;
+
+        return $this;
+    }
     
-     
-
-// Getter et setter pour resetPasswordTokenExpiresAt
-public function getResetPasswordTokenExpiresAt(): ?\DateTimeInterface
-{
-    return $this->resetPasswordTokenExpiresAt;
-}
-
-public function setResetPasswordTokenExpiresAt(?\DateTimeInterface $resetPasswordTokenExpiresAt): self
-{
-    $this->resetPasswordTokenExpiresAt = $resetPasswordTokenExpiresAt;
-    return $this;
-}
-
-#[ORM\Column(type: 'string', length: 255, nullable: true)]
-private ?string $googleId = null;
 #[ORM\OneToMany(mappedBy: 'user', targetEntity: Participe::class, cascade: ['persist', 'remove'])]
         private Collection $participations;
         
@@ -278,16 +262,6 @@ private ?string $googleId = null;
             $this->participations = new ArrayCollection();
             $this->eventsCreated = new ArrayCollection();
         }
-public function getGoogleId(): ?string
-{
-    return $this->googleId;
-}
-
-public function setGoogleId(?string $googleId): self
-{
-    $this->googleId = $googleId;
-    return $this;
-}
   /**
     * @return Collection<int, Participe>
     */

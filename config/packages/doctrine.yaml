@@ -6,6 +6,14 @@ doctrine:
         # either here or in the DATABASE_URL env var (see .env file)
         #server_version: '16'
         use_savepoints: true
+
+        # 👉 Ajout du mapping enum vers string
+        
+
+        # ✅ Enregistrement du type personnalisé pour RoleEnum
+        types:
+            role_enum: App\Doctrine\Type\RoleEnumType
+
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
@@ -20,7 +28,6 @@ doctrine:
 when@test:
     doctrine:
         dbal:
-            # "TEST_TOKEN" is typically set by ParaTest
             dbname_suffix: '_test%env(default::TEST_TOKEN)%'
 
 when@prod:

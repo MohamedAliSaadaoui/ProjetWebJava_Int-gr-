@@ -1,4 +1,5 @@
-{% extends 'base_back.html.twig' %}
+{% extends 'base.html.twig' %}
+
 {% block body %}
 	<div class="page">
 		<div class="page-main">
@@ -18,7 +19,6 @@
 								</div>
 							</a>
 						</div>
-                        
 
 						<div class="right-eliment">
 							<ul class="list">
@@ -270,7 +270,7 @@
     </a>
     <ul class="collapse list-unstyled" id="menu3" data-parent="#accordion">
         <li>
-            <a href="{{ path('app_user') }}"><span>Customers List</span></a>
+            <a href="https://cleandemo.geniusocean.net/geniuscart2/admin/users"><span>Customers List</span></a>
         </li>
         <li>
             <a href="https://cleandemo.geniusocean.net/geniuscart2/admin/users/withdraws"><span>Withdraws</span></a>
@@ -693,484 +693,163 @@
 
     </div>
 
-    <div class="row row-cards-one">
-        <div class="col-md-6 col-xl-3">
-            <div class="card c-info-box-area">
-                <div class="c-info-box box1">
-                    <p>0</p>
-                </div>
-                <div class="c-info-box-content">
-                    <h6 class="title">New Customers</h6>
-                    <p class="text">Last 30 Days</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-xl-3">
-            <div class="card c-info-box-area">
-                <div class="c-info-box box2">
-                    <p>10</p>
-                </div>
-                <div class="c-info-box-content">
-                    <h6 class="title">Total Customers</h6>
-                    <p class="text">All Time</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-xl-3">
-            <div class="card c-info-box-area">
-                <div class="c-info-box box3">
-                    <p>0</p>
-                </div>
-                <div class="c-info-box-content">
-                    <h6 class="title">Total Sales</h6>
-                    <p class="text">Last 30 days</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-xl-3">
-            <div class="card c-info-box-area">
-                <div class="c-info-box box4">
-                     <p>0</p>
-                </div>
-                <div class="c-info-box-content">
-                    <h6 class="title">Total Sales</h6>
-                    <p class="text">All Time</p>
-                </div>
-            </div>
-        </div>
+    <form method="get" action="{{ path('admin_users') }}" class="search-form">
+        <input type="text" name="search" value="{{ search }}" placeholder="🔍 Rechercher par nom ou email..." />
+        <button type="submit" class="btn btn-search">Rechercher</button>
+        <a href="{{ path('admin_users') }}" class="btn btn-reset">Réinitialiser</a>
+    </form>
+
+    <div class="table-wrapper">
+        <table class="user-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nom d'utilisateur</th>
+                    <th>Email</th>
+                    <th>Téléphone</th>
+                    <th>Adresse</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.numTel }}</td>
+                        <td>{{ user.adresse }}</td>
+                        <td>
+                            <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-edit">✏️ Modifier</a>
+                            <form method="post" action="{{ path('app_user_delete', {'id': user.id}) }}" style="display:inline;" onsubmit="return confirm('Supprimer cet utilisateur ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                                <button type="submit" class="btn btn-delete">🗑️ Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">Aucun utilisateur trouvé.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-
-    <div class="row row-cards-one">
-
-        <div class="col-md-12 col-lg-6 col-sm-12 col-xl-6">
-            <div class="card">
-                <h5 class="card-header">Recent Order(s)</h5>
-                <div class="card-body">
-
-                <div class="table-responsive  dashboard-home-table">
-                                    <table id="poproducts" class="table table-hover dt-responsive" cellspacing="0" width="100%">
-                            <thead>
-                                <tr>
-
-                                    <th>Order Number</th>
-                                    <th>Order Date</th>
-                                </tr>
-                                                                <tr>
-                                    <td>kRL91739009679</td>
-                                    <td>2025-02-08</td>
-                                    <td>
-                                        <div class="action-list"><a href="https://cleandemo.geniusocean.net/geniuscart2/admin/order/27/show"><i
-                                                    class="fas fa-eye"></i> Details</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                                                <tr>
-                                    <td>ynlR1738308653</td>
-                                    <td>2025-01-31</td>
-                                    <td>
-                                        <div class="action-list"><a href="https://cleandemo.geniusocean.net/geniuscart2/admin/order/26/show"><i
-                                                    class="fas fa-eye"></i> Details</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                                                <tr>
-                                    <td>aaAM1738298586</td>
-                                    <td>2025-01-31</td>
-                                    <td>
-                                        <div class="action-list"><a href="https://cleandemo.geniusocean.net/geniuscart2/admin/order/25/show"><i
-                                                    class="fas fa-eye"></i> Details</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                                                <tr>
-                                    <td>hzOv1738040701</td>
-                                    <td>2025-01-28</td>
-                                    <td>
-                                        <div class="action-list"><a href="https://cleandemo.geniusocean.net/geniuscart2/admin/order/24/show"><i
-                                                    class="fas fa-eye"></i> Details</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                                                <tr>
-                                    <td>gVNv1732763745</td>
-                                    <td>2024-11-28</td>
-                                    <td>
-                                        <div class="action-list"><a href="https://cleandemo.geniusocean.net/geniuscart2/admin/order/23/show"><i
-                                                    class="fas fa-eye"></i> Details</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                                            </thead>
-                        </table>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-
-        <div class="col-md-12 col-lg-6 col-sm-12 col-xl-6">
-                <div class="card">
-                        <h5 class="card-header">Recent Customer(s)</h5>
-                        <div class="card-body">
-        
-                             <div class="table-responsive  dashboard-home-table">
-                                    <table id="poproducts" class="table table-hover dt-responsive" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Customer Email</th>
-                                            <th>Joined</th>
-                                        </tr>
-                                                                                <tr>
-                                            <td>fazal@gmail.com</td>
-                                            <td>2024-11-27 06:55:09</td>
-                                            <td>
-                                                <div class="action-list"><a href="https://cleandemo.geniusocean.net/geniuscart2/admin/user/56/show"><i
-                                                            class="fas fa-eye"></i> Details</a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                                                                <tr>
-                                            <td>amn@gmail.com</td>
-                                            <td>2024-11-22 18:10:14</td>
-                                            <td>
-                                                <div class="action-list"><a href="https://cleandemo.geniusocean.net/geniuscart2/admin/user/55/show"><i
-                                                            class="fas fa-eye"></i> Details</a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                                                                <tr>
-                                            <td>amijanina@gmail.com</td>
-                                            <td>2024-11-21 16:49:22</td>
-                                            <td>
-                                                <div class="action-list"><a href="https://cleandemo.geniusocean.net/geniuscart2/admin/user/54/show"><i
-                                                            class="fas fa-eye"></i> Details</a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                                                                <tr>
-                                            <td>farhadwts@gmail.com</td>
-                                            <td>2024-10-16 04:40:35</td>
-                                            <td>
-                                                <div class="action-list"><a href="https://cleandemo.geniusocean.net/geniuscart2/admin/user/53/show"><i
-                                                            class="fas fa-eye"></i> Details</a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                                                                <tr>
-                                            <td>s@gmail.com</td>
-                                            <td>2024-10-13 10:11:25</td>
-                                            <td>
-                                                <div class="action-list"><a href="https://cleandemo.geniusocean.net/geniuscart2/admin/user/52/show"><i
-                                                            class="fas fa-eye"></i> Details</a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                                                            </thead>
-                                </table>
-                            </div>
-        
-                        </div>
-                    </div>
-        </div>
-    </div>
-
-    <div class="row row-cards-one">
-
-            <div class="col-md-12 col-lg-12 col-sm-12 col-xl-12">
-                    <div class="card">
-                            <h5 class="card-header">Popular Product(s)</h5>
-                            <div class="card-body">
-            
-                                <div class="table-responsive  dashboard-home-table">
-                                    <table id="poproducts" class="table table-hover dt-responsive" cellspacing="0" width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th>Featured Image</th>
-                                                <th>Name</th>
-                                                <th>Category</th>
-                                                <th>Type</th>
-                                                <th>Price</th>
-                                                <th></th>
-                                                
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                                                                        <tr>
-                                            <td><img src="https://cleandemo.geniusocean.net/geniuscart2/assets/images/products/1733223017bbbPPHVf.png"></td>
-                                            <td>Fashion Physical product title will be here</td>
-                                            <td>Men&#039;s Clothing
-                                                                                                        <br>
-                                                    Tops
-                                                                                                                                                            <br>
-                                                    T-Shirts
-                                                                                                    </td>
-                                                <td>Physical</td>
-
-                                                <td> 120$ </td>
-
-                                                <td>
-                                                    <div class="action-list"><a href="https://cleandemo.geniusocean.net/geniuscart2/admin/products/edit/498"><i
-                                                                class="fas fa-eye"></i> Details</a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                                                                        <tr>
-                                            <td><img src="https://cleandemo.geniusocean.net/geniuscart2/assets/images/products/1733224672oz6wrOt6.png"></td>
-                                            <td>Fashion Physical product title will be here</td>
-                                            <td>Men&#039;s Clothing
-                                                                                                        <br>
-                                                    Outerwear
-                                                                                                                                                            <br>
-                                                    Coats
-                                                                                                    </td>
-                                                <td>Physical</td>
-
-                                                <td> 190$ </td>
-
-                                                <td>
-                                                    <div class="action-list"><a href="https://cleandemo.geniusocean.net/geniuscart2/admin/products/edit/496"><i
-                                                                class="fas fa-eye"></i> Details</a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                                                                        <tr>
-                                            <td><img src="https://cleandemo.geniusocean.net/geniuscart2/assets/images/products/1733224609zo6AGfRZ.png"></td>
-                                            <td>Fashion Physical product title will be here</td>
-                                            <td>Men&#039;s Clothing
-                                                                                                        <br>
-                                                    Outerwear
-                                                                                                                                                            <br>
-                                                    Jackets
-                                                                                                    </td>
-                                                <td>Physical</td>
-
-                                                <td> 129$ </td>
-
-                                                <td>
-                                                    <div class="action-list"><a href="https://cleandemo.geniusocean.net/geniuscart2/admin/products/edit/497"><i
-                                                                class="fas fa-eye"></i> Details</a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                                                                        <tr>
-                                            <td><img src="https://cleandemo.geniusocean.net/geniuscart2/assets/images/products/1733289857BmXQ0fLz.png"></td>
-                                            <td>Fashion Physical product title will be here</td>
-                                            <td>Unisex Shoes
-                                                                                                        <br>
-                                                    Sneakers
-                                                                                                                                                            <br>
-                                                    
-                                                                                                    </td>
-                                                <td>Physical</td>
-
-                                                <td> 360$ </td>
-
-                                                <td>
-                                                    <div class="action-list"><a href="https://cleandemo.geniusocean.net/geniuscart2/admin/products/edit/484"><i
-                                                                class="fas fa-eye"></i> Details</a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                                                                        <tr>
-                                            <td><img src="https://cleandemo.geniusocean.net/geniuscart2/assets/images/products/173328832248xDy5Kj.png"></td>
-                                            <td>Fashion Physical product title will be here</td>
-                                            <td>Unisex Clothing
-                                                                                                        <br>
-                                                    Hoodies
-                                                                                                                                                            <br>
-                                                    
-                                                                                                    </td>
-                                                <td>Physical</td>
-
-                                                <td> 460$ </td>
-
-                                                <td>
-                                                    <div class="action-list"><a href="https://cleandemo.geniusocean.net/geniuscart2/admin/products/edit/491"><i
-                                                                class="fas fa-eye"></i> Details</a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                                                                    </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-    
-            </div>
-    
-        </div>
-
-    <div class="row row-cards-one">
-
-            <div class="col-md-12 col-lg-12 col-sm-12 col-xl-12">
-                    <div class="card">
-                            <h5 class="card-header">Recent Product(s)</h5>
-                            <div class="card-body">
-            
-                                <div class="table-responsive dashboard-home-table">
-                                    <table id="pproducts" class="table table-hover dt-responsive" cellspacing="0" width="100%">
-                                            <thead>
-                                                    <tr>
-                                                        <th>Featured Image</th>
-                                                        <th>Name</th>
-                                                        <th>Category</th>
-                                                        <th>Type</th>
-                                                        <th>Price</th>
-                                                        <th></th>
-                                                        
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                                                                        <tr>
-                                                    <td><img src="https://cleandemo.geniusocean.net/geniuscart2/assets/images/products/1733223017bbbPPHVf.png"></td>
-                                                    <td>Fashion Physical product title will be here</td>
-                                                    <td>Men&#039;s Clothing
-                                                                                                                <br>
-                                                        Tops
-                                                                                                                                                                        <br>
-                                                        T-Shirts
-                                                                                                            </td>
-                                                        <td>Physical</td>
-                                                        <td> 120$ </td>
-                                                        <td>
-                                                            <div class="action-list"><a href="https://cleandemo.geniusocean.net/geniuscart2/admin/products/edit/498"><i
-                                                                        class="fas fa-eye"></i> Details</a>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                                                                        <tr>
-                                                    <td><img src="https://cleandemo.geniusocean.net/geniuscart2/assets/images/products/1733224609zo6AGfRZ.png"></td>
-                                                    <td>Fashion Physical product title will be here</td>
-                                                    <td>Men&#039;s Clothing
-                                                                                                                <br>
-                                                        Outerwear
-                                                                                                                                                                        <br>
-                                                        Jackets
-                                                                                                            </td>
-                                                        <td>Physical</td>
-                                                        <td> 129$ </td>
-                                                        <td>
-                                                            <div class="action-list"><a href="https://cleandemo.geniusocean.net/geniuscart2/admin/products/edit/497"><i
-                                                                        class="fas fa-eye"></i> Details</a>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                                                                        <tr>
-                                                    <td><img src="https://cleandemo.geniusocean.net/geniuscart2/assets/images/products/1733224672oz6wrOt6.png"></td>
-                                                    <td>Fashion Physical product title will be here</td>
-                                                    <td>Men&#039;s Clothing
-                                                                                                                <br>
-                                                        Outerwear
-                                                                                                                                                                        <br>
-                                                        Coats
-                                                                                                            </td>
-                                                        <td>Physical</td>
-                                                        <td> 190$ </td>
-                                                        <td>
-                                                            <div class="action-list"><a href="https://cleandemo.geniusocean.net/geniuscart2/admin/products/edit/496"><i
-                                                                        class="fas fa-eye"></i> Details</a>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                                                                        <tr>
-                                                    <td><img src="https://cleandemo.geniusocean.net/geniuscart2/assets/images/products/1733224982418e3yol.png"></td>
-                                                    <td>Fashion Physical product title will be here</td>
-                                                    <td>Men&#039;s Clothing
-                                                                                                                <br>
-                                                        Activewear
-                                                                                                                                                                        <br>
-                                                        Tracksuits
-                                                                                                            </td>
-                                                        <td>Physical</td>
-                                                        <td> 124$ </td>
-                                                        <td>
-                                                            <div class="action-list"><a href="https://cleandemo.geniusocean.net/geniuscart2/admin/products/edit/495"><i
-                                                                        class="fas fa-eye"></i> Details</a>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                                                                        <tr>
-                                                    <td><img src="https://cleandemo.geniusocean.net/geniuscart2/assets/images/products/1733286614zJxOszbG.png"></td>
-                                                    <td>Fashion Physical product title will be here</td>
-                                                    <td>Women&#039;s Clothing
-                                                                                                                <br>
-                                                        Tops
-                                                                                                                                                                        <br>
-                                                        Tank Tops
-                                                                                                            </td>
-                                                        <td>Physical</td>
-                                                        <td> 225$ </td>
-                                                        <td>
-                                                            <div class="action-list"><a href="https://cleandemo.geniusocean.net/geniuscart2/admin/products/edit/494"><i
-                                                                        class="fas fa-eye"></i> Details</a>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                                                                    </tbody>
-                                    </table>
-                                </div>
-            
-                            </div>
-                        </div>
-    
-            </div>
-    
-    </div>
-
-    <div class="row row-cards-one">
-
-        <div class="col-md-12 col-lg-12 col-sm-12 col-xl-12">
-            <div class="card">
-                <h5 class="card-header">Total Sales in Last 30 Days</h5>
-                <div class="card-body">
-
-                    <canvas  id="lineChart"></canvas>
-
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-
-
-
-
-    <div class="row row-cards-one">
-
-        <div class="col-md-12 col-sm-12 col-lg-6 col-xl-6">
-            <div class="card">
-                <h5 class="card-header">Top Referrals</h5>
-                <div class="card-body">
-                    <div class="admin-fix-height-card">
-                         <div id="chartContainer-topReference"></div>
-                    </div>
-                       
-                </div>
-            </div>
-
-        </div>
-
-        <div class="col-md-12 col-lg-6 col-sm-12 col-xl-6">
-                <div class="card">
-                        <h5 class="card-header">Most Used OS</h5>
-                        <div class="card-body">
-                        <div class="admin-fix-height-card">
-                            <div id="chartContainer-os"></div>
-                        </div>
-                        </div>
-                    </div>
-        </div>
-        
-    </div>
-
-
-
 </div>
+{% endblock %}
 
-				<!-- Main Content Area End -->
-			</div>
-		</div>
-	</div>
+{% block stylesheets %}
+<style>
+    .admin-container {
+        width: 90%;
+        margin: 40px auto;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 10px;
+    }
+
+    .title {
+        color: #2f4f4f;
+        font-weight: bold;
+    }
+
+    .search-form {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 25px;
+    }
+
+    .search-form input[type="text"] {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #bbb;
+        border-radius: 6px;
+    }
+
+    .btn {
+        padding: 8px 14px;
+        border: none;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.2s ease;
+    }
+
+    .btn-search {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .btn-reset {
+        background-color: #888;
+        color: white;
+    }
+
+    .btn-logout {
+        background-color: #333;
+        color: white;
+    }
+
+    .btn-logout:hover {
+        background-color: #111;
+    }
+
+    .table-wrapper {
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .user-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .user-table th,
+    .user-table td {
+        padding: 14px;
+        text-align: left;
+        border-bottom: 1px solid #e1e1e1;
+    }
+
+    .user-table th {
+        background-color: #f4f7f6;
+        color: #333;
+    }
+
+    .user-table tr:hover {
+        background-color: #f1f9f2;
+    }
+
+    .btn-edit {
+        background-color: #3498db;
+        color: white;
+        margin-right: 5px;
+    }
+
+    .btn-edit:hover {
+        background-color: #2980b9;
+    }
+
+    .btn-delete {
+        background-color: #e74c3c;
+        color: white;
+    }
+
+    .btn-delete:hover {
+        background-color: #c0392b;
+    }
+
+    .text-muted {
+        color: #888 !important;
+    }
+</style>
 {% endblock %}

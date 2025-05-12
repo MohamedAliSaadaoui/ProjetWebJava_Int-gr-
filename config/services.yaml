@@ -1,15 +1,10 @@
-# This file is the entry point to configure your own services.
-# Files in the packages/ subdirectory configure your dependencies.
-
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     product_photos_directory: '%kernel.project_dir%/public/uploads/products'
     reclamation_uploads_directory: '%kernel.project_dir%/public/uploads/photos'
 services:
     _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        autowire: true
+        autoconfigure: true
 
     App\:
         resource: '../src/'
@@ -18,10 +13,7 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    # Define RoleEnum as a service explicitly
-    App\Enum\RoleEnum: ~
-
-    # Add more service definitions when explicit configuration is needed
+    # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
     # Explicit service definition for OAuthUtils
