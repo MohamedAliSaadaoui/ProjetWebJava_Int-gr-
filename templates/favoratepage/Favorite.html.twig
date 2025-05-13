@@ -1,0 +1,159 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Your Favorites{% endblock %}
+
+{% block body %}
+<section class="gs-breadcrumb-section bg-class" data-background="assets/images/breadcrumb-bg.png">
+    <div class="container">
+        <div class="row justify-content-center content-wrapper">
+            <div class="col-12">
+                <h2 class="breadcrumb-title">Your Favorites</h2>
+                <ul class="bread-menu">
+                    <li><a href="{{ path('app_category') }}">Home</a></li>
+                    <li><a href="#">Favorites</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="favorites-container py-5">
+    <div class="container">
+        {% if favoriteProducts|length > 0 %}
+            <div class="row">
+                {% for product in favoriteProducts %}
+                    <div class="col-md-4 col-lg-3 mb-4 favorite-item-container">
+                        <div class="single-product">
+                            <div class="img-wrapper">
+                                <!-- Favorite button -->
+                                <a href="#" class="remove-favorite" data-id="{{ product.id }}">
+                                    <div class="remove-favorite-btn">
+                                        <i class="fas fa-heart" style="color: red;"></i>
+                                    </div>
+                                </a>
+                                
+                                <!-- Product link -->
+                                <a href="{{ path('app_detail_produit_controler', {'id': product.id}) }}">
+                                    <div class="product-placeholder" style="height: 200px; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+                                        <span>{{ product.objetAVendre }}</span>
+                                    </div>
+                                </a>
+                                
+                                <!-- Add to cart button -->
+                                <div class="add-to-cart-btn">
+                                    <a href="{{ path('app_panier_add', {'id': product.id}) }}" class="template-btn">Add to Cart</a>
+                                </div>
+                            </div>
+                            
+                            <div class="product-info">
+                                <a href="{{ path('app_detail_produit_controler', {'id': product.id}) }}">
+                                    <h6 class="product-title">{{ product.objetAVendre }}</h6>
+                                </a>
+                                <div class="price-wrapper">
+                                    <h6>{{ product.prixDeVente }}€</h6>
+                                    {% if product.prixOriginal and product.prixOriginal > product.prixDeVente %}
+                                        <h6><del>{{ product.prixOriginal }}€</del></h6>
+                                    {% endif %}
+                                </div>
+                                <div class="product-meta mt-2">
+                                    <span class="badge bg-secondary">{{ product.genre }}</span>
+                                    <span class="badge bg-info">{{ product.taille }}</span>
+                                    <span class="badge bg-primary">{{ product.couleur }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <h3>Your favorites list is empty</h3>
+                <p class="mt-3">Browse our products and add items to your favorites</p>
+                <a href="{{ path('app_category') }}" class="template-btn mt-4">Browse Products</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle remove from favorites
+        document.querySelectorAll('.remove-favorite').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const productId = this.getAttribute('data-id');
+                const favoriteItemContainer = this.closest('.favorite-item-container');
+                
+                fetch(`/product/favorite/${productId}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Remove the product from the display
+                        favoriteItemContainer.remove();
+                        
+                        // Check if there are any products left
+                        if (document.querySelectorAll('.favorite-item-container').length === 0) {
+                            location.reload(); // Reload to show empty favorites message
+                        }
+                        
+                        alert(data.message);
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to remove from favorites. Please try again.');
+                });
+            });
+        });
+    });
+</script>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<style>
+    .remove-favorite-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 10;
+        background-color: white;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    
+    .product-placeholder {
+        border-radius: 8px;
+        color: #666;
+        font-weight: bold;
+        text-align: center;
+        padding: 20px;
+    }
+    
+    .product-meta {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+    
+    .badge {
+        font-size: 0.7rem;
+    }
+</style>
+{% endblock %}

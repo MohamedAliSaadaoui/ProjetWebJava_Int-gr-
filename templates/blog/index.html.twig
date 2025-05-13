@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container d-flex justify-content-center">
+    <div class="col-12 col-lg-8 gs-main-blog-wrapper wow fadeInUp" data-wow-delay=".1s">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="text-center mb-0">Liste des articles</h1>
+            <a href="{{ path('statistics') }}" class="btn btn-info animate__animated animate__bounceIn">Voir les statistiques</a>
+        </div>
+
+        <!-- Search Form and Sorting -->
+        <div class="search-container mb-4">
+            <form method="get" action="{{ path('app_blog') }}" class="d-flex">
+                <input type="text" id="search-input" name="searchTerm" class="form-control me-2" placeholder="Rechercher un article" value="{{ searchTerm }}">
+                <button type="submit" class="btn btn-primary animate__animated animate__pulse">Rechercher</button>
+            </form>
+            <button id="clear-search" class="btn btn-outline-secondary btn-sm mt-2 animate__animated animate__fadeIn" style="display:none;">Effacer la recherche</button>
+            <div id="article-search-results" class="mt-2"></div>
+        </div>
+
+        <div class="sort-buttons mb-4 text-center">
+            <form method="get" action="{{ path('app_blog') }}">
+                <input type="hidden" id="search-input-hidden" name="searchTerm" value="{{ searchTerm }}">
+                <button type="submit" class="btn btn-secondary me-2 animate__animated animate__fadeInLeft" name="orderBy" value="ASC">Trier Ascendant</button>
+                <button type="submit" class="btn btn-secondary animate__animated animate__fadeInRight" name="orderBy" value="DESC">Trier Descendant</button>
+            </form>
+        </div>
+
+        <!-- Button to create a new article -->
+        <div class="text-center mb-4">
+            <a href="{{ path('article_new') }}" class="btn btn-success animate__animated animate__zoomIn">Créer un article</a>
+        </div>
+
+        <!-- List of articles -->
+        {% if articles|length > 0 %}
+            {% for article in articles %}
+                <div class="gs-main-single-blog wow fadeInUp" data-wow-delay=".2s">
+                    <div class="d-flex p-3 border rounded shadow-sm align-items-center">
+                        <div class="me-3">
+                            <img src="{{ asset('uploads/' ~ article.image) }}" class="img-fluid rounded" alt="Article image" style="max-width: 120px; height: 120px; object-fit: cover;">
+                        </div>
+                        <div>
+                            <h4>
+                                <a class="title text-decoration-none" href="{{ path('article_details', {'id': article.id}) }}">
+                                    {{ article.title }}
+                                </a>
+                            </h4>
+                            <p class="text-muted">{{ article.content|slice(0, 150)|striptags }}...</p>
+                            <div class="text-muted">
+                                <i class="bi bi-calendar-check"></i> {{ article.date|date('d M Y') }}
+                            </div>
+                            <a class="btn btn-outline-primary btn-sm mt-2 animate__animated animate__fadeInUp" href="{{ path('article_details', {'id': article.id}) }}">En savoir plus</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted text-center">Aucun article disponible pour le moment.</p>
+        {% endif %}
+
+        <!-- Pagination -->
+        {% if totalPages > 1 %}
+            <nav class="pagination mt-4 text-center" aria-label="Navigation de la pagination">
+                <ul class="pagination justify-content-center">
+                    {% if pageActuelle > 1 %}
+                        <li class="page-item">
+                            <a href="{{ path('app_blog', {'page': pageActuelle - 1}) }}" class="page-link animate__animated animate__fadeInLeft">Précédent</a>
+                        </li>
+                    {% endif %}
+                    {% for i in 1..totalPages %}
+                        <li class="page-item {% if i == pageActuelle %}active{% endif %}">
+                            <a href="{{ path('app_blog', {'page': i}) }}" class="page-link animate__animated animate__fadeIn">{{ i }}</a>
+                        </li>
+                    {% endfor %}
+                    {% if pageActuelle < totalPages %}
+                        <li class="page-item">
+                            <a href="{{ path('app_blog', {'page': pageActuelle + 1}) }}" class="page-link animate__animated animate__fadeInRight">Suivant</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Include WOW.js and Animate.css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+<script>
+    new WOW().init();
+</script>
+{% endblock %}

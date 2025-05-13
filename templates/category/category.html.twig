@@ -1,0 +1,1363 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product Categories{% endblock %}
+
+{% block body %}
+	<!-- header area -->
+
+
+	<!-- if route is user panel then show vendor.mobile-header else show frontend.mobile_menu -->
+
+
+	<!-- mobile menu -->
+		<div class="mobile-menu"> <div class="mobile-menu-top">
+			<img src="https://cleandemo.geniusocean.net/geniuscart2/assets/images/1730281141Whitepng.png" alt="">
+			<svg class="close" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none">
+				<path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+			</svg>
+		</div>
+		<nav>
+			<div class="nav justify-content-between pt-24" id="nav-tab" role="tablist">
+				<button class="flex-grow-1 state-left-btn active active-tab-btn" id="main-menu-tab" data-bs-toggle="tab" data-bs-target="#main-menu" type="button" role="tab" aria-controls="main-menu" aria-selected="true">MAIN MENU</button>
+
+				<button class="flex-grow-1 state-right-btn active-tab-btn" id="categories-tab" data-bs-toggle="tab" data-bs-target="#categories" type="button" role="tab" aria-controls="categories" aria-selected="false">CATEGORIES</button>
+			</div>
+		</nav>
+
+		<div class="tab-content " id="nav-tabContent1">
+			<div class="tab-pane fade show active table-responsive tb-tb" id="main-menu" role="tabpanel" aria-labelledby="main-menu-tab" style="color: white;">
+
+				<div class="mobile-menu-widget">
+					<div
+						class="single-product-widget">
+						<!-- <h5 class="widget-title">Product categories</h5> -->
+						<div class="product-cat-widget">
+							<ul
+								class="accordion">
+								<!-- main list -->
+								<li>
+									<a href="/">Home</a>
+								</li>
+								<li>
+									<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category">Product</a>
+								</li>
+								<li>
+									<a href="#" "#" data-bs-toggle="collapse" data-bs-target="#child_level_1" aria-controls="child_level_1" aria-expanded="false" class="collapsed">
+										Pages
+									</a>
+
+									<ul id="child_level_1" class="accordion-collapse collapse ms-3">
+										<li>
+											<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/about">About Us</a>
+										</li>
+										<li>
+											<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/privacy">Privacy &amp; Policy</a>
+										</li>
+										<li>
+											<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/terms">Terms &amp; Condition</a>
+										</li>
+
+									</ul>
+								</li>
+								<li>
+									<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/blog">BLOG</a>
+								</li>
+								<li>
+									<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/faq">FAQ</a>
+								</li>
+								<li>
+									<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/contact">CONTACT</a>
+								</li>
+
+							</ul>
+
+							<div class="auth-actions-btn gap-4 d-flex flex-column">
+
+
+								<a class="template-btn" href="https://cleandemo.geniusocean.net/geniuscart2/vendor/dashboard">Vendor Panel</a>
+
+
+							</div>
+
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="tab-content " id="nav-tabContent3">
+			<div class="tab-pane fade table-responsive tb-tb" id="categories" role="tabpanel" aria-labelledby="categories-tab" style="color: white;">
+
+				<div class="mobile-menu-widget">
+					<div
+						class="single-product-widget">
+						<!-- <h5 class="widget-title">Product categories</h5> -->
+						<div class="product-cat-widget">
+							<ul class="accordion">
+								<li>
+									<div class="d-flex justify-content-between align-items-lg-baseline">
+										<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Clothing" class="">
+											Men&#039;s Clothing
+										</a>
+
+										<button data-bs-toggle="collapse" data-bs-target="#Mens-Clothing_level_2" aria-controls="Mens-Clothing_level_2" aria-expanded="false" class="position-relative bottom-12 collapsed">
+											<i class="fa-solid fa-plus"></i>
+											<i class="fa-solid fa-minus"></i>
+										</button>
+									</div>
+
+									<ul id="Mens-Clothing_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Clothing/Tops" class=" " data-bs-toggle="collapse" data-bs-target="#innerTops_level_2_1" aria-controls="innerTops_level_2_1" aria-expanded="false" class="collapsed">
+													Tops
+												</a>
+
+												<button data-bs-toggle="collapse" data-bs-target="#innerTops_level_2_1" aria-controls="innerTops_level_2_1" aria-expanded="false" class="position-relative bottom-12 collapsed">
+													<i class="fa-solid fa-plus"></i>
+													<i class="fa-solid fa-minus"></i>
+												</button>
+											</div>
+
+											<ul id="innerTops_level_2_1" class="accordion-collapse collapse ms-3 ">
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Clothing/Tops/T-Shirts" class="">
+														T-Shirts
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Clothing/Tops/Shirts" class="">
+														Shirts
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Clothing/Tops/Hoodies--Sweatshirts" class="">
+														Hoodies &amp; Sweatshirts
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+									<ul id="Mens-Clothing_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Clothing/Bottoms" class=" " data-bs-toggle="collapse" data-bs-target="#innerBottoms_level_2_1" aria-controls="innerBottoms_level_2_1" aria-expanded="false" class="collapsed">
+													Bottoms
+												</a>
+
+												<button data-bs-toggle="collapse" data-bs-target="#innerBottoms_level_2_1" aria-controls="innerBottoms_level_2_1" aria-expanded="false" class="position-relative bottom-12 collapsed">
+													<i class="fa-solid fa-plus"></i>
+													<i class="fa-solid fa-minus"></i>
+												</button>
+											</div>
+
+											<ul id="innerBottoms_level_2_1" class="accordion-collapse collapse ms-3 ">
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Clothing/Bottoms/Jeans" class="">
+														Jeans
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Clothing/Bottoms/Shorts" class="">
+														Shorts
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+									<ul id="Mens-Clothing_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Clothing/Outerwear" class=" " data-bs-toggle="collapse" data-bs-target="#innerOuterwear_level_2_1" aria-controls="innerOuterwear_level_2_1" aria-expanded="false" class="collapsed">
+													Outerwear
+												</a>
+
+												<button data-bs-toggle="collapse" data-bs-target="#innerOuterwear_level_2_1" aria-controls="innerOuterwear_level_2_1" aria-expanded="false" class="position-relative bottom-12 collapsed">
+													<i class="fa-solid fa-plus"></i>
+													<i class="fa-solid fa-minus"></i>
+												</button>
+											</div>
+
+											<ul id="innerOuterwear_level_2_1" class="accordion-collapse collapse ms-3 ">
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Clothing/Outerwear/Jackets" class="">
+														Jackets
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Clothing/Outerwear/Coats" class="">
+														Coats
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Clothing/Outerwear/Blazers" class="">
+														Blazers
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+									<ul id="Mens-Clothing_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Clothing/Activewear" class=" " data-bs-toggle="collapse" data-bs-target="#innerActivewear_level_2_1" aria-controls="innerActivewear_level_2_1" aria-expanded="false" class="collapsed">
+													Activewear
+												</a>
+
+												<button data-bs-toggle="collapse" data-bs-target="#innerActivewear_level_2_1" aria-controls="innerActivewear_level_2_1" aria-expanded="false" class="position-relative bottom-12 collapsed">
+													<i class="fa-solid fa-plus"></i>
+													<i class="fa-solid fa-minus"></i>
+												</button>
+											</div>
+
+											<ul id="innerActivewear_level_2_1" class="accordion-collapse collapse ms-3 ">
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Clothing/Activewear/Gym-Wear" class="">
+														Gym Wear
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Clothing/Activewear/Tracksuits" class="">
+														Tracksuits
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Clothing/Activewear/Sports-Jerseys" class="">
+														Sports Jerseys
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+									<ul id="Mens-Clothing_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Clothing/Innerwear" class=" " data-bs-toggle="collapse" data-bs-target="#innerInnerwear_level_2_1" aria-controls="innerInnerwear_level_2_1" aria-expanded="false" class="collapsed">
+													Innerwear
+												</a>
+
+												<button data-bs-toggle="collapse" data-bs-target="#innerInnerwear_level_2_1" aria-controls="innerInnerwear_level_2_1" aria-expanded="false" class="position-relative bottom-12 collapsed">
+													<i class="fa-solid fa-plus"></i>
+													<i class="fa-solid fa-minus"></i>
+												</button>
+											</div>
+
+											<ul id="innerInnerwear_level_2_1" class="accordion-collapse collapse ms-3 ">
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Clothing/Innerwear/Undergarments" class="">
+														Undergarments
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+									<ul id="Mens-Clothing_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Clothing/Accessories" class=" ">
+													Accessories
+												</a>
+
+											</div>
+
+										</li>
+									</ul>
+
+								</li>
+								<li>
+									<div class="d-flex justify-content-between align-items-lg-baseline">
+										<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Clothing" class="">
+											Women&#039;s Clothing
+										</a>
+
+										<button data-bs-toggle="collapse" data-bs-target="#Womens-Clothing_level_2" aria-controls="Womens-Clothing_level_2" aria-expanded="false" class="position-relative bottom-12 collapsed">
+											<i class="fa-solid fa-plus"></i>
+											<i class="fa-solid fa-minus"></i>
+										</button>
+									</div>
+
+									<ul id="Womens-Clothing_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Clothing/Topss" class=" " data-bs-toggle="collapse" data-bs-target="#innerTopss_level_2_1" aria-controls="innerTopss_level_2_1" aria-expanded="false" class="collapsed">
+													Tops
+												</a>
+
+												<button data-bs-toggle="collapse" data-bs-target="#innerTopss_level_2_1" aria-controls="innerTopss_level_2_1" aria-expanded="false" class="position-relative bottom-12 collapsed">
+													<i class="fa-solid fa-plus"></i>
+													<i class="fa-solid fa-minus"></i>
+												</button>
+											</div>
+
+											<ul id="innerTopss_level_2_1" class="accordion-collapse collapse ms-3 ">
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Clothing/Topss/T-Shirtss" class="">
+														T-Shirts
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Clothing/Topss/Blouses" class="">
+														Blouses
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Clothing/Topss/Tank-Tops" class="">
+														Tank Tops
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+									<ul id="Womens-Clothing_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Clothing/Bottomss" class=" " data-bs-toggle="collapse" data-bs-target="#innerBottomss_level_2_1" aria-controls="innerBottomss_level_2_1" aria-expanded="false" class="collapsed">
+													Bottoms
+												</a>
+
+												<button data-bs-toggle="collapse" data-bs-target="#innerBottomss_level_2_1" aria-controls="innerBottomss_level_2_1" aria-expanded="false" class="position-relative bottom-12 collapsed">
+													<i class="fa-solid fa-plus"></i>
+													<i class="fa-solid fa-minus"></i>
+												</button>
+											</div>
+
+											<ul id="innerBottomss_level_2_1" class="accordion-collapse collapse ms-3 ">
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Clothing/Bottomss/Trousers" class="">
+														Trousers
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Clothing/Bottomss/Jeanss" class="">
+														Jeans
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Clothing/Bottomss/Leggings" class="">
+														Leggings
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+									<ul id="Womens-Clothing_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Clothing/Dresses" class=" " data-bs-toggle="collapse" data-bs-target="#innerDresses_level_2_1" aria-controls="innerDresses_level_2_1" aria-expanded="false" class="collapsed">
+													Dresses
+												</a>
+
+												<button data-bs-toggle="collapse" data-bs-target="#innerDresses_level_2_1" aria-controls="innerDresses_level_2_1" aria-expanded="false" class="position-relative bottom-12 collapsed">
+													<i class="fa-solid fa-plus"></i>
+													<i class="fa-solid fa-minus"></i>
+												</button>
+											</div>
+
+											<ul id="innerDresses_level_2_1" class="accordion-collapse collapse ms-3 ">
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Clothing/Dresses/Maxi-Dresses" class="">
+														Maxi Dresses
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Clothing/Dresses/Party-Dresses" class="">
+														Party Dresses
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Clothing/Dresses/Casual-Dresses" class="">
+														Casual Dresses
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+									<ul id="Womens-Clothing_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Clothing/Outerwears" class=" " data-bs-toggle="collapse" data-bs-target="#innerOuterwears_level_2_1" aria-controls="innerOuterwears_level_2_1" aria-expanded="false" class="collapsed">
+													Outerwear
+												</a>
+
+												<button data-bs-toggle="collapse" data-bs-target="#innerOuterwears_level_2_1" aria-controls="innerOuterwears_level_2_1" aria-expanded="false" class="position-relative bottom-12 collapsed">
+													<i class="fa-solid fa-plus"></i>
+													<i class="fa-solid fa-minus"></i>
+												</button>
+											</div>
+
+											<ul id="innerOuterwears_level_2_1" class="accordion-collapse collapse ms-3 ">
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Clothing/Outerwears/Jacketss" class="">
+														Jackets
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Clothing/Outerwears/Cardigans" class="">
+														Cardigans
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Clothing/Outerwears/Coatss" class="">
+														Coats
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+									<ul id="Womens-Clothing_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Clothing/Activewears" class=" ">
+													Activewear
+												</a>
+
+											</div>
+
+										</li>
+									</ul>
+									<ul id="Womens-Clothing_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Clothing/Innerwears" class=" ">
+													Innerwear
+												</a>
+
+											</div>
+
+										</li>
+									</ul>
+									<ul id="Womens-Clothing_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Clothing/Accessoriess" class=" ">
+													Accessories
+												</a>
+
+											</div>
+
+										</li>
+									</ul>
+
+								</li>
+								<li>
+									<div class="d-flex justify-content-between align-items-lg-baseline">
+										<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Unisex-Clothing" class="">
+											Unisex Clothing
+										</a>
+
+										<button data-bs-toggle="collapse" data-bs-target="#Unisex-Clothing_level_2" aria-controls="Unisex-Clothing_level_2" aria-expanded="false" class="position-relative bottom-12 collapsed">
+											<i class="fa-solid fa-plus"></i>
+											<i class="fa-solid fa-minus"></i>
+										</button>
+									</div>
+
+									<ul id="Unisex-Clothing_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Unisex-Clothing/Hoodies" class=" ">
+													Hoodies
+												</a>
+
+											</div>
+
+										</li>
+									</ul>
+									<ul id="Unisex-Clothing_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Unisex-Clothing/T-Shirts" class=" ">
+													T-Shirts
+												</a>
+
+											</div>
+
+										</li>
+									</ul>
+									<ul id="Unisex-Clothing_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Unisex-Clothing/Activewearss" class=" ">
+													Activewear
+												</a>
+
+											</div>
+
+										</li>
+									</ul>
+
+								</li>
+								<li>
+									<div class="d-flex justify-content-between align-items-lg-baseline">
+										<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Shoes" class="">
+											Men's Shoes
+										</a>
+
+										<button data-bs-toggle="collapse" data-bs-target="#Mens-Shoes_level_2" aria-controls="Mens-Shoes_level_2" aria-expanded="false" class="position-relative bottom-12 collapsed">
+											<i class="fa-solid fa-plus"></i>
+											<i class="fa-solid fa-minus"></i>
+										</button>
+									</div>
+
+									<ul id="Mens-Shoes_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Shoes/Formal-Shoes" class=" " data-bs-toggle="collapse" data-bs-target="#innerFormal-Shoes_level_2_1" aria-controls="innerFormal-Shoes_level_2_1" aria-expanded="false" class="collapsed">
+													Formal Shoes
+												</a>
+
+												<button data-bs-toggle="collapse" data-bs-target="#innerFormal-Shoes_level_2_1" aria-controls="innerFormal-Shoes_level_2_1" aria-expanded="false" class="position-relative bottom-12 collapsed">
+													<i class="fa-solid fa-plus"></i>
+													<i class="fa-solid fa-minus"></i>
+												</button>
+											</div>
+
+											<ul id="innerFormal-Shoes_level_2_1" class="accordion-collapse collapse ms-3 ">
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Shoes/Formal-Shoes/Oxfords" class="">
+														Oxfords
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Shoes/Formal-Shoes/Loafers" class="">
+														Loafers
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Shoes/Formal-Shoes/Brogues" class="">
+														Brogues
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+									<ul id="Mens-Shoes_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Shoes/Casual-Shoes" class=" " data-bs-toggle="collapse" data-bs-target="#innerCasual-Shoes_level_2_1" aria-controls="innerCasual-Shoes_level_2_1" aria-expanded="false" class="collapsed">
+													Casual Shoes
+												</a>
+
+												<button data-bs-toggle="collapse" data-bs-target="#innerCasual-Shoes_level_2_1" aria-controls="innerCasual-Shoes_level_2_1" aria-expanded="false" class="position-relative bottom-12 collapsed">
+													<i class="fa-solid fa-plus"></i>
+													<i class="fa-solid fa-minus"></i>
+												</button>
+											</div>
+
+											<ul id="innerCasual-Shoes_level_2_1" class="accordion-collapse collapse ms-3 ">
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Shoes/Casual-Shoes/Sneakers" class="">
+														Sneakers
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Shoes/Casual-Shoes/Sandals" class="">
+														Sandals
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Shoes/Casual-Shoes/Boat-Shoes" class="">
+														Boat Shoes
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+									<ul id="Mens-Shoes_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Shoes/Sports-Shoes" class=" ">
+													Sports Shoes
+												</a>
+
+											</div>
+
+										</li>
+									</ul>
+									<ul id="Mens-Shoes_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Mens-Shoes/Boots" class=" ">
+													Boots
+												</a>
+
+											</div>
+
+										</li>
+									</ul>
+
+								</li>
+								<li>
+									<div class="d-flex justify-content-between align-items-lg-baseline">
+										<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Shoes" class="">
+											Women&#039;s Shoes
+										</a>
+
+										<button data-bs-toggle="collapse" data-bs-target="#Womens-Shoes_level_2" aria-controls="Womens-Shoes_level_2" aria-expanded="false" class="position-relative bottom-12 collapsed">
+											<i class="fa-solid fa-plus"></i>
+											<i class="fa-solid fa-minus"></i>
+										</button>
+									</div>
+
+									<ul id="Womens-Shoes_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Shoes/Heels" class=" " data-bs-toggle="collapse" data-bs-target="#innerHeels_level_2_1" aria-controls="innerHeels_level_2_1" aria-expanded="false" class="collapsed">
+													Heels
+												</a>
+
+												<button data-bs-toggle="collapse" data-bs-target="#innerHeels_level_2_1" aria-controls="innerHeels_level_2_1" aria-expanded="false" class="position-relative bottom-12 collapsed">
+													<i class="fa-solid fa-plus"></i>
+													<i class="fa-solid fa-minus"></i>
+												</button>
+											</div>
+
+											<ul id="innerHeels_level_2_1" class="accordion-collapse collapse ms-3 ">
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Shoes/Heels/Stilettos" class="">
+														Stilettos
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Shoes/Heels/Wedges" class="">
+														Wedges
+													</a>
+												</li>
+												<li>
+													<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Shoes/Heels/Block-Heels" class="">
+														Block Heels
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+									<ul id="Womens-Shoes_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Shoes/Flats" class=" ">
+													Flats
+												</a>
+
+											</div>
+
+										</li>
+									</ul>
+									<ul id="Womens-Shoes_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Shoes/Sports-Shoes" class=" ">
+													Sports Shoes
+												</a>
+
+											</div>
+
+										</li>
+									</ul>
+									<ul id="Womens-Shoes_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Womens-Shoes/Bootss" class=" ">
+													Boots
+												</a>
+
+											</div>
+
+										</li>
+									</ul>
+
+								</li>
+								<li>
+									<div class="d-flex justify-content-between align-items-lg-baseline">
+										<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Kids-Shoes" class="">
+											Kids&#039; Shoes
+										</a>
+
+										<button data-bs-toggle="collapse" data-bs-target="#Kids-Shoes_level_2" aria-controls="Kids-Shoes_level_2" aria-expanded="false" class="position-relative bottom-12 collapsed">
+											<i class="fa-solid fa-plus"></i>
+											<i class="fa-solid fa-minus"></i>
+										</button>
+									</div>
+
+									<ul id="Kids-Shoes_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Kids-Shoes/Boysss" class=" ">
+													Boys
+												</a>
+
+											</div>
+
+										</li>
+									</ul>
+									<ul id="Kids-Shoes_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Kids-Shoes/Girlsss" class=" ">
+													Girls
+												</a>
+
+											</div>
+
+										</li>
+									</ul>
+									<ul id="Kids-Shoes_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Kids-Shoes/Unisexs" class=" ">
+													Unisex
+												</a>
+
+											</div>
+
+										</li>
+									</ul>
+
+								</li>
+								<li>
+									<div class="d-flex justify-content-between align-items-lg-baseline">
+										<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Unisex-Shoes" class="">
+											Unisex Shoes
+										</a>
+
+										<button data-bs-toggle="collapse" data-bs-target="#Unisex-Shoes_level_2" aria-controls="Unisex-Shoes_level_2" aria-expanded="false" class="position-relative bottom-12 collapsed">
+											<i class="fa-solid fa-plus"></i>
+											<i class="fa-solid fa-minus"></i>
+										</button>
+									</div>
+
+									<ul id="Unisex-Shoes_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Unisex-Shoes/Sneakerss" class=" ">
+													Sneakers
+												</a>
+
+											</div>
+
+										</li>
+									</ul>
+									<ul id="Unisex-Shoes_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Unisex-Shoes/Sliders" class=" ">
+													Sliders
+												</a>
+
+											</div>
+
+										</li>
+									</ul>
+									<ul id="Unisex-Shoes_level_2" class="accordion-collapse collapse ms-3 ">
+										<li class="">
+											<div class="d-flex justify-content-between align-items-lg-baseline">
+												<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category/Unisex-Shoes/Flip-Flops" class=" ">
+													Flip-Flops
+												</a>
+
+											</div>
+
+										</li>
+									</ul>
+
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- search bar -->
+	<div class="search-bar" id="searchBar">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<form class="search-form" action="https://cleandemo.geniusocean.net/geniuscart2/category">
+
+
+						<div class="input-group input__group">
+							<input type="text" class="form-control form__control" name="search" placeholder="Search Any Product Here">
+							<div class="input-group-append">
+								<span class="search-separator"></span>
+								<button class="dropdown-toggle btn btn-secondary search-category-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+									All Categories
+								</button>
+								<ul class="dropdown-menu">
+									<li>
+										<a class="dropdown-item dropdown__item" href="javascript:;">Men&#039;s Clothing</a>
+									</li>
+									<li>
+										<a class="dropdown-item dropdown__item" href="javascript:;">Women&#039;s Clothing</a>
+									</li>
+									<li>
+										<a class="dropdown-item dropdown__item" href="javascript:;">Kids&#039; Clothing</a>
+									</li>
+									<li>
+										<a class="dropdown-item dropdown__item" href="javascript:;">Unisex Clothing</a>
+									</li>
+									<li>
+										<a class="dropdown-item dropdown__item" href="javascript:;">Men's Shoes</a>
+									</li>
+									<li>
+										<a class="dropdown-item dropdown__item" href="javascript:;">Women&#039;s Shoes</a>
+									</li>
+									<li>
+										<a class="dropdown-item dropdown__item" href="javascript:;">Kids&#039; Shoes</a>
+									</li>
+									<li>
+										<a class="dropdown-item dropdown__item" href="javascript:;">Unisex Shoes</a>
+									</li>
+								</ul>
+							</div>
+
+
+							<div class="input-group-append">
+								<button class="btn btn-primary search-icn" type="submit">
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none">
+										<path d="M21 21L17.5001 17.5M20 11.5C20 16.1944 16.1944 20 11.5 20C6.80558 20 3 16.1944 3 11.5C3 6.80558 6.80558 3 11.5 3C16.1944 3 20 6.80558 20 11.5Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+									</svg>
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- user panel mobile sidebar -->
+
+
+	<div class="overlay"></div>
+
+	<section class="gs-breadcrumb-section bg-class" data-background="https://cleandemo.geniusocean.net/geniuscart2/assets/images/1724480495Imagexxxxxpng.png">
+		<div class="container">
+			<div class="row justify-content-center content-wrapper">
+				<div class="col-12">
+					<h2 class="breadcrumb-title">Products</h2>
+					<ul class="bread-menu">
+						<li>
+							<a href="/">Home</a>
+						</li>
+						<li>
+							<a href="#">Products</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- breadcrumb end -->
+
+	<!-- product wrapper start -->
+	<div class="gs-blog-wrapper">
+		<div class="container">
+			<div class="row flex-column-reverse flex-lg-row">
+				<div class="col-12 col-lg-4 col-xl-3 mt-40 mt-lg-0">
+					<div
+						class="gs-product-sidebar-wrapper">
+						<!-- product categories wrapper -->
+						<div class="single-product-widget">
+							<h5 class="widget-title">Product Categories</h5>
+							<div class="product-cat-widget">
+								<div class="d-flex flex-wrap gap-2">
+									{% set categories = [
+										{'name': "Men's Clothing", 'slug': 'homme'},
+										{'name': "Women's Clothing", 'slug': 'femme'},
+										{'name': "Kids' Clothing", 'slug': 'enfant'},
+										{'name': "Unisex", 'slug': 'unisex'}
+									] %}
+
+									{% for category in categories %}
+										<button class="btn filter-btn {{ app.request.get('category') == category.slug ? 'btn-primary' : 'btn-outline-primary' }}" data-category="{{ category.slug }}">
+											{{ category.name }}
+										</button>
+									{% endfor %}
+								</div>
+
+								<!-- Apply & Clear Filter Buttons -->
+								<button class="template-btn mt-3 w-100" id="apply_filter">Apply Filter</button>
+								<a href="{{ path('app_category') }}" class="template-btn dark-btn w-100 mt-3">Clear Filter</a>
+							</div>
+						</div>
+
+						<script>
+							let selectedCategory = '{{ app.request.get('category', '') }}';
+
+							document.querySelectorAll('.filter-btn').forEach(button => {
+								button.addEventListener('click', function() {
+									document.querySelectorAll('.filter-btn').forEach(btn => {
+										btn.classList.remove('btn-primary');
+										btn.classList.add('btn-outline-primary');
+									});
+									this.classList.remove('btn-outline-primary');
+									this.classList.add('btn-primary');
+									selectedCategory = this.getAttribute('data-category');
+								});
+							});
+
+							document.getElementById('apply_filter').addEventListener('click', function() {
+								const url = new URL(window.location.href);
+								
+								// Set category parameter if selected
+								if (selectedCategory) {
+									url.searchParams.set('category', selectedCategory);
+								} else {
+									url.searchParams.delete('category');
+								}
+								
+								// Keep other existing parameters
+								const sort = document.getElementById('sortby').value;
+								if (sort) {
+									url.searchParams.set('sort', sort);
+								}
+								
+								window.location.href = url.toString();
+							});
+						</script>
+
+
+						<!-- Price Range -->
+						<div class="single-product-widget">
+							<h5 class="widget-title">Price Range</h5>
+							<div class="price-range">
+								<div id="slider-range"></div>
+								<div class="mt-3">
+									<input type="text" id="amount" readonly class="form-control range_output">
+								</div>
+								<div class="d-none">
+									<input id="start_value" type="number" name="min" value="{{ app.request.get('min', 0) }}">
+									<input id="end_value" type="number" name="max" value="{{ app.request.get('max', 1000) }}">
+								</div>
+							</div>
+							<button class="template-btn mt-3 w-100" id="price_filter">Apply Price Filter</button>
+						</div>
+
+
+						<!-- Recent Product-->
+
+					</div>
+				</div>
+				<div
+					class="col-12 col-lg-8 col-xl-9 gs-main-blog-wrapper">
+
+
+					<!-- product nav wrapper -->
+					<div class=" product-nav-wrapper">
+						<h5>Total Products Found:
+							{{ totalProducts }}</h5>
+						<div class="filter-wrapper">
+							<div class="sort-wrapper">
+								<h5>Sort by:</h5>
+
+								<select class="nice-select" id="sortby" name="sort">
+									<option value="date_desc" {{ app.request.get('sort') == 'date_desc' ? 'selected' : '' }}>Latest Product</option>
+									<option value="date_asc" {{ app.request.get('sort') == 'date_asc' ? 'selected' : '' }}>Oldest Product</option>
+									<option value="price_asc" {{ app.request.get('sort') == 'price_asc' ? 'selected' : '' }}>Price (Low to High)</option>
+									<option value="price_desc" {{ app.request.get('sort') == 'price_desc' ? 'selected' : '' }}>Price (High to Low)</option>
+								</select>
+							</div>
+							<!-- list and grid view tab btns  start -->
+							<div class="btn-wrapper nav d-none d-lg-inline-block" role="tablist">
+								<button class="grid-btn check_view " data-shopview="list-view" type="button" data-bs-toggle="tab" data-bs-target="#layout-list-pane" role="tab" aria-controls="layout-list-pane" aria-selected="false">
+									<svg xmlns="http://www.w3.org/2000/svg" width="31" height="24" viewbox="0 0 31 24" fill="none">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M1.33331 18.7575H3.90917C4.64356 18.7575 5.24248 19.3564 5.24248 20.0908V22.6666C5.24248 23.401 4.64356 24 3.90917 24H1.33331C0.598918 24 0 23.4011 0 22.6666V20.0908C0 19.3564 0.598918 18.7575 1.33331 18.7575ZM10.7121 0H29.44C30.1744 0 30.7734 0.598986 30.7734 1.33331V3.90917C30.7734 4.64349 30.1744 5.24248 29.44 5.24248C15.6911 5.24248 24.461 5.24248 10.7121 5.24248C9.97775 5.24248 9.37876 4.64356 9.37876 3.90917V1.33331C9.37876 0.598918 9.97775 0 10.7121 0ZM1.33331 0H3.90917C4.64356 0 5.24248 0.598986 5.24248 1.33331V3.90917C5.24248 4.64356 4.64356 5.24248 3.90917 5.24248H1.33331C0.598918 5.24248 0 4.64356 0 3.90917V1.33331C0 0.598918 0.598918 0 1.33331 0ZM10.7121 9.37869H29.44C30.1744 9.37869 30.7734 9.97768 30.7734 10.712V13.2879C30.7734 14.0222 30.1744 14.6212 29.44 14.6212C15.6911 14.6212 24.461 14.6212 10.7121 14.6212C9.97775 14.6212 9.37876 14.0223 9.37876 13.2879V10.712C9.37876 9.97761 9.97775 9.37869 10.7121 9.37869ZM1.33331 9.37869H3.90917C4.64356 9.37869 5.24248 9.97768 5.24248 10.712V13.2879C5.24248 14.0223 4.64356 14.6212 3.90917 14.6212H1.33331C0.598918 14.6212 0 14.0223 0 13.2879V10.712C0 9.97761 0.598918 9.37869 1.33331 9.37869ZM10.7121 18.7575H29.44C30.1744 18.7575 30.7734 19.3564 30.7734 20.0908V22.6666C30.7734 23.4009 30.1744 23.9999 29.44 23.9999C15.6911 23.9999 24.461 23.9999 10.7121 23.9999C9.97775 23.9999 9.37876 23.401 9.37876 22.6666V20.0908C9.37876 19.3564 9.97775 18.7575 10.7121 18.7575Z" fill="#978D8F"/>
+									</svg>
+								</button>
+								<button class="grid-btn check_view  active" type="button" data-shopview="grid-view" data-bs-toggle="tab" data-bs-target="#layout-grid-pane" role="tab" aria-controls="layout-grid-pane" aria-selected="true">
+									<svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewbox="0 0 25 24" fill="none">
+										<path d="M9.5685 0H2.8222C1.69252 0 0.773438 0.919078 0.773438 2.04877V8.79506C0.773438 9.92475 1.69252 10.8438 2.8222 10.8438H9.5685C10.6982 10.8438 11.6173 9.92475 11.6173 8.79506V2.04877C11.6173 0.919078 10.6982 0 9.5685 0Z" fill="#978D8F"/>
+										<path d="M22.7248 0H15.9785C14.8488 0 13.9297 0.919078 13.9297 2.04877V8.79506C13.9297 9.92475 14.8488 10.8438 15.9785 10.8438H22.7248C23.8544 10.8438 24.7735 9.92475 24.7735 8.79506V2.04877C24.7735 0.919078 23.8544 0 22.7248 0Z" fill="#978D8F"/>
+										<path d="M9.5685 13.1562H2.8222C1.69252 13.1562 0.773438 14.0753 0.773438 15.205V21.9513C0.773438 23.081 1.69252 24.0001 2.8222 24.0001H9.5685C10.6982 24.0001 11.6173 23.081 11.6173 21.9513V15.205C11.6173 14.0753 10.6982 13.1562 9.5685 13.1562Z" fill="#978D8F"/>
+										<path d="M22.7248 13.1562H15.9785C14.8488 13.1562 13.9297 14.0753 13.9297 15.205V21.9513C13.9297 23.081 14.8488 24.0001 15.9785 24.0001H22.7248C23.8544 24.0001 24.7735 23.081 24.7735 21.9513V15.205C24.7735 14.0753 23.8544 13.1562 22.7248 13.1562Z" fill="#978D8F"/>
+									</svg>
+								</button>
+							</div>
+							<!-- list and grid view tab btns  end -->
+						</div>
+					</div>
+					<!-- main content -->
+					<div
+						class="tab-content" id="myTabContent">
+						<!-- product list view start  -->
+
+
+						<div class="row gy-4 gy-lg-5 mt-20">
+							{% for product in products %}
+								<div class="col-sm-6 col-md-6 col-xl-4">
+									<div class="single-product">
+										<div
+											class="img-wrapper">
+											<!-- Static Image and Badge -->
+											<a href="javascript:;" class="wishlist toggle-favorite" data-id="{{ product.id }}">
+												<div class="add-to-wishlist-btn">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" class="favorite-icon">
+														<path fill-rule="evenodd" clip-rule="evenodd" d="M11.9932 5.13581C9.9938 2.7984 6.65975 2.16964 4.15469 4.31001C1.64964 6.45038 1.29697 10.029 3.2642 12.5604C4.89982 14.6651 9.84977 19.1041 11.4721 20.5408C11.6536 20.7016 11.7444 20.7819 11.8502 20.8135C11.9426 20.8411 12.0437 20.8411 12.1361 20.8135C12.2419 20.7819 12.3327 20.7016 12.5142 20.5408C14.1365 19.1041 19.0865 14.6651 20.7221 12.5604C22.6893 10.029 22.3797 6.42787 19.8316 4.31001C17.2835 2.19216 13.9925 2.7984 11.9932 5.13581Z" stroke="#030712" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+													</svg>
+												</div>
+											</a>
+
+											<div class="product-thumb">
+												{% if product.photo %}
+													<img class="product-img" src="{{ asset('uploads/products/' ~ product.photo) }}" alt="{{ product.objetAVendre }}">
+												{% else %}
+													<img src="{{ asset('images/placeholder.jpg') }}" alt="No image available" class="product-img">
+												{% endif %}
+											</div>
+											<div class="add-to-cart">
+												<a href="javascript:;" class="compare_product">
+													<div class="compare">
+														<svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none">
+															<path d="M18.1777 8C23.2737 8 23.2737 16 18.1777 16C13.0827 16 11.0447 8 5.43875 8C0.85375 8 0.85375 16 5.43875 16C11.0447 16 13.0828 8 18.1788 8H18.1777Z" stroke="#030712" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+														</svg>
+													</div>
+												</a>
+
+												<a href="{{ path('app_panier_add', {'id': product.id}) }}" class="add_cart_click">
+													<div class="add-cart">
+														Add to Cart
+													</div>
+												</a>
+
+												<a href="{{ path('app_detail_produit_controler', { 'id': product.id }) }}">
+													<div class="details">
+														<svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none">
+															<path d="M2.42012 12.7132C2.28394 12.4975 2.21584 12.3897 2.17772 12.2234C2.14909 12.0985 2.14909 11.9015 2.17772 11.7766C2.21584 11.6103 2.28394 11.5025 2.42012 11.2868C3.54553 9.50484 6.8954 5 12.0004 5C17.1054 5 20.4553 9.50484 21.5807 11.2868C21.7169 11.5025 21.785 11.6103 21.8231 11.7766C21.8517 11.9015 21.8517 12.0985 21.8231 12.2234C21.785 12.3897 21.7169 12.4975 21.5807 12.7132C20.4553 14.4952 17.1054 19 12.0004 19C6.8954 19 3.54553 14.4952 2.42012 12.7132Z" stroke="#030712" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+															<path d="M12.0004 15C13.6573 15 15.0004 13.6569 15.0004 12C15.0004 10.3431 13.6573 9 12.0004 9C10.3435 9 9.0004 10.3431 9.0004 12C9.0004 13.6569 10.3435 15 12.0004 15Z" stroke="#030712" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+														</svg>
+													</div>
+												</a>
+
+											</div>
+										</div>
+										<div class="content-wrapper">
+											<a href="{{ path('app_detail_produit_controler', { id: product.id }) }}">
+												<h6 class="product-title">{{ product.objetAVendre }}</h6>
+											</a>
+											<div class="price-wrapper">
+												<h6>{{ product.prixDeVente }}€</h6>
+												{% if product.prixOriginal and product.prixOriginal > product.prixDeVente %}
+													<h6><del>{{ product.prixOriginal }}€</del></h6>
+												{% endif %}
+											</div>
+										</div>
+									</div>
+								</div>
+							{% else %}
+								<div class="col-12">
+									<p class="text-center">No products found.</p>
+								</div>
+							{% endfor %}
+						</div>
+
+
+					</div>
+					<!-- product grid view end  -->
+				</div>
+				<div class="col-12">
+					<div class="d-flex justify-content-center mt-60">
+
+
+						<ul class="gs-pagination">
+
+							<li class="disabled">
+								<a href="#" "#">
+									<svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewbox="0 0 25 24" fill="none">
+										<path d="M11.3987 18.9998C11.5965 18.999 11.7896 18.9395 11.9536 18.829C12.1175 18.7184 12.2451 18.5617 12.32 18.3787C12.3949 18.1956 12.4139 17.9945 12.3745 17.8007C12.3351 17.6069 12.2391 17.4291 12.0987 17.2898L7.49872 12.7098C7.40499 12.6169 7.3306 12.5063 7.27983 12.3844C7.22906 12.2625 7.20292 12.1318 7.20292 11.9998C7.20292 11.8678 7.22906 11.7371 7.27983 11.6152C7.3306 11.4934 7.40499 11.3828 7.49872 11.2898L12.0987 6.70982C12.1925 6.61685 12.2668 6.50625 12.3176 6.38439C12.3684 6.26253 12.3945 6.13183 12.3945 5.99982C12.3945 5.8678 12.3684 5.7371 12.3176 5.61524C12.2668 5.49338 12.1925 5.38278 12.0987 5.28982C11.9114 5.10356 11.6579 4.99902 11.3937 4.99902C11.1295 4.99902 10.8761 5.10356 10.6887 5.28982L6.09872 9.87982C5.53692 10.4423 5.22136 11.2048 5.22136 11.9998C5.22136 12.7948 5.53692 13.5573 6.09872 14.1198L10.6887 18.7098C10.7822 18.8025 10.893 18.8758 11.0148 18.9256C11.1367 18.9754 11.2671 19.0006 11.3987 18.9998Z" fill="#180207"/>
+									</svg>
+								</a>
+							</li>
+
+
+							<li class="active" aria-current="page">
+								<a href="#" "#">1</a>
+							</li>
+							<li>
+								<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category?page=2">2</a>
+							</li>
+
+
+							<li>
+								<a href="#" "https://cleandemo.geniusocean.net/geniuscart2/category?page=2" rel="next">
+									<svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewbox="0 0 25 24" fill="none">
+										<path d="M13.6013 18.9998C13.4035 18.999 13.2104 18.9395 13.0464 18.829C12.8825 18.7184 12.7549 18.5617 12.68 18.3787C12.6051 18.1956 12.5861 17.9945 12.6255 17.8007C12.6649 17.6069 12.7609 17.4291 12.9013 17.2898L17.5013 12.7098C17.595 12.6169 17.6694 12.5063 17.7202 12.3844C17.7709 12.2625 17.7971 12.1318 17.7971 11.9998C17.7971 11.8678 17.7709 11.7371 17.7202 11.6152C17.6694 11.4934 17.595 11.3828 17.5013 11.2898L12.9013 6.70982C12.8075 6.61685 12.7332 6.50625 12.6824 6.38439C12.6316 6.26253 12.6055 6.13183 12.6055 5.99982C12.6055 5.8678 12.6316 5.7371 12.6824 5.61524C12.7332 5.49338 12.8075 5.38278 12.9013 5.28982C13.0886 5.10356 13.3421 4.99902 13.6063 4.99902C13.8705 4.99902 14.1239 5.10356 14.3113 5.28982L18.9013 9.87982C19.4631 10.4423 19.7786 11.2048 19.7786 11.9998C19.7786 12.7948 19.4631 13.5573 18.9013 14.1198L14.3113 18.7098C14.2178 18.8025 14.107 18.8758 13.9852 18.9256C13.8633 18.9754 13.7329 19.0006 13.6013 18.9998Z" fill="#180207"/>
+										<path d="M6.60128 18.9998C6.4035 18.999 6.21042 18.9395 6.04643 18.829C5.88245 18.7184 5.75493 18.5617 5.68001 18.3787C5.60508 18.1956 5.58611 17.9945 5.6255 17.8007C5.66488 17.6069 5.76085 17.4291 5.90128 17.2898L11.1913 11.9998L5.90128 6.70982C5.80755 6.61685 5.73315 6.50625 5.68238 6.38439C5.63162 6.26253 5.60548 6.13183 5.60548 5.99982C5.60548 5.8678 5.63162 5.7371 5.68238 5.61524C5.73315 5.49338 5.80755 5.38278 5.90128 5.28982C6.08864 5.10356 6.34209 4.99902 6.60628 4.99902C6.87046 4.99902 7.12391 5.10356 7.31128 5.28982L13.3113 11.2898C13.405 11.3828 13.4794 11.4934 13.5302 11.6152C13.5809 11.7371 13.6071 11.8678 13.6071 11.9998C13.6071 12.1318 13.5809 12.2625 13.5302 12.3844C13.4794 12.5063 13.405 12.6169 13.3113 12.7098L7.31128 18.7098C7.21784 18.8025 7.10702 18.8758 6.98518 18.9256C6.86335 18.9754 6.73288 19.0006 6.60128 18.9998Z" fill="#180207"/>
+									</svg>
+								</a>
+							</li>
+
+
+						</ul>
+
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+</div>
+<!-- product wrapper end -->
+
+<input type="hidden" id="update_min_price" value="">
+<input
+type="hidden" id="update_max_price" value="">
+
+
+<!-- footer section -->
+
+<script>
+	var mainurl = "{{ app.request.schemeAndHttpHost }}"; // Set the base URL dynamically
+</script>
+
+<script src="path/to/myscript.js"></script>
+<!-- Ensure this comes after the definition -->
+<script>
+	var lang = "{{ app.request.locale }}"; // Set the language dynamically
+</script>
+
+<script src="path/to/myscript.js"></script>
+<!-- Ensure this comes after the lang definition -->
+
+<!-- footer section -->{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Category filter
+            let selectedCategory = '{{ app.request.get('category', '') }}';
+            
+            document.querySelectorAll('.filter-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(btn => {
+                        btn.classList.remove('btn-primary');
+                        btn.classList.add('btn-outline-primary');
+                    });
+                    this.classList.remove('btn-outline-primary');
+                    this.classList.add('btn-primary');
+                    selectedCategory = this.getAttribute('data-category');
+                });
+            });
+            
+            // Apply filter button
+            document.getElementById('apply_filter').addEventListener('click', function() {
+                const url = new URL(window.location.href);
+                
+                // Set category parameter if selected
+                if (selectedCategory) {
+                    url.searchParams.set('category', selectedCategory);
+                } else {
+                    url.searchParams.delete('category');
+                }
+                
+                // Keep price range if set
+                const minPrice = document.getElementById('start_value').value;
+                const maxPrice = document.getElementById('end_value').value;
+                
+                if (minPrice) {
+                    url.searchParams.set('min', minPrice);
+                }
+                
+                if (maxPrice) {
+                    url.searchParams.set('max', maxPrice);
+                }
+                
+                // Keep sort parameter
+                const sort = document.getElementById('sortby').value;
+                if (sort) {
+                    url.searchParams.set('sort', sort);
+                }
+                
+                window.location.href = url.toString();
+            });
+            
+            // Initialize the price slider
+            $(function() {
+                $("#slider-range").slider({
+                    range: true,
+                    min: 0,
+                    max: 1000,
+                    values: [{{ app.request.get('min', 0) }}, {{ app.request.get('max', 1000) }}],
+                    slide: function(event, ui) {
+                        $("#amount").val("€" + ui.values[0] + " - €" + ui.values[1]);
+                        $("#start_value").val(ui.values[0]);
+                        $("#end_value").val(ui.values[1]);
+                    }
+                });
+                
+                $("#amount").val("€" + $("#slider-range").slider("values", 0) +
+                    " - €" + $("#slider-range").slider("values", 1));
+            });
+            
+            // Price filter button
+            document.getElementById('price_filter').addEventListener('click', function() {
+                const url = new URL(window.location.href);
+                const minPrice = document.getElementById('start_value').value;
+                const maxPrice = document.getElementById('end_value').value;
+                
+                url.searchParams.set('min', minPrice);
+                url.searchParams.set('max', maxPrice);
+                
+                // Keep category parameter if set
+                if (selectedCategory) {
+                    url.searchParams.set('category', selectedCategory);
+                }
+                
+                // Keep sort parameter
+                const sort = document.getElementById('sortby').value;
+                if (sort) {
+                    url.searchParams.set('sort', sort);
+                }
+                
+                window.location.href = url.toString();
+            });
+            
+            // Sort dropdown change event
+            document.getElementById('sortby').addEventListener('change', function() {
+                const url = new URL(window.location.href);
+                url.searchParams.set('sort', this.value);
+                
+                // Keep other parameters
+                if (selectedCategory) {
+                    url.searchParams.set('category', selectedCategory);
+                }
+                
+                const minPrice = document.getElementById('start_value').value;
+                const maxPrice = document.getElementById('end_value').value;
+                
+                if (minPrice) {
+                    url.searchParams.set('min', minPrice);
+                }
+                
+                if (maxPrice) {
+                    url.searchParams.set('max', maxPrice);
+                }
+                
+                window.location.href = url.toString();
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check which products are in favorites
+            const productIds = [];
+            document.querySelectorAll('.toggle-favorite').forEach(button => {
+                productIds.push(button.getAttribute('data-id'));
+            });
+            
+            if (productIds.length > 0) {
+                // Fetch all favorite statuses at once
+                fetch('/product/favorite/check-multiple', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ productIds: productIds })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Update heart icons for products in favorites
+                    document.querySelectorAll('.toggle-favorite').forEach(button => {
+                        const productId = button.getAttribute('data-id');
+                        const icon = button.querySelector('.favorite-icon');
+                        
+                        if (data.favoriteIds.includes(parseInt(productId))) {
+                            icon.setAttribute('fill', 'red');
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Error checking favorites:', error);
+                });
+            }
+            
+            // Add click event listeners to favorite buttons
+            document.querySelectorAll('.toggle-favorite').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const productId = this.getAttribute('data-id');
+                    const icon = this.querySelector('.favorite-icon');
+                    
+                    fetch(`/product/favorite/${productId}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update heart icon
+                            if (data.isInFavorites) {
+                                icon.setAttribute('fill', 'red');
+                                // Redirect to favorites page
+                                window.location.href = '{{ path('app_product_favorites') }}';
+                            } else {
+                                icon.setAttribute('fill', 'none');
+                            }
+                            
+                            // Update favorites count in header
+                            const wishlistCount = document.getElementById('wishlist-count');
+                            if (wishlistCount) {
+                                fetch('/product/favorite/count')
+                                    .then(response => response.json())
+                                    .then(countData => {
+                                        wishlistCount.textContent = countData.count;
+                                    });
+                            }
+                        } else {
+                            alert(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to update favorites. Please try again.');
+                    });
+                });
+            });
+        });
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Search functionality
+        const searchIcon = document.getElementById('searchIcon');
+        const searchPopup = document.getElementById('searchPopup');
+        const closeSearch = document.getElementById('closeSearch');
+        
+        if (searchIcon && searchPopup && closeSearch) {
+            searchIcon.addEventListener('click', function() {
+                searchPopup.style.display = searchPopup.style.display === 'none' ? 'block' : 'none';
+            });
+            
+            closeSearch.addEventListener('click', function() {
+                searchPopup.style.display = 'none';
+            });
+            
+            // Close search popup when clicking outside
+            document.addEventListener('click', function(event) {
+                if (searchPopup.style.display === 'block' && 
+                    !searchPopup.contains(event.target) && 
+                    event.target !== searchIcon) {
+                    searchPopup.style.display = 'none';
+                }
+            });
+        }
+    });
+    </script>
+{% endblock %}
+
+
