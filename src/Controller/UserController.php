@@ -70,7 +70,7 @@ public function newUser(
     if ($form->isSubmitted()) {
         if ($form->isValid()) {
             try {
-                // Récupérer et vérifier le mot de passe
+                // Récupérer le mot de passe
                 $plainPassword = $form->get('password')->getData();
 
                 if (!$plainPassword) {
@@ -81,22 +81,27 @@ public function newUser(
                 // Hacher le mot de passe
                 $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
 
-                // Gérer la photo de profil (VichUploader)
+                // Gérer l'image si présente
                 $photoFile = $form->get('photoFile')->getData();
                 if ($photoFile) {
                     $user->setPhotoFile($photoFile);
                 }
 
-                // Définir un rôle par défaut si aucun n’est défini
+                // Définir le rôle par défaut si non défini
                 if (!$user->getRoles()) {
                     $user->setRoles(RoleEnum::ROLE_USER);
                 }
 
-                // Persister l'utilisateur
+                // ✅ Définir le statut par défaut si non défini
+                if ($user->getStatut() === null) {
+                    $user->setStatut(\App\Enum\StatutEnum::ACTIF);
+                }
+
+                // Enregistrement
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                // Envoyer l'email de bienvenue
+                // Envoi de l'email
                 $emailMessage = (new Email())
                     ->from('noreply@yourdomain.com')
                     ->to($user->getEmail())
@@ -108,7 +113,6 @@ public function newUser(
                 $this->addFlash('success', 'Votre compte a été créé avec succès.');
                 return $this->redirectToRoute('app_login');
             } catch (\Exception $e) {
-                // Afficher l'erreur exacte (utile en dev)
                 $this->addFlash('error', 'Erreur lors de la création du compte : ' . $e->getMessage());
             }
         } else {
@@ -121,6 +125,7 @@ public function newUser(
         'user' => $user,
     ]);
 }
+
 
    #[Route('/user/{id}/edit', name: 'app_user_edit')]
 public function edit(User $user, Request $request, EntityManagerInterface $entityManager): Response
@@ -329,4 +334,15 @@ public function connectGoogle(ClientRegistry $clientRegistry): Response
         // car le firewall intercepte la route
         return $this->redirectToRoute('app_profile');
     }
+
+#[Route('/test-password')]
+public function test(UserPasswordHasherInterface $hasher, EntityManagerInterface $em): Response
+{
+    $user = $em->getRepository(User::class)->findOneBy(['email' => 'siwar5@gmail.com']);
+    if (!$user) return new Response("Utilisateur introuvable");
+
+    $test = $hasher->isPasswordValid($user, 'le_mot_de_passe_saisi');
+    return new Response($test ? "Mot de passe valide ✅" : "Mot de passe invalide ❌");
+}
+
 }

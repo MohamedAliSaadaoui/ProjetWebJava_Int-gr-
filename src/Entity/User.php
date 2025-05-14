@@ -6,13 +6,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use App\Repository\UserRepository;
 use App\Enum\RoleEnum;
+use App\Enum\StatutEnum;
 use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[Vich\Uploadable]
@@ -37,7 +37,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @Vich\UploadableField(mapping="user_photo", fileNameProperty="photo")
-     * @var File|null
      */
     private ?File $photoFile = null;
 
@@ -50,9 +49,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $adresse = null;
 
-
     #[ORM\Column(type: 'role_enum')]
     private RoleEnum $roles = RoleEnum::ROLE_USER;
+
+    #[ORM\Column(type: 'statut_enum')]
+    private StatutEnum $statut;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
@@ -66,12 +67,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $googleId = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $statut = null;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Participe::class, cascade: ['persist', 'remove'])]
+    private Collection $participations;
+
+    #[ORM\OneToMany(mappedBy: 'creator', targetEntity: Event::class, cascade: ['persist'])]
+    private Collection $eventsCreated;
 
     public function __construct()
     {
         $this->roles = RoleEnum::ROLE_USER;
+        $this->statut = StatutEnum::ACTIF;
+        $this->initializeCollections();
+    }
+
+    private function initializeCollections(): void
+    {
+        $this->participations = new ArrayCollection();
+        $this->eventsCreated = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -174,16 +186,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
     public function getRoles(): array
     {
         return [$this->roles->value];
     }
-    
+
     public function setRoles(RoleEnum $roles): self
     {
         $this->roles = $roles;
-        
+        return $this;
+    }
+
+    public function getStatut(): StatutEnum
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(StatutEnum $statut): self
+    {
+        $this->statut = $statut;
         return $this;
     }
 
@@ -236,90 +257,63 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return null;
     }
 
-    public function eraseCredentials(): void
-    {
-    }
+    public function eraseCredentials(): void {}
 
-    public function getStatut(): ?string
-    {
-        return $this->statut;
-    }
-
-    public function setStatut(string $statut): static
-    {
-        $this->statut = $statut;
-
-        return $this;
-    }
-    
-#[ORM\OneToMany(mappedBy: 'user', targetEntity: Participe::class, cascade: ['persist', 'remove'])]
-        private Collection $participations;
-        
-#[ORM\OneToMany(mappedBy: 'creator', targetEntity: Event::class, cascade: ['persist'])]
-        private Collection $eventsCreated;
-        private function initializeCollections(): void
-        {
-            $this->participations = new ArrayCollection();
-            $this->eventsCreated = new ArrayCollection();
-        }
-  /**
-    * @return Collection<int, Participe>
-    */
+    /**
+     * @return Collection<int, Participe>
+     */
     public function getParticipations(): Collection
     {
         return $this->participations;
     }
-    
+
     public function addParticipation(Participe $participation): static
     {
         if (!$this->participations->contains($participation)) {
-        $this->participations->add($participation);
-        $participation->setUser($this);
-    }
-    
+            $this->participations->add($participation);
+            $participation->setUser($this);
+        }
+
         return $this;
     }
-    
+
     public function removeParticipation(Participe $participation): static
     {
         if ($this->participations->removeElement($participation)) {
-            // set the owning side to null (unless already changed)
             if ($participation->getUser() === $this) {
-            $participation->setUser(null);
+                $participation->setUser(null);
             }
         }
-    
-         return $this;
-     }
-     
-     /**
-      * @return Collection<int, Event>
-      */
-     public function getEventsCreated(): Collection
-     {
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getEventsCreated(): Collection
+    {
         return $this->eventsCreated;
     }
-    
+
     public function addEventCreated(Event $event): static
     {
         if (!$this->eventsCreated->contains($event)) {
             $this->eventsCreated->add($event);
             $event->setCreator($this);
         }
-    
+
         return $this;
     }
-    
-     public function removeEventCreated(Event $event): static
-     {
-         if ($this->eventsCreated->removeElement($event)) {
-            // set the owning side to null (unless already changed)
+
+    public function removeEventCreated(Event $event): static
+    {
+        if ($this->eventsCreated->removeElement($event)) {
             if ($event->getCreator() === $this) {
                 $event->setCreator(null);
             }
         }
-    
-        return $this;
-     }
 
+        return $this;
+    }
 }

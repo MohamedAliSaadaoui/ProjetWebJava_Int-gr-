@@ -13,6 +13,9 @@ doctrine:
         # ✅ Enregistrement du type personnalisé pour RoleEnum
         types:
             role_enum: App\Doctrine\Type\RoleEnumType
+            statut_enum: App\Doctrine\Type\StatutEnumType
+        mapping_types:
+            enum: statut_enum
 
     orm:
         auto_generate_proxy_classes: true

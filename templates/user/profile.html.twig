@@ -11,6 +11,7 @@
                     <p><strong>Email :</strong> {{ user.email }}</p>
                     <p><strong>Rôle :</strong> {{ user.roles|join(', ') }}</p>
 
+                    <!-- Vérification si l'utilisateur a une photo de profil -->
                     {% if user.photo is not empty %}
                         <p><strong>Photo de profil :</strong></p>
                         <img src="{{ asset('uploads/photos/' ~ user.photo) }}" alt="Photo de profil" class="profile-photo" />
@@ -23,13 +24,7 @@
 
                 <div class="profile-actions">
                     <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-edit">Modifier mon profil</a>
-
-                    <a href="{{ path('app_logout') }}" class="btn btn-logout">Log out</a>
-
-                    <form method="post" action="{{ path('app_user_delete', {'id': user.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-                        <button type="submit" class="btn btn-delete">Supprimer mon compte</button>
-                    </form>
+                    <a href="{{ path('app_logout') }}" class="btn btn-delete">Log out</a>
                 </div>
             </div>
         {% else %}
@@ -39,6 +34,7 @@
 {% endblock %}
 
 {% block stylesheets %}
+    {{ parent() }}
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -139,5 +135,65 @@
             color: red;
             font-weight: bold;
         }
+        
+        /* Masquer explicitement les menus déroulants sur la page profil */
+        .megamenu, .dropdown-menu, .navbar-nav ul {
+            display: none !important;
+        }
     </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // Script pour corriger le problème des menus déroulants sur la page profil
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fonction pour masquer tous les menus et sous-menus
+            function hideAllMenus() {
+                // Cibler tous les types de menus déroulants possibles
+                const menus = document.querySelectorAll('.megamenu, .dropdown-menu, .navbar-nav ul, ul li ul, .has-megamenu .has-submenu-icon + div');
+                
+                menus.forEach(function(menu) {
+                    if (menu) {
+                        menu.style.display = 'none';
+                    }
+                });
+                
+                // Réinitialiser les états actifs
+                document.querySelectorAll('.has-megamenu, .dropdown, .nav-item.active').forEach(function(item) {
+                    if (item) {
+                        item.classList.remove('active', 'show');
+                    }
+                });
+                
+                // Réinitialiser les attributs aria-expanded
+                document.querySelectorAll('[aria-expanded="true"]').forEach(function(item) {
+                    if (item) {
+                        item.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
+            
+            // Exécuter immédiatement
+            hideAllMenus();
+            
+            // Exécuter à nouveau après un court délai pour s'assurer que tout est bien masqué
+            setTimeout(hideAllMenus, 100);
+            
+            // Et une dernière fois après le chargement complet de la page
+            window.addEventListener('load', hideAllMenus);
+            
+            // Empêcher l'ouverture des menus lors des clics
+            document.addEventListener('click', function(event) {
+                // Si on clique sur un élément qui pourrait ouvrir un menu
+                if (event.target.closest('.has-megamenu') || event.target.closest('.dropdown') || 
+                    event.target.closest('[data-bs-toggle="dropdown"]') || 
+                    event.target.closest('.nav-item.dropdown')) {
+                    
+                    // Masquer tous les menus à nouveau
+                    setTimeout(hideAllMenus, 10);
+                }
+            });
+        });
+    </script>
 {% endblock %}
